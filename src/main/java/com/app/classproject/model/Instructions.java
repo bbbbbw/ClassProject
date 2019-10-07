@@ -12,22 +12,22 @@ public class Instructions {
     public static final int[] STX_opc = {1, 0, 1, 0, 1, 0};
     
 // part 2
-    public static final int[] JZ_opc  = {0, 0, 1, 0, 1, 0};
+        public static final int[] JZ_opc  = {0, 0, 1, 0, 1, 0};
 	public static final int[] JNE_opc = {0, 0, 1, 0, 1, 1};
 	public static final int[] JCC_opc = {0, 0, 1, 1, 0, 0};
 	public static final int[] JMA_opc = {0, 0, 1, 1, 0, 1};
 	public static final int[] JSR_opc = {0, 0, 1, 1, 1, 0};
 	public static final int[] RFS_opc = {0, 0, 1, 1, 1, 1};
-    public static final int[] SOB_opc = {0, 1, 0, 0, 0, 0};
+        public static final int[] SOB_opc = {0, 1, 0, 0, 0, 0};
 	public static final int[] JGE_opc = {0, 1, 0, 0, 0, 1};
-    public static final int[] AMR_opc = {0, 0, 0, 1, 0, 0};
+        public static final int[] AMR_opc = {0, 0, 0, 1, 0, 0};
 	public static final int[] SMR_opc = {0, 0, 0, 1, 0, 1};
 	public static final int[] AIR_opc = {0, 0, 0, 1, 1, 0};
 	public static final int[] SIR_opc = {0, 0, 0, 1, 1, 1};
 	public static final int[] MLT_opc = {0, 1, 0, 1, 0, 0};
 	public static final int[] DVD_opc = {0, 1, 0, 1, 0, 1};
 	public static final int[] TRR_opc = {0, 1, 0, 1, 1, 0};
-    public static final int[] AND_opc = {0, 1, 0, 1, 1, 1};
+        public static final int[] AND_opc = {0, 1, 0, 1, 1, 1};
 	public static final int[] ORR_opc = {0, 1, 1, 0, 0, 0};
 	public static final int[] NOT_opc = {0, 1, 1, 0, 0, 1};
 	public static final int[] SRC_opc = {0, 1, 1, 1, 1, 1};
