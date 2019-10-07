@@ -1,5 +1,8 @@
 HELP.md
-target/
+target/maven-status
+target/maven-archiver
+target/generated-sources
+target/classes
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
