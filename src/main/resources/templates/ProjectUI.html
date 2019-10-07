@@ -64,6 +64,13 @@
             padding: 40px 15% 40px 15%;
         }
 
+        #instructionArea {
+            padding: 1rem 2rem;
+            border-radius: .5rem;
+            background-color: #222831;
+            font-size: 18px;
+            font-weight: 600;
+        }
 
         #statusArea {
             padding: 1rem 2rem;
@@ -88,6 +95,12 @@
 
         #errorMessage {
             font-size: 13px;
+        }
+
+        #printer {
+            padding: 1rem 2rem;
+            background-color: #eeeeee;
+            font-size: 18px;
         }
     </style>
 
@@ -154,6 +167,10 @@
 
         function loadInstruction() {
             $('#instructionModal').modal("show");
+        }
+        
+        function IO() {
+            $('#IOModal').modal("show");
         }
 
         function IPL() {
@@ -334,9 +351,9 @@
     <div id="projectInterface">
         <h1 class="text-center mb-5">CSCI-6461 Class Project</h1>
         <div class="row">
-            <div class="col-9 mb-6">
+            <div class="col-9">
                 <h3 class="text-center mb-4">Registers</h3>
-                <div>
+                <div class="mb-6">
                     <div id="generalPurposeRegisters" class="registers-list mb-4">
                         <h6 class="text-center mb-3">General Purpose Registers</h6>
                         <ul class="list-group">
@@ -430,50 +447,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-3 mb-6">
-                <!--<h3 class="text-center mb-4">Memory</h3>
-                <table class="table table-bordered text-center mb-6">
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                Current Address
-                            </th>
-                            <td id="currentMemoryAddress">
-                                /
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Current Value
-                            </th>
-                            <td id="currentMemoryValue">
-                                /
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>-->
-                <div>
-                    <h3 class="text-center mb-4">Program Status</h3>
-                    <div id="statusArea" class="text-center">
-                        <div class="mb-4">
-                            <h6 class="mb-3">Current Status</h6>
-                            <span id="statusNormal">Normal</span>
-                            <span id="statusHalt">Halt</span>
-                            <span id="statusError">Error</span>
-                        </div>
-                        <div>
-                            <h6 class="mb-3">Error Message</h6>
-                            <div id="errorMessage">
-                                /
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-10">
                 <h3 class="text-center mb-4">Switches</h3>
                 <div class="row">
                     <div class="col-3 mb-3">
@@ -503,7 +476,58 @@
                         <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterRegister()">Alter Register</button>
                         <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterMemory()">Alter Memory</button>
                         <!--<button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="loadInstruction()">Load Instruction</button>-->
+                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="IO()">Device Input</button>
                     </div>
+                </div>
+            </div>
+            <div class="col-3 mb-6">
+                <!--<h3 class="text-center mb-4">Memory</h3>
+                <table class="table table-bordered text-center mb-6">
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                Current Address
+                            </th>
+                            <td id="currentMemoryAddress">
+                                /
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                Current Value
+                            </th>
+                            <td id="currentMemoryValue">
+                                /
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>-->
+                <div class="mb-5">
+                    <h3 class="text-center mb-4">Next Instruction</h3>
+                    <div id="instructionArea" class="text-center">
+                        > LDR 01, 00, 00000
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <h3 class="text-center mb-4">Program Status</h3>
+                    <div id="statusArea" class="text-center">
+                        <div class="mb-4">
+                            <h6 class="mb-3">Current Status</h6>
+                            <span id="statusNormal">Normal</span>
+                            <span id="statusHalt">Halt</span>
+                            <span id="statusError">Error</span>
+                        </div>
+                        <div>
+                            <h6 class="mb-3">Error Message</h6>
+                            <div id="errorMessage">
+                                /
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <h3 class="text-center mb-4">Printer</h3>
+                    <textarea rows="5" readonly="readonly" type="text" class="form-control" id="printer" name="printer"></textarea>
                 </div>
             </div>
         </div>
@@ -625,6 +649,38 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="submitInstruction()" data-dismiss="modal">Load</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="IOModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">I/O Panel</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span class="errorMessage"></span>
+                        </div>
+                        <form id="IOForm">
+                            <div class="row modal-body-row">
+                                <div class="col-3 col-form-label mb-3">
+                                    Keyboard:
+                                </div>
+                                <div class="col-9 mb-3">
+                                    <input type="text" class="form-control" id="keyboard" name="keyboard" placeholder="Keyboard Input">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="keyboardIN()">Save</button>
                     </div>
                 </div>
             </div>
