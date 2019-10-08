@@ -5,7 +5,7 @@ public class Register {
         GPR, // General purpose register
         IDX, // Index register
         PC, // Program counter
-        CC, // Condition code
+        CCR, // Condition code register
         IR, // Instruction register
         MAR, // Memory address register
         MBR, // Memory buffer register
@@ -19,7 +19,7 @@ public class Register {
         this.type = type;
 
         int size = -1; // Unit is bits
-        if(type == Register.Type.CC || type == Register.Type.MFR) {
+        if(type == Register.Type.CCR || type == Register.Type.MFR) {
             size = 4;
         } else if(type == Register.Type.PC) {
             size = 12;

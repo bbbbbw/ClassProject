@@ -22,3 +22,6 @@ Models a 16-bit memory unit. Includes functions to translate from a base 2 binar
 
 ### Register.java ###
 Models a program register and provides a constructor to create all required types of registers.  
+
+## *Executable jar file*
+target/classproject-0.0.1-SNAPSHOT.jar
