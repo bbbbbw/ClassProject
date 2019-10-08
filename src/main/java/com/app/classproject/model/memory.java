@@ -26,6 +26,7 @@ public class  memory {
 
     public int idr; // translate IX index register number decimal number
     public int gpr; // translate R into general purpose register decimal number
+    public int ccr;  // translate cc into general purpose register decimal number
     public int address; // translate addr into integer number decimal number
 
     // opcode 20-25
