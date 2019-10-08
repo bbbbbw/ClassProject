@@ -1,6 +1,7 @@
 package com.app.classproject.model;
 
 import java.util.Arrays;
+
 /**
  * this class simulates the  individual Random access memory entry or words
  * The mem represent a 16-bit word which will be stored in the RAM.
@@ -8,7 +9,7 @@ import java.util.Arrays;
  * UPPER CASE VARIABLES are  binarys arrays and lower case variables are decimal number
  * It has 4 methods
  */
-public class  memory {
+public class memory {
 
     // use array to represent the memory
 
@@ -81,7 +82,7 @@ public class  memory {
         System.out.println("opc" + opc);
         if (this.opc == 36) {
             System.out.println("trap code ");
-            System.out.println("trap code " + trapcode );
+            System.out.println("trap code " + trapcode);
         } else if (this.opc == 0) {
             System.out.println("halt ");
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
@@ -113,20 +114,16 @@ public class  memory {
             System.out.println("lr" + lr);
             System.out.println("count" + count);
 
-        }
-        else if (this.opc >= 61 && this.opc <= 63) {
+        } else if (this.opc >= 61 && this.opc <= 63) {
             System.out.println("I/O Operations ");
             System.out.println("R" + Arrays.toString(R));
             System.out.println("DEVICEID" + Arrays.toString(DID));
             System.out.println("---------------------------------------------------------");
             System.out.println("r" + r);
             System.out.println("deviceID" + did);
-        }
-        else {
+        } else {
             System.out.println("Illegal Operation Code ");
         }
-
-
 
 
     }
@@ -239,9 +236,7 @@ public class  memory {
             }
             tmp = builder.toString();
             this.mem = Integer.parseInt(tmp, 2);
-        }
-
-        else if (this.opc >= 61 && this.opc <= 63) {
+        } else if (this.opc >= 61 && this.opc <= 63) {
             System.out.println("I/O Operations setup");
             System.arraycopy(mem, 6, memory.this.R, 0, 2);
             builder = new StringBuilder();
@@ -264,9 +259,7 @@ public class  memory {
             }
             tmp = builder.toString();
             this.mem = Integer.parseInt(tmp, 2);
-        }
-
-        else {
+        } else {
             builder = new StringBuilder();
             for (int value : MEM) {
                 builder.append(value);
@@ -276,6 +269,7 @@ public class  memory {
         }
 //		this.print();
     }
+
     public int[] loadval() {
         String VAL = Integer.toBinaryString(this.mem);
         // make sure there are 0000s in front of binary numbers
@@ -373,7 +367,7 @@ public class  memory {
             if (ADDRE.length() > 5) {
                 System.out.println("error address! load");
             }
-            String temp = OPC+ GPR + IDR  + IAD + ADDRE;
+            String temp = OPC + GPR + IDR + IAD + ADDRE;
 
             for (int i = 0; i < temp.length(); i++) {
                 this.MEM[i] = (int) temp.charAt(i) - 48;
@@ -443,8 +437,7 @@ public class  memory {
             this.setup();
             return this.MEM;
 
-        }
-        else if (this.opc >= 61 && this.opc <= 63) {
+        } else if (this.opc >= 61 && this.opc <= 63) {
             System.out.println("I/O Operations load");
 
             String R = Integer.toBinaryString(r);
@@ -462,7 +455,7 @@ public class  memory {
             if (DID.length() > 5) {
                 System.out.println("error device ID! I/O Operations load");
             }
-            String temp = OPC + R + "000" +DID;
+            String temp = OPC + R + "000" + DID;
 
             for (int i = 0; i < temp.length(); i++) {
                 this.MEM[i] = (int) temp.charAt(i) - 48;

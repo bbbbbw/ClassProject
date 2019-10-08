@@ -15,10 +15,10 @@ public class Computer {
 
     public Computer() {
         // Initialize registers
-        for(int i = 0; i < gpr.length; i++) {
+        for (int i = 0; i < gpr.length; i++) {
             gpr[i] = new Register(Register.Type.GPR);
         }
-        for(int i = 0; i < idx.length; i++) {
+        for (int i = 0; i < idx.length; i++) {
             idx[i] = new Register(Register.Type.IDX);
         }
         pc = new Register(Register.Type.PC);
@@ -29,7 +29,7 @@ public class Computer {
         mfr = new Register(Register.Type.MFR);
 
         // Initialize memory
-        for(int i = 0; i < RAM.length; i++) {
+        for (int i = 0; i < RAM.length; i++) {
             RAM[i] = new memory();
             RAM[i].ini();
         }
@@ -44,7 +44,7 @@ public class Computer {
         int[] instruction = new int[16];
 
         // Set opcode
-        for(int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             instruction[i] = opcode[i];
         }
 
@@ -60,7 +60,7 @@ public class Computer {
         instruction[10] = I;
 
         // Set Address
-        for(int i = 11; i < 16; i++) {
+        for (int i = 11; i < 16; i++) {
             instruction[i] = address[i - 11];
         }
 
@@ -80,49 +80,49 @@ public class Computer {
         idx[2].setValue(3);
 
         // Set memory values
-        RAM[25].MEM = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0}; // 26
+        RAM[25].MEM = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0}; // 26
         RAM[25].setup();
-        RAM[26].MEM = new int[] {0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0}; // 26794
+        RAM[26].MEM = new int[]{0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0}; // 26794
         RAM[26].setup();
-        RAM[28].MEM = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1}; // 29
+        RAM[28].MEM = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1}; // 29
         RAM[28].setup();
-        RAM[29].MEM = new int[] {0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1}; // 351
+        RAM[29].MEM = new int[]{0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1}; // 351
         RAM[29].setup();
-        RAM[30].MEM = new int[] {0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0}; // 18650
+        RAM[30].MEM = new int[]{0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0}; // 18650
         RAM[30].setup();
-        RAM[31].MEM = new int[] {0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1}; // 7083
+        RAM[31].MEM = new int[]{0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1}; // 7083
         RAM[31].setup();
 
         // Load register 0 from RAM[31]. LDR, no indexing, no indirect
-        RAM[6].MEM = buildInstruction(Instructions.LDR_opc, new int[] {0, 0}, new int[] {0, 0}, 0, new int[] {1, 1, 1, 1, 1});
+        RAM[6].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 0}, new int[]{0, 0}, 0, new int[]{1, 1, 1, 1, 1});
         RAM[6].setup();
 
         // Load register 2 from RAM[30]. LDR, indexing, no indirect
-        RAM[7].MEM = buildInstruction(Instructions.LDR_opc, new int[] {0, 1}, new int[] {1, 0}, 0, new int[] {1, 1, 1, 0, 1});
+        RAM[7].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 1}, new int[]{1, 0}, 0, new int[]{1, 1, 1, 0, 1});
         RAM[7].setup();
 
         // Load register 1 from RAM[29]. LDR, no indexing, indirect
-        RAM[8].MEM = buildInstruction(Instructions.LDR_opc, new int[] {0, 0}, new int[] {0, 1}, 1, new int[] {1, 1, 1, 0, 0});
+        RAM[8].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 0}, new int[]{0, 1}, 1, new int[]{1, 1, 1, 0, 0});
         RAM[8].setup();
 
         // Load register 3 from RAM[29]. LDR, indexing, indirect
-        RAM[9].MEM = buildInstruction(Instructions.LDR_opc, new int[] {1, 0}, new int[] {1, 1}, 1, new int[] {1, 1, 0, 1, 0});
+        RAM[9].MEM = buildInstruction(Instructions.LDR_opc, new int[]{1, 0}, new int[]{1, 1}, 1, new int[]{1, 1, 0, 1, 0});
         RAM[9].setup();
 
         // Store register 0 to RAM[28]. STR, no indexing, no indirect
-        RAM[10].MEM = buildInstruction(Instructions.STR_opc, new int[] {0, 0}, new int[] {0, 0}, 0, new int[] {1, 1, 1, 0, 0});
+        RAM[10].MEM = buildInstruction(Instructions.STR_opc, new int[]{0, 0}, new int[]{0, 0}, 0, new int[]{1, 1, 1, 0, 0});
         RAM[10].setup();
 
         // Store register 1 to RAM[27]. STR, indexing, no indirect
-        RAM[11].MEM = buildInstruction(Instructions.STR_opc, new int[] {1, 1}, new int[] {0, 1}, 0, new int[] {1, 1, 0, 0, 0});
+        RAM[11].MEM = buildInstruction(Instructions.STR_opc, new int[]{1, 1}, new int[]{0, 1}, 0, new int[]{1, 1, 0, 0, 0});
         RAM[11].setup();
 
         // Store register 2 to RAM[26]. STR, no indexing, indirect
-        RAM[12].MEM = buildInstruction(Instructions.STR_opc, new int[] {0, 0}, new int[] {1, 0}, 1, new int[] {1, 1, 0, 0, 1});
+        RAM[12].MEM = buildInstruction(Instructions.STR_opc, new int[]{0, 0}, new int[]{1, 0}, 1, new int[]{1, 1, 0, 0, 1});
         RAM[12].setup();
 
         // Store register 3 to RAM[26]. STR, indexing, indirect
-        RAM[13].MEM = buildInstruction(Instructions.STR_opc, new int[] {0, 1}, new int[] {1, 1}, 1, new int[] {1, 1, 0, 0, 0});
+        RAM[13].MEM = buildInstruction(Instructions.STR_opc, new int[]{0, 1}, new int[]{1, 1}, 1, new int[]{1, 1, 0, 0, 0});
         RAM[13].setup();
 
 
