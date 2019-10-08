@@ -640,7 +640,7 @@ public class Instructions {
 			  this.setValueToRById(next, Integer.parseInt(temp1.substring(16), 2));
 		   }else {
 			   System.out.println("OVERFLOW");
-			   computer.ccr[0].setValue(OVERFLOW);
+			   computer.ccr[3].setValue(OVERFLOW);
 		   }
 	   } 
 	   return Computer.SUCCESS_RET_CODE;
@@ -676,7 +676,7 @@ public class Instructions {
 			   this.setValueToRById(next, Integer.parseInt(remainder, 2));
 		   }else {
 			   System.out.println("DIVZERO");
-			   computer.ccr[0].setValue(DIVZERO);
+			   computer.ccr[3].setValue(DIVZERO);
 		   }
 	   }
 	   return Computer.SUCCESS_RET_CODE;
