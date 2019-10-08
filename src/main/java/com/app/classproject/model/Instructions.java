@@ -615,11 +615,70 @@ public class Instructions {
    /** 
     *  Multiply Register by Register
     */
-  
+
+      public int MLT() {
+	   if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
+			System.out.println("Error !");
+			return Computer.ERROR_RET_CODE;
+		}
+	   if (instruction.rx == 0 || instruction.rx == 2 && instruction.ry == 0 || instruction.ry == 2) {
+		   int data1 = this.getValueFromRById(instruction.rx);
+		   int data2 = this.getValueFromRById(instruction.ry);
+		   int temp  = data1 * data2;
+		   
+		   if(temp < Integer.MAX_VALUE && temp > Integer.MIN_VALUE ) {
+			   int next = 0;
+			   if(instruction.rx == 0) {
+				   next = 1 ;
+			   }else {
+				   next = 3;
+			   }
+			   
+			  String temp1 = this.InttoBinary32(temp);
+			  this.setValueToRById(instruction.rx, Integer.parseInt(temp1.substring(0, 16), 2));
+			  this.setValueToRById(next, Integer.parseInt(temp1.substring(16), 2));
+		   }else {
+			   System.out.println("OVERFLOW");
+			   computer.ccr[0].setValue(OVERFLOW);
+		   }
+	   } 
+	   return Computer.SUCCESS_RET_CODE;
+   }
+	
    /** 
     *  Divide Register by Register
     */
    
+	public int DVD() {
+	   if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
+			System.out.println("Error !");
+			return Computer.ERROR_RET_CODE;
+		}
+	   
+	   if (instruction.rx == 0 || instruction.rx == 2 && instruction.ry == 0 || instruction.ry == 2) {
+		   int data1 = this.getValueFromRById(instruction.rx);
+		   int data2 = this.getValueFromRById(instruction.ry);
+		   if(data2 != 0){
+			   int temp1 = data1 / data2 ;
+			   int temp2 = data1 % data2 ;
+			   int next = 0;
+			   
+			   if(instruction.rx == 0) {
+				   next = 1;
+			   }else {
+				   next = 3;
+			   }
+			   String quotient = this.InttoBinary16(temp1);
+			   String remainder = this.InttoBinary16(temp2);
+			   this.setValueToRById(instruction.rx, Integer.parseInt(quotient, 2));
+			   this.setValueToRById(next, Integer.parseInt(remainder, 2));
+		   }else {
+			   System.out.println("DIVZERO");
+			   computer.ccr[0].setValue(DIVZERO);
+		   }
+	   }
+	   return Computer.SUCCESS_RET_CODE;
+   }
    /** 
     *  Test the Equality of Register and Register
     */
@@ -695,9 +754,6 @@ public class Instructions {
      *  Output Character to Device from Register
      */
    	
-   	/** 
-     *  Check Device Status to Register
-     */
 
  // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
@@ -738,8 +794,27 @@ public class Instructions {
 		break;
     	}
     }
+	
+ 
+     private String InttoBinary32(int num) {
+    	
+    	String temp = Integer.toBinaryString(num);
+    	
+    	for (int i = temp.length(); i < 32; i++) {
+			temp = "0" + temp;
+		}
+		return temp;
+    }
     
-    
+    private String InttoBinary16(int num) {
+    	
+    	String temp = Integer.toBinaryString(num);
+
+		for (int i = temp.length(); i < 16; i++) {
+			temp = "0" + temp;
+		}
+		return temp;
+    }
     
     public void printInfo() {
 
