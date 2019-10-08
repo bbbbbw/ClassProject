@@ -35,6 +35,10 @@ public class Instructions {
 	public static final int[] IN_opc  = {1, 1, 1, 1, 0, 1};
 	public static final int[] OUT_opc = {1, 1, 1, 1, 1, 0};
 	public static final int[] CHK_opc = {1, 1, 1, 1, 1, 1};
+	public static final int	OVERFLOW	= 0;
+	public static final int	UNDERFLOW	= 1;
+	public static final int	DIVZERO		= 2;
+	public static final int	EQUALORNOT	= 3;
     
     public Computer computer;
     public memory instruction = new memory();
