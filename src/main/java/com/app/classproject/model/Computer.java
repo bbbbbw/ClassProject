@@ -7,7 +7,8 @@ public class Computer {
 
     public Register[] gpr = new Register[4];
     public Register[] idx = new Register[3]; // X0-X2
-    public Register pc, cc, ir, mar, mbr, mfr;
+    public Register[] ccr = new Register[4];
+    public Register pc, ir, mar, mbr, mfr;
 
     public memory[] RAM = new memory[2048];
 
@@ -21,8 +22,10 @@ public class Computer {
         for(int i = 0; i < idx.length; i++) {
             idx[i] = new Register(Register.Type.IDX);
         }
+        for(int i = 0; i < ccr.length; i++) {
+            ccr[i] = new Register(Register.Type.CCR);
+        }
         pc = new Register(Register.Type.PC);
-        cc = new Register(Register.Type.CC);
         ir = new Register(Register.Type.IR);
         mar = new Register(Register.Type.MAR);
         mbr = new Register(Register.Type.MBR);
