@@ -4,12 +4,12 @@ import java.util.Arrays;
 
 public class Instructions {
 // part 1
-    public static final int[] HLT_opc = {0, 0, 0, 0, 0, 0};
-    public static final int[] LDR_opc = {0, 0, 0, 0, 0, 1};
-    public static final int[] STR_opc = {0, 0, 0, 0, 1, 0};
-    public static final int[] LDA_opc = {0, 0, 0, 0, 1, 1};
-    public static final int[] LDX_opc = {1, 0, 1, 0, 0, 1};
-    public static final int[] STX_opc = {1, 0, 1, 0, 1, 0};
+    	public static final int[] HLT_opc = {0, 0, 0, 0, 0, 0};
+   	public static final int[] LDR_opc = {0, 0, 0, 0, 0, 1};
+    	public static final int[] STR_opc = {0, 0, 0, 0, 1, 0};
+   	public static final int[] LDA_opc = {0, 0, 0, 0, 1, 1};
+   	public static final int[] LDX_opc = {1, 0, 1, 0, 0, 1};
+   	public static final int[] STX_opc = {1, 0, 1, 0, 1, 0};
     
 // part 2
         public static final int[] JZ_opc  = {0, 0, 1, 0, 1, 0};
@@ -498,9 +498,9 @@ public class Instructions {
    public int AMR() {
 	   int EA = getEffectiveAdr();
 	   computer.mar.setValue(EA);
-       computer.mbr.setValue(computer.RAM[EA].MEM);
-       computer.pc.setValue(computer.pc.getBase10Value() + 1);
-       computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+       	   computer.mbr.setValue(computer.RAM[EA].MEM);
+       	   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+       	   computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 	   switch(instruction.gpr) {
 	   case 0:
 		   computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.RAM[EA].mem);
@@ -525,24 +525,24 @@ public class Instructions {
     *  Subtract Memory From Register
     */
    public int SMR() {
-	   int EA = getEffectiveAdr();
-	   computer.mar.setValue(EA);
-       computer.mbr.setValue(computer.RAM[EA].MEM);
-       computer.pc.setValue(computer.pc.getBase10Value() + 1);
-       computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-       switch(instruction.gpr) {
-       case 0: 
-    	   computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
-    	   break;
-       case 1:
-    	   computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.RAM[EA].mem);
-    	   break;
-       case 2:
-    	   computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.RAM[EA].mem);
-    	   break;
-       case 3:
-    	   computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.RAM[EA].mem);
-    	   break;
+		int EA = getEffectiveAdr();
+		computer.mar.setValue(EA);
+       		computer.mbr.setValue(computer.RAM[EA].MEM);
+       		computer.pc.setValue(computer.pc.getBase10Value() + 1);
+       		computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        switch(instruction.gpr) {
+    		case 0:	
+    		    	computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + immed);
+    			break;
+    		case 1:
+   		    	computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + immed);
+    			break;
+    		case 2:	
+   		    	computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + immed);
+    			break;
+    		case 3:
+   		    	computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + immed);
+    			break;
     	   default:
     		   System.out.println("Error");
     		   return Computer.ERROR_RET_CODE;
@@ -555,36 +555,24 @@ public class Instructions {
     *  IX and I are ignored in this instruction
     */
    	public int AIR(int immed) {
-   	 int EA = getEffectiveAdr();
-	 computer.mar.setValue(EA);
-     computer.mbr.setValue(computer.RAM[EA].MEM);
-     computer.pc.setValue(computer.pc.getBase10Value() + 1);
-     computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+   		int EA = getEffectiveAdr();
+		computer.mar.setValue(EA);
+     		computer.mbr.setValue(computer.RAM[EA].MEM);
+     		computer.pc.setValue(computer.pc.getBase10Value() + 1);
+     		computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
    
     	 switch(instruction.gpr) {
-    		case 0:
-    			computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + immed);
-    			if(computer.gpr[0].getBase10Value() == 0) {
-    		    	 computer.gpr[0].setValue(immed);
-    		     }
-    			break;
-    		case 1:
-    			computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + immed);
-    			if(computer.gpr[1].getBase10Value() == 0) {
-   		    	 	computer.gpr[1].setValue(immed);
-   		     }
-    			break;
-    		case 2:
-    			computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + immed);
-    			if(computer.gpr[2].getBase10Value() == 0) {
-   		    	 	computer.gpr[2].setValue(immed);
-   		     }
-    			break;
-    		case 3:
-    			computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + immed);
-    			if(computer.gpr[3].getBase10Value() == 0) {
-   		    	 	computer.gpr[3].setValue(immed);
-   		     }
+   		case 0:
+   			computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - immed);
+   			break;
+   		case 1:
+   			computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - immed);
+   			break;
+   		case 2:
+   			computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - immed);
+   			break;
+   		case 3:
+   			computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - immed);
     			break;
     			default:
     				System.out.println("Error");
@@ -602,9 +590,9 @@ public class Instructions {
    	public int SIR(int immed) {
    		int EA = getEffectiveAdr();
    		computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
-        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        	computer.mbr.setValue(computer.RAM[EA].MEM);
+        	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        	computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
    		switch(instruction.gpr) {
    		case 0:
    			computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - immed);
