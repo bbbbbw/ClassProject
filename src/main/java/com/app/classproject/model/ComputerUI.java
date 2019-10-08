@@ -118,11 +118,5 @@ public class ComputerUI {
                 nextInstruction = "CHK " + Integer.toString(instruction.r) + ", " + Integer.toString(instruction.did);
                 break;
         }
-
-        if ((instruction.opc >= 1 && instruction.opc <= 5) || (instruction.opc >= 10 && instruction.opc <= 11) || (instruction.opc >= 16 && instruction.opc <= 17)) {
-            nextInstruction += Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
-        } else if ((instruction.opc >= 41 && instruction.opc <= 42) || (instruction.opc >= 13 && instruction.opc <= 14)) {
-            nextInstruction += Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
-        }
     }
 }
