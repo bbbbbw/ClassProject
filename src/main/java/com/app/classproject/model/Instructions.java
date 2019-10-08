@@ -635,6 +635,7 @@ public class Instructions {
 			   }
 			   
 			  String temp1 = this.InttoBinary32(temp);
+			   System.out.println(temp1);
 			  this.setValueToRById(instruction.rx, Integer.parseInt(temp1.substring(0, 16), 2));
 			  this.setValueToRById(next, Integer.parseInt(temp1.substring(16), 2));
 		   }else {
@@ -670,6 +671,7 @@ public class Instructions {
 			   }
 			   String quotient = this.InttoBinary16(temp1);
 			   String remainder = this.InttoBinary16(temp2);
+			   System.out.println(quotient + "   " + remainder);
 			   this.setValueToRById(instruction.rx, Integer.parseInt(quotient, 2));
 			   this.setValueToRById(next, Integer.parseInt(remainder, 2));
 		   }else {
