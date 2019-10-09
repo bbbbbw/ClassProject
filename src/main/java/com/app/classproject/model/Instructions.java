@@ -631,7 +631,7 @@ public class Instructions {
 		   
 		   if(temp < Integer.MAX_VALUE && temp > Integer.MIN_VALUE ) {
 			   int next = 0;
-			   if(instruction.rx == 0) {
+			   if(instruction.rx == 0) {         // next = rx + 1, rx must be 0 or 2
 				   next = 1 ;
 			   }else {
 				   next = 3;
@@ -664,14 +664,13 @@ public class Instructions {
 			   int temp2 = data1 % data2 ;
 			   int next = 0;
 			   
-			   if(instruction.rx == 0) {
+			   if(instruction.rx == 0) {       // next = rx + 1, rx must be 0 or 2
 				   next = 1;
 			   }else {
 				   next = 3;
 			   }
 			   String quotient = this.InttoBinary16(temp1); 
 			   String remainder = this.InttoBinary16(temp2);
-			   System.out.println(quotient + "   " + remainder);
 			   this.setValueToRById(instruction.rx, Integer.parseInt(quotient, 2));
 			   this.setValueToRById(next, Integer.parseInt(remainder, 2));
 		   }else {
