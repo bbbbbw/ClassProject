@@ -132,11 +132,15 @@
             $("#X2").text(computer.idx[1].value.toString().replace(/,/g,''));
             $("#X3").text(computer.idx[2].value.toString().replace(/,/g,''));
             $("#PC").text(computer.pc.value.toString().replace(/,/g,''));
-            $("#CC").text(computer.cc.value.toString().replace(/,/g,''));
+            $("#CC0").text(computer.ccr[0].value.toString().replace(/,/g,''));
+            $("#CC1").text(computer.ccr[0].value.toString().replace(/,/g,''));
+            $("#CC2").text(computer.ccr[0].value.toString().replace(/,/g,''));
+            $("#CC3").text(computer.ccr[0].value.toString().replace(/,/g,''));
             $("#IR").text(computer.ir.value.toString().replace(/,/g,''));
             $("#MAR").text(computer.mar.value.toString().replace(/,/g,''));
             $("#MBR").text(computer.mbr.value.toString().replace(/,/g,''));
             $("#MFR").text(computer.mfr.value.toString().replace(/,/g,''));
+            $("#instructionArea").text("> " + computer.nextInstruction);
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
@@ -392,21 +396,33 @@
                             </li>
                         </ul>
                     </div>
+                    <div id="conditionCode" class="registers-list mb-4">
+                        <h6 class="text-center mb-3">Condition Code</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span id="CC0">/</span>
+                                <span class="badge badge-name">CC0</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span id="CC1">/</span>
+                                <span class="badge badge-name">CC1</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span id="CC2">/</span>
+                                <span class="badge badge-name">CC2</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span id="CC3">/</span>
+                                <span class="badge badge-name">CC3</span>
+                            </li>
+                        </ul>
+                    </div>
                     <div id="programCounter" class="registers-list mb-4">
                         <h6 class="text-center mb-3">Program Counter</h6>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span id="PC">/</span>
                                 <span class="badge badge-name">PC</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="conditionCode" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Condition Code</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC">/</span>
-                                <span class="badge badge-name">CC</span>
                             </li>
                         </ul>
                     </div>
@@ -480,7 +496,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 mb-6">
+            <div class="col-3">
                 <!--<h3 class="text-center mb-4">Memory</h3>
                 <table class="table table-bordered text-center mb-6">
                     <tbody>
@@ -505,7 +521,7 @@
                 <div class="mb-5">
                     <h3 class="text-center mb-4">Next Instruction</h3>
                     <div id="instructionArea" class="text-center">
-                        > LDR 01, 00, 00000
+                        > LDR 1, 0, 0, 1
                     </div>
                 </div>
                 <div class="mb-5">
