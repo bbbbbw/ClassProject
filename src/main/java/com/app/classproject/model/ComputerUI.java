@@ -55,7 +55,7 @@ public class ComputerUI {
                 nextInstruction = "JNE " + Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
                 break;
             case 12:
-                nextInstruction = "JCC "; // TODO
+                nextInstruction = "JCC " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.ccr) + ", " + Integer.toString(instruction.idr)+ ", " + Integer.toString(instruction.iad);
                 break;
             case 13:
                 nextInstruction = "JMA " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
@@ -64,7 +64,7 @@ public class ComputerUI {
                 nextInstruction = "JSR " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
                 break;
             case 15:
-                nextInstruction = "RFS "; // TODO
+                nextInstruction = "RFS " + + Integer.toString(instruction.address);
                 break;
             case 16:
                 nextInstruction = "SOB " + Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
@@ -79,10 +79,10 @@ public class ComputerUI {
                 nextInstruction = "SMR " + Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
                 break;
             case 6:
-                nextInstruction = "AIR "; // TODO
+                nextInstruction = "AIR " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.gpr);
                 break;
             case 7:
-                nextInstruction = "SIR "; // TODO
+                nextInstruction = "SIR " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.gpr);
                 break;
             case 20:
                 nextInstruction = "MLT " + Integer.toString(instruction.rx) + ", " + Integer.toString(instruction.ry);
