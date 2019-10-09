@@ -1,0 +1,19 @@
+DEVID	Device
+0	Console Keyboard
+1	Console Printer
+2	Card Reader
+3-31	Console Registers, switches, etc
+
+Notes:
+(1) You may only use the IN and CHK instructions with the console keyboard and the card reader.
+(2) You may only use the OUT and CHK instruction with the console printer.
+(3) Devices 3 – 31 are affected only by the IN and OUT opcodes.
+    Some of these devices may be affected by only one of these opcodes.
+
+Your simulator will have a GUI. 
+It should have a pane that simulates the console printer and a pane that simulates the console keyboard.
+
+You can implement the console printer as a text field to which you can only print.
+
+You can implement the console keyboard as a text field into which you can type characters and numbers,
+e.g., you do not have to simulate the actual keyboard. Too much work.
