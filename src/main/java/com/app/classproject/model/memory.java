@@ -24,9 +24,9 @@ public class memory {
     public int[] IX = new int[2]; // 2 digits index registers in binary array
     public int iad; // 1 digit indirect address indicator in binary array
     public int[] ADDR = new int[5]; // 5 digits for 32 locations in binary array
-
-    public int idr; // translate IX index register number decimal number
+    
     public int gpr; // translate R into general purpose register decimal number
+    public int idr; // translate IX index register number decimal number
     public int ccr;  // translate cc into general purpose register decimal number
     public int address; // translate addr into integer number decimal number
 
@@ -89,8 +89,8 @@ public class memory {
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
                 || this.opc == 42) {
             System.out.println("Load/Store Instructions ");
-            System.out.println("IX" + Arrays.toString(IX));
             System.out.println("R" + Arrays.toString(R));
+            System.out.println("IX" + Arrays.toString(IX));
             System.out.println("iad" + iad);
             System.out.println("ADDR" + Arrays.toString(ADDR));
             System.out.println("---------------------------------------------------------");
@@ -153,8 +153,8 @@ public class memory {
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
                 || this.opc == 42) {
 //			System.out.println("Load/Store Instructions");
-            System.arraycopy(MEM, 6, memory.this.IX, 0, 2);
-            System.arraycopy(MEM, 8, memory.this.R, 0, 2);
+            System.arraycopy(MEM, 6, memory.this.R, 0, 2);
+            System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
             System.arraycopy(MEM, 11, memory.this.ADDR, 0, 5);
             // make array into string and calculate value
             builder = new StringBuilder();
@@ -340,21 +340,22 @@ public class memory {
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
                 || this.opc == 42) {
             System.out.println("Load/Store Instructions load");
-            String IDR = Integer.toBinaryString(this.idr);
-            while (IDR.length() < 2) {
-                IDR = "0" + IDR;
-            }
-            if (IDR.length() > 2) {
-                System.out.println("error idr! load");
-            }
-            String GPR = Integer.toBinaryString(this.gpr);
+            String GPR = Integer.toBinaryString(this.gpr);//R
             while (GPR.length() < 2) {
                 GPR = "0" + GPR;
             }
             if (GPR.length() > 2) {
                 System.out.println("error gpr! load");
             }
-            String IAD = Integer.toBinaryString(this.iad);
+            String IDR = Integer.toBinaryString(this.idr);//IX
+            while (IDR.length() < 2) {
+                IDR = "0" + IDR;
+            }
+            if (IDR.length() > 2) {
+                System.out.println("error idr! load");
+            }
+           
+            String IAD = Integer.toBinaryString(this.iad);//iad
             while (IAD.length() < 1) {
                 IAD = "0" + IAD;
             }
