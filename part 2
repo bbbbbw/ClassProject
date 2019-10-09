@@ -1,0 +1,11 @@
+1. Cache Design and Implementation
+2. Have all instructions working except Part IV 
+3. Have your cache design at least coded out if not working
+
+Demonstrate that individual instructions work. 
+Your user interface, e.g., operator’s console should be used to test instructions, etc. Include source code for Program 1.
+Your simulator, packaged as a JAR file, running program 1.
+File containing program 1 as machine code.
+Demonstration that Program 1 works.
+
+Simple documentation describing how to use your simulator, what the console layout is and how to operate it.
