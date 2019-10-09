@@ -35,6 +35,42 @@ public class Instructions {
     public static final int[] IN_opc  = {1, 1, 1, 1, 0, 1};
     public static final int[] OUT_opc = {1, 1, 1, 1, 1, 0};
     public static final int[] CHK_opc = {1, 1, 1, 1, 1, 1};
+	
+	// part 1
+    public static final int  HLTopc = 0;
+    public static final int  LDRopc = 1;
+    public static final int  STRopc = 2;
+    public static final int  LDAopc = 3;
+    public static final int  LDXopc = 41;
+    public static final int  STXopc = 42;
+
+    // part 2
+    public static final int  JZopc  = 10;
+    public static final int  JNEopc = 11;
+    public static final int  JCCopc = 12;
+    public static final int  JMAopc = 13;
+    public static final int  JSRopc = 14;
+    public static final int  RFSopc = 15;
+    public static final int  SOBopc = 16;
+    public static final int  JGEopc = 17;
+    public static final int  AMRopc = 4;
+    public static final int  SMRopc = 5;
+    public static final int  AIRopc = 6;
+    public static final int  SIRopc = 7;
+    public static final int  MLTopc = 20;
+    public static final int  DVDopc = 21;
+    public static final int  TRRopc = 22;
+    public static final int  ANDopc = 23;
+    public static final int  ORRopc = 24;
+    public static final int  NOTopc = 25;
+    public static final int  SRCopc = 31;
+    public static final int  RRCopc = 32;
+    public static final int  INopc  = 61;
+    public static final int  OUTopc = 62;
+    public static final int  CHKopc = 63;
+    
+	
+	
     public static final int OVERFLOW = 0;
     public static final int UNDERFLOW = 1;
     public static final int DIVZERO = 2;
