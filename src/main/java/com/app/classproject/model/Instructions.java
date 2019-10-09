@@ -441,24 +441,35 @@ public class Instructions {
 	   switch(instruction.gpr) {
 	   case 0:
 		   computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - 1);
-		   if(computer.gpr[0].getBase10Value() > 0)
+		   if(computer.gpr[0].getBase10Value() > 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }	   
 		   break;
 	   case 1:
 		   computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - 1);
-		   if(computer.gpr[1].getBase10Value() > 0)
+		   if(computer.gpr[1].getBase10Value() > 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }	   
 		   break;
 	   case 2:
 		   computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - 1);
-		   if(computer.gpr[2].getBase10Value() > 0)
+		   if(computer.gpr[2].getBase10Value() > 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }	   
 		   break;
 	   case 3:
 		   computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - 1);
-		   if(computer.gpr[3].getBase10Value() > 0)
+		   if(computer.gpr[3].getBase10Value() > 0) {
 			   computer.pc.setValue(EA);
-		  
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }	   
 	   default:
 			   System.out.println("Error");
 			   return Computer.ERROR_RET_CODE;
@@ -474,20 +485,32 @@ public class Instructions {
 	   int EA = getEffectiveAdr();
 	   switch(instruction.gpr) {
 	   case 0:
-		   if(computer.gpr[0].getBase10Value() >= 0)
+		   if(computer.gpr[0].getBase10Value() >= 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }
 		   break;
 	   case 1:
-		   if(computer.gpr[1].getBase10Value() >= 0)
+		   if(computer.gpr[1].getBase10Value() >= 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }
 		   break;	
 	   case 2:
-		   if(computer.gpr[2].getBase10Value() >= 0)
+		   if(computer.gpr[2].getBase10Value() >= 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }
 		   break;
 	   case 3:
-		   if(computer.gpr[3].getBase10Value() >= 0)
+		   if(computer.gpr[3].getBase10Value() >= 0) {
 			   computer.pc.setValue(EA);
+		   }else{
+			   computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		   }
 		   break;
 		   default:
 			   System.out.println("Error");
@@ -500,11 +523,11 @@ public class Instructions {
     *  Add Memory To Register
     */
    public int AMR() {
-	   int EA = getEffectiveAdr();
-	   computer.mar.setValue(EA);
-       computer.mbr.setValue(computer.RAM[EA].MEM);
-       computer.pc.setValue(computer.pc.getBase10Value() + 1);
-       computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+	int EA = getEffectiveAdr();
+	computer.mar.setValue(EA);
+        computer.mbr.setValue(computer.RAM[EA].MEM);
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 	   switch(instruction.gpr) {
 	   case 0:
 		   computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.RAM[EA].mem);
@@ -529,11 +552,11 @@ public class Instructions {
     *  Subtract Memory From Register
     */
    public int SMR() {
-	   int EA = getEffectiveAdr();
-	   computer.mar.setValue(EA);
-       computer.mbr.setValue(computer.RAM[EA].MEM);
-       computer.pc.setValue(computer.pc.getBase10Value() + 1);
-       computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+	 int EA = getEffectiveAdr();
+	 computer.mar.setValue(EA);
+       	 computer.mbr.setValue(computer.RAM[EA].MEM);
+       	 computer.pc.setValue(computer.pc.getBase10Value() + 1);
+       	 computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
        switch(instruction.gpr) {
        case 0: 
     	   computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
@@ -558,12 +581,12 @@ public class Instructions {
     *  Add  Immediate to Register
     *  IX and I are ignored in this instruction
     */
-   	public int AIR(int immed) {
-   	 int EA = getEffectiveAdr();
-	 computer.mar.setValue(EA);
-     computer.mbr.setValue(computer.RAM[EA].MEM);
-     computer.pc.setValue(computer.pc.getBase10Value() + 1);
-     computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+   public int AIR(int immed) {
+   	int EA = getEffectiveAdr();
+	computer.mar.setValue(EA);
+     	computer.mbr.setValue(computer.RAM[EA].MEM);
+     	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+     	computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
    
     	 switch(instruction.gpr) {
     		case 0:
@@ -591,9 +614,9 @@ public class Instructions {
     *  Subtract  Immediate  from Register
     */
    
-   	public int SIR(int immed) {
-   		int EA = getEffectiveAdr();
-   		computer.mar.setValue(EA);
+   public int SIR(int immed) {
+   	int EA = getEffectiveAdr();
+   	computer.mar.setValue(EA);
         computer.mbr.setValue(computer.RAM[EA].MEM);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
