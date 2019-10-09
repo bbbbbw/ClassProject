@@ -2,10 +2,8 @@ package com.app.classproject.model;
 
 import java.util.LinkedList;
 
-/**
- * 16 line cache
- */
 public class Cache {
+	private int numCacheLines = 16;
 	private LinkedList<CacheLine> cacheLine;
 	
 	public Cache() {
@@ -17,38 +15,38 @@ public class Cache {
 		return cacheLine;
 	}
 
-	public void addToCache(int address, String value) {
-		if(cacheLine.size() >= 16) {
+	public void addToCache(int key, String value) {
+		if(cacheLine.size() >= numCacheLines) {
 			cacheLine.removeLast(); // FIFO
 		}
 		else {
-			cacheLine.addFirst(new CacheLine(address, value));
+			cacheLine.addFirst(new CacheLine(key, value));
 		}
 	}
 	
 	public class CacheLine {
-		private int tag;
-		private String data;
+		private int key; // Address
+		private String value; // Data stored at address
 		
-		public CacheLine(int tag, String data ) {
-			this.tag = tag;
-			this.data = data;
+		public CacheLine(int key, String value) {
+			this.key = key;
+			this.value = value;
 		}
 		
-		public int getTag() {
-			return tag;
+		public int getKey() {
+			return key;
 		}
 		
-		public void setTag(int tag) {
-			this.tag = tag;
+		public void setKey(int key) {
+			this.key = key;
 		}
 		
-		public String getData() {
-			return data;
+		public String getValue() {
+			return value;
 		}
 		
-		public void setData(String data) {
-			this.data = data;
+		public void setValue(String value) {
+			this.value = value;
 		}
 	}
 }
