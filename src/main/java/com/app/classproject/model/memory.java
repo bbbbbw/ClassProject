@@ -19,15 +19,14 @@ public class memory {
     public int[] RL = new int[6]; // 6 digits reserved location in binary array ex:011110
     public int opc; // translate RL into opcode decimal number ex: 36
 
-    // load and store instruction
+    // load and store instruction & logical instructions
     public int[] R = new int[2]; // 3 digits general purpose registers in binary array
     public int[] IX = new int[2]; // 2 digits index registers in binary array
     public int iad; // 1 digit indirect address indicator in binary array
     public int[] ADDR = new int[5]; // 5 digits for 32 locations in binary array
-    
-    public int gpr; // translate R into general purpose register decimal number
+
     public int idr; // translate IX index register number decimal number
-    public int ccr;  // translate cc into general purpose register decimal number
+    public int gpr; // translate R into general purpose register decimal number
     public int address; // translate addr into integer number decimal number
 
     // opcode 20-25
@@ -89,8 +88,8 @@ public class memory {
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
                 || this.opc == 42) {
             System.out.println("Load/Store Instructions ");
-            System.out.println("R" + Arrays.toString(R));
             System.out.println("IX" + Arrays.toString(IX));
+            System.out.println("R" + Arrays.toString(R));
             System.out.println("iad" + iad);
             System.out.println("ADDR" + Arrays.toString(ADDR));
             System.out.println("---------------------------------------------------------");
@@ -144,6 +143,14 @@ public class memory {
             builder.append(value);
         }
         String tmp = builder.toString();
+        //calculate the decimal value of whole binary array.
+        builder = new StringBuilder();
+        for (int value : MEM) {
+            builder.append(value);
+        }
+        tmp = builder.toString();
+        this.mem = Integer.parseInt(tmp, 2);
+        
         this.opc = Integer.parseInt(tmp, 2);
         //different opcode cases
         if (this.opc == 36) {
@@ -181,12 +188,7 @@ public class memory {
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
 
-            builder = new StringBuilder();
-            for (int value : MEM) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.mem = Integer.parseInt(tmp, 2);
+           
 //			this.print();
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register setup");
@@ -206,13 +208,9 @@ public class memory {
             tmp = builder.toString();
             this.ry = Integer.parseInt(tmp, 2);
 
-            builder = new StringBuilder();
-            for (int value : MEM) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.mem = Integer.parseInt(tmp, 2);
-        } else if (this.opc >= 31 && this.opc <= 32) {
+        } 
+        else if (this.opc >= 31 && this.opc <= 32) 
+        {
             System.out.println("shift and rotate instructions setup");
             System.arraycopy(mem, 6, memory.this.R, 0, 2);
             builder = new StringBuilder();
@@ -231,12 +229,6 @@ public class memory {
             tmp = builder.toString();
             this.count = Integer.parseInt(tmp, 2);
 
-            builder = new StringBuilder();
-            for (int value : MEM) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.mem = Integer.parseInt(tmp, 2);
         } else if (this.opc >= 61 && this.opc <= 63) {
             System.out.println("I/O Operations setup");
             System.arraycopy(mem, 6, memory.this.R, 0, 2);
@@ -253,20 +245,8 @@ public class memory {
             }
             tmp = builder.toString();
             this.did = Integer.parseInt(tmp, 2);
-
-            builder = new StringBuilder();
-            for (int value : MEM) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.mem = Integer.parseInt(tmp, 2);
         } else {
-            builder = new StringBuilder();
-            for (int value : MEM) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.mem = Integer.parseInt(tmp, 2);
+
         }
 //		this.print();
     }
@@ -340,22 +320,22 @@ public class memory {
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
                 || this.opc == 42) {
             System.out.println("Load/Store Instructions load");
-            String GPR = Integer.toBinaryString(this.gpr);//R
+            String GPR = Integer.toBinaryString(this.gpr);
             while (GPR.length() < 2) {
                 GPR = "0" + GPR;
             }
             if (GPR.length() > 2) {
                 System.out.println("error gpr! load");
             }
-            String IDR = Integer.toBinaryString(this.idr);//IX
+            String IDR = Integer.toBinaryString(this.idr);
             while (IDR.length() < 2) {
                 IDR = "0" + IDR;
             }
             if (IDR.length() > 2) {
                 System.out.println("error idr! load");
             }
-           
-            String IAD = Integer.toBinaryString(this.iad);//iad
+            
+            String IAD = Integer.toBinaryString(this.iad);
             while (IAD.length() < 1) {
                 IAD = "0" + IAD;
             }
