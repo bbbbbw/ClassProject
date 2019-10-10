@@ -78,9 +78,8 @@ public class Instructions {
     public memory instruction = new memory();
     public Register register;
     
-    public Instructions(int[] instruction, Computer computer, Register register) {
+    public Instructions(int[] instruction, Computer computer) {
         this.computer = computer;
-        this.register = register;
         this.instruction.MEM = instruction;
         this.instruction.setup();
         
