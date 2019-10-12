@@ -9,6 +9,8 @@ public class ComputerUI {
     public int status;
     public String nextInstruction;
 
+    public int[] printer;
+
 
     public ComputerUI(Computer computer) {
         for (int i = 0; i < gpr.length; i++) {
@@ -25,6 +27,7 @@ public class ComputerUI {
         mar = computer.mar;
         mbr = computer.mbr;
         mfr = computer.mfr;
+        printer = computer.printer;
 
         status = computer.status;
 
@@ -116,6 +119,9 @@ public class ComputerUI {
                 break;
             case 63:
                 nextInstruction = "CHK " + Integer.toString(instruction.r) + ", " + Integer.toString(instruction.did);
+                break;
+            default:
+                nextInstruction = "N/A";
                 break;
         }
     }

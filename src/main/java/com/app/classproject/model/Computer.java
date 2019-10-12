@@ -14,6 +14,9 @@ public class Computer {
 
     public int status; // 1: working, 0: halt, -1: error
 
+    public int[] printer;
+
+
     public Computer() {
         // Initialize registers
         for (int i = 0; i < gpr.length; i++) {

@@ -118,7 +118,7 @@
                     initializePage(result.computer);
                 },
                 error: function() {
-                    alert("Error");
+                    alert("Error -- No Connection");
                 }
             });
         });
@@ -141,6 +141,7 @@
             $("#MBR").text(computer.mbr.value.toString().replace(/,/g,''));
             $("#MFR").text(computer.mfr.value.toString().replace(/,/g,''));
             $("#instructionArea").text("> " + computer.nextInstruction);
+            $("#printer").val(computer.printer.toString().replace(/,/g,''));
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
@@ -173,8 +174,12 @@
             $('#instructionModal').modal("show");
         }
         
-        function IO() {
-            $('#IOModal').modal("show");
+        function keyboardInput() {
+            $('#keyboardModal').modal("show");
+        }
+
+        function cardInput() {
+            $('#cardModal').modal("show");
         }
 
         function IPL() {
@@ -492,7 +497,8 @@
                         <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterRegister()">Alter Register</button>
                         <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterMemory()">Alter Memory</button>
                         <!--<button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="loadInstruction()">Load Instruction</button>-->
-                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="IO()">Device Input</button>
+                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="keyboardInput()">Keyboard Input</button>
+                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="cardInput()">Card Input</button>
                     </div>
                 </div>
             </div>
@@ -670,11 +676,11 @@
             </div>
         </div>
 
-        <div id="IOModal" class="modal" tabindex="-1" role="dialog">
+        <div id="keyboardModal" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">I/O Panel</h5>
+                        <h5 class="modal-title">Keyboard Panel</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -683,7 +689,7 @@
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <span class="errorMessage"></span>
                         </div>
-                        <form id="IOForm">
+                        <form id="keyboardForm">
                             <div class="row modal-body-row">
                                 <div class="col-3 col-form-label mb-3">
                                     Keyboard:
@@ -697,6 +703,38 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="keyboardIN()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cardModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Keyboard Panel</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span class="errorMessage"></span>
+                        </div>
+                        <form id="cardForm">
+                            <div class="row modal-body-row">
+                                <div class="col-3 col-form-label mb-3">
+                                    Keyboard:
+                                </div>
+                                <div class="col-9 mb-3">
+                                    <input type="text" class="form-control" id="card" name="keyboard" placeholder="Keyboard Input">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="cardIN()">Save</button>
                     </div>
                 </div>
             </div>

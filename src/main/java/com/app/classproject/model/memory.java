@@ -150,7 +150,7 @@ public class memory {
         }
         tmp = builder.toString();
         this.mem = Integer.parseInt(tmp, 2);
-        
+
         this.opc = Integer.parseInt(tmp, 2);
         //different opcode cases
         if (this.opc == 36) {
@@ -188,7 +188,7 @@ public class memory {
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
 
-           
+
 //			this.print();
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register setup");
@@ -208,9 +208,7 @@ public class memory {
             tmp = builder.toString();
             this.ry = Integer.parseInt(tmp, 2);
 
-        } 
-        else if (this.opc >= 31 && this.opc <= 32) 
-        {
+        } else if (this.opc >= 31 && this.opc <= 32) {
             System.out.println("shift and rotate instructions setup");
             System.arraycopy(mem, 6, memory.this.R, 0, 2);
             builder = new StringBuilder();
@@ -334,7 +332,7 @@ public class memory {
             if (IDR.length() > 2) {
                 System.out.println("error idr! load");
             }
-            
+
             String IAD = Integer.toBinaryString(this.iad);
             while (IAD.length() < 1) {
                 IAD = "0" + IAD;
