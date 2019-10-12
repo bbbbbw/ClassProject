@@ -19,11 +19,13 @@ public class Register {
         this.type = type;
 
         int size = -1; // Unit is bits
-        if(type == Register.Type.CCR || type == Register.Type.MFR) {
+        if (type == Register.Type.CCR) {
+            size = 1;
+        } else if (type == Register.Type.MFR) {
             size = 4;
-        } else if(type == Register.Type.PC) {
+        } else if (type == Register.Type.PC) {
             size = 12;
-        } else if(type == Register.Type.GPR || type == Register.Type.IR || type == Register.Type.MAR || type == Register.Type.MBR || type == Register.Type.IDX) {
+        } else if (type == Register.Type.GPR || type == Register.Type.IR || type == Register.Type.MAR || type == Register.Type.MBR || type == Register.Type.IDX) {
             size = 16;
         } else {
             System.out.println("Unknown register type: " + type);
@@ -52,16 +54,16 @@ public class Register {
         // Fill in values from end
         int i = binaryStr.length() - 1;
         int j;
-        for(j = this.value.length - 1; j >= 0; j--) {
+        for (j = this.value.length - 1; j >= 0; j--) {
             this.value[j] = Integer.parseInt(Character.toString(binaryStr.charAt(i)));
             i--;
-            if(i < 0) {
+            if (i < 0) {
                 break;
             }
         }
 
         // Fill beginning with 0's
-        for(j = j - 1; j >= 0; j--) {
+        for (j = j - 1; j >= 0; j--) {
             this.value[j] = 0;
         }
     }
@@ -73,8 +75,8 @@ public class Register {
         int base10Value = 0;
         int multiplier = 1;
 
-        for(int i = value.length - 1; i >= 0; i--) {
-            if(value[i] == 1) {
+        for (int i = value.length - 1; i >= 0; i--) {
+            if (value[i] == 1) {
                 base10Value += multiplier;
             }
             multiplier *= 2;
