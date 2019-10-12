@@ -7,10 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"
+          crossorigin="anonymous">
 
     <style>
         body {
@@ -49,7 +53,7 @@
         }
 
         .mb-6 {
-            margin-bottom: 4rem!important;
+            margin-bottom: 4rem !important;
         }
 
         .alert {
@@ -112,39 +116,39 @@
                 url: "http://localhost:8080/action/initialize",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     initializePage(result.computer);
                 },
-                error: function() {
-                    alert("Error -- No Connection");
+                error: function () {
+                    alert("Error");
                 }
             });
         });
-        
+
         function initializePage(computer) {
-            $("#R0").text(computer.gpr[0].value.toString().replace(/,/g,''));
-            $("#R1").text(computer.gpr[1].value.toString().replace(/,/g,''));
-            $("#R2").text(computer.gpr[2].value.toString().replace(/,/g,''));
-            $("#R3").text(computer.gpr[3].value.toString().replace(/,/g,''));
-            $("#X1").text(computer.idx[0].value.toString().replace(/,/g,''));
-            $("#X2").text(computer.idx[1].value.toString().replace(/,/g,''));
-            $("#X3").text(computer.idx[2].value.toString().replace(/,/g,''));
-            $("#PC").text(computer.pc.value.toString().replace(/,/g,''));
-            $("#CC").text(computer.ccr[0].value.toString().replace(/,/g,'') + computer.ccr[1].value.toString().replace(/,/g,'') + computer.ccr[2].value.toString().replace(/,/g,'') + computer.ccr[3].value.toString().replace(/,/g,''));
-            $("#IR").text(computer.ir.value.toString().replace(/,/g,''));
-            $("#MAR").text(computer.mar.value.toString().replace(/,/g,''));
-            $("#MBR").text(computer.mbr.value.toString().replace(/,/g,''));
-            $("#MFR").text(computer.mfr.value.toString().replace(/,/g,''));
+            $("#R0").text(computer.gpr[0].value.toString().replace(/,/g, ''));
+            $("#R1").text(computer.gpr[1].value.toString().replace(/,/g, ''));
+            $("#R2").text(computer.gpr[2].value.toString().replace(/,/g, ''));
+            $("#R3").text(computer.gpr[3].value.toString().replace(/,/g, ''));
+            $("#X1").text(computer.idx[0].value.toString().replace(/,/g, ''));
+            $("#X2").text(computer.idx[1].value.toString().replace(/,/g, ''));
+            $("#X3").text(computer.idx[2].value.toString().replace(/,/g, ''));
+            $("#PC").text(computer.pc.value.toString().replace(/,/g, ''));
+            $("#CC").text(computer.ccr[0].value.toString().replace(/,/g, '') + computer.ccr[1].value.toString().replace(/,/g, '') + computer.ccr[2].value.toString().replace(/,/g, '') + computer.ccr[3].value.toString().replace(/,/g, ''));
+            $("#IR").text(computer.ir.value.toString().replace(/,/g, ''));
+            $("#MAR").text(computer.mar.value.toString().replace(/,/g, ''));
+            $("#MBR").text(computer.mbr.value.toString().replace(/,/g, ''));
+            $("#MFR").text(computer.mfr.value.toString().replace(/,/g, ''));
             $("#instructionArea").text("> " + computer.nextInstruction);
-            $("#printer").val(computer.printer.toString().replace(/,/g,''));
+            $("#printer").val(computer.printer.toString().replace(/,/g, ''));
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
                 $("#statusHalt").hide();
                 $("#statusError").hide();
-            } else if (computer.status  == -1) {
+            } else if (computer.status == -1) {
                 $("#statusNormal").hide();
                 $("#statusHalt").hide();
                 $("#statusError").show();
@@ -152,6 +156,10 @@
                 $("#statusNormal").hide();
                 $("#statusHalt").show();
                 $("#statusError").hide();
+            }
+
+            if (computer.stopForInput == 1) {
+                keyboardInput();
             }
         }
 
@@ -170,9 +178,47 @@
         function loadInstruction() {
             $('#instructionModal').modal("show");
         }
-        
+
         function keyboardInput() {
+            $('#keyboardModal').modal({
+                keyboard: false,
+                backdrop: "static"
+            })
             $('#keyboardModal').modal("show");
+        }
+
+        function keyboardIn() {
+            var formData = new FormData($("#keyboardForm")[0]);
+            console.log(formData.get("keyboard"));
+            if (formData.get("keyboard") == null || formData.get("keyboard") == "") {
+                $("#keyboardModal .alert").show();
+                $("#keyboardModal .alert .errorMessage").text("Cannot be empty");
+                return;
+            }
+            $.ajax({
+                type: 'post',
+                url: "http://localhost:8080/action/input",
+                data: {
+                    input: formData.get("keyboard")
+                },
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    var result = JSON.parse(data);
+                    if (result.status == -1) {
+                        $("#keyboardModal .alert").show();
+                        $("#keyboardModal .alert .errorMessage").text(result.errorMessage);
+                    } else {
+                        initializePage(result.computer);
+                        $('#keyboardModal').modal("hide");
+                        $("#keyboard").val("");
+                    }
+                },
+                error: function () {
+                    $("#keyboardModal .alert").show();
+                    $("#keyboardModal .alert .errorMessage").text("Error");
+                }
+            });
         }
 
         function cardInput() {
@@ -180,54 +226,51 @@
         }
 
         function IPL() {
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/IPL",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     initializePage(result.computer);
                 },
-                error: function() {
+                error: function () {
                     console.log("Fail");
                 }
             });
         }
 
         function reStart() {
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/reStart",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     initializePage(result.computer);
                 },
-                error: function() {
+                error: function () {
                     console.log("Fail");
                 }
             });
         }
 
         function run() {
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/run",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     initializePage(result.computer);
                 },
-                error: function() {
+                error: function () {
                     console.log("fail");
                 }
             });
@@ -235,43 +278,40 @@
         }
 
         function halt() {
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/halt",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                 },
-                error: function() {
+                error: function () {
                     console.log("fail");
                 }
             });
         }
 
         function singleStep() {
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/singleStep",
                 data: null,
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     initializePage(result.computer);
                 },
-                error: function() {
+                error: function () {
                     console.log("fail");
                 }
             });
         }
-        
+
         function submitRegister() {
             var formData = new FormData($("#registerForm")[0]);
             console.log(formData.get("register"), formData.get("value"));
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/submitRegister",
@@ -280,7 +320,7 @@
                     value: formData.get("value")
                 },
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     if (result.status == -1) {
@@ -293,17 +333,16 @@
                         $("#registerValue").val("");
                     }
                 },
-                error: function() {
+                error: function () {
                     $("#registerModal .alert").show();
                     $("#registerModal .alert .errorMessage").text("Error");
                 }
             });
         }
-        
+
         function submitMemory() {
             var formData = new FormData($("#memoryForm")[0]);
             console.log(formData.get("address"), formData.get("value"));
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/submitMemory",
@@ -312,7 +351,7 @@
                     value: formData.get("value")
                 },
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                     var result = JSON.parse(data);
                     if (result.status == -1) {
@@ -324,18 +363,17 @@
                         $("#memoryValue").val("");
                     }
                 },
-                error: function() {
+                error: function () {
                     $("#memoryModal .alert").show();
                     $("#memoryModal .alert .errorMessage").text("Error");
                 }
             });
         }
-        
+
         function submitInstruction() {
             var formData = new FormData($("#instructionForm")[0]);
             console.log(formData.get("instruction"));
             $("#inputInstruction").val("");
-            // TODO: success and error
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/submitInstruction",
@@ -343,10 +381,10 @@
                     instruction: formData.get("instruction")
                 },
                 cache: false,
-                success: function(data){
+                success: function (data) {
                     console.log(data);
                 },
-                error: function() {
+                error: function () {
                     console.log("fail");
                 }
             });
@@ -354,375 +392,349 @@
     </script>
 </head>
 <body>
-    <div id="projectInterface">
-        <h1 class="text-center mb-5">CSCI-6461 Class Project</h1>
-        <div class="row">
-            <div class="col-9">
-                <h3 class="text-center mb-4">Registers</h3>
-                <div class="mb-6">
-                    <div id="generalPurposeRegisters" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">General Purpose Registers</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="R0">/</span>
-                                <span class="badge badge-name">R0</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="R1">/</span>
-                                <span class="badge badge-name">R1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="R2">/</span>
-                                <span class="badge badge-name">R2</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="R3">/</span>
-                                <span class="badge badge-name">R3</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="indexRegisters" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Index Registers</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="X1">/</span>
-                                <span class="badge badge-name">X1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="X2">/</span>
-                                <span class="badge badge-name">X2</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="X3">/</span>
-                                <span class="badge badge-name">X3</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="conditionCode" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Condition Code</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC">/</span>
-                                <span class="badge badge-name">CC</span>
-                        </ul>
-                    </div>
-                    <div id="programCounter" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Program Counter</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="PC">/</span>
-                                <span class="badge badge-name">PC</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="instructionRegister" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Instruction Register</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="IR">/</span>
-                                <span class="badge badge-name">IR</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="memoryAddressRegister" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Memory Address Register</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="MAR">/</span>
-                                <span class="badge badge-name">MAR</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="memoryBufferRegister" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Memory Buffer Register</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="MBR">/</span>
-                                <span class="badge badge-name">MBR</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="machineFaultRegister" class="registers-list mb-4">
-                        <h6 class="text-center mb-3">Machine Fault Register</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="MFR">/</span>
-                                <span class="badge badge-name">MFR</span>
-                            </li>
-                        </ul>
-                    </div>
+<div id="projectInterface">
+    <h1 class="text-center mb-5">CSCI-6461 Class Project</h1>
+    <div class="row">
+        <div class="col-9">
+            <h3 class="text-center mb-4">Registers</h3>
+            <div class="mb-6">
+                <div id="generalPurposeRegisters" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">General Purpose Registers</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="R0">/</span>
+                            <span class="badge badge-name">R0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="R1">/</span>
+                            <span class="badge badge-name">R1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="R2">/</span>
+                            <span class="badge badge-name">R2</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="R3">/</span>
+                            <span class="badge badge-name">R3</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-center mb-4">Switches</h3>
-                <div class="row">
-                    <div class="col-3 mb-3">
-                        <h6 class="text-right col-form-label mb-3">Control</h6>
-                    </div>
-                    <div class="col-9 mb-3">
-                        <button class="btn btn-outline-danger mb-3 mr-3" type="button" onclick="IPL()">
-                            IPL&nbsp;&nbsp;<i class="fas fa-power-off"></i>
-                        </button>
-                        <button class="btn btn-outline-danger mb-3 mr-3" type="button" onclick="reStart()">
-                            Restart&nbsp;&nbsp;<i class="fas fa-undo"></i>
-                        </button>
-                        <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="run()">
-                            Run&nbsp;&nbsp;<i class="fas fa-play"></i>
-                        </button>
-                        <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="halt()">
-                            Halt&nbsp;&nbsp;<i class="fas fa-stop"></i>
-                        </button>
-                        <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="singleStep()">
-                            Single Step&nbsp;&nbsp;<i class="fas fa-step-forward"></i>
-                        </button>
-                    </div>
-                    <div class="col-3 mb-3">
-                        <h6 class="text-right col-form-label mb-3">Settings</h6>
-                    </div>
-                    <div class="col-9 mb-3">
-                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterRegister()">Alter Register</button>
-                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterMemory()">Alter Memory</button>
-                        <!--<button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="loadInstruction()">Load Instruction</button>-->
-                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="keyboardInput()">Keyboard Input</button>
-                        <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="cardInput()">Card Input</button>
-                    </div>
+                <div id="indexRegisters" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Index Registers</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="X1">/</span>
+                            <span class="badge badge-name">X1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="X2">/</span>
+                            <span class="badge badge-name">X2</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="X3">/</span>
+                            <span class="badge badge-name">X3</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="conditionCode" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Condition Code</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="CC">/</span>
+                            <span class="badge badge-name">CC</span>
+                    </ul>
+                </div>
+                <div id="programCounter" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Program Counter</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="PC">/</span>
+                            <span class="badge badge-name">PC</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="instructionRegister" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Instruction Register</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="IR">/</span>
+                            <span class="badge badge-name">IR</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="memoryAddressRegister" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Memory Address Register</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="MAR">/</span>
+                            <span class="badge badge-name">MAR</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="memoryBufferRegister" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Memory Buffer Register</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="MBR">/</span>
+                            <span class="badge badge-name">MBR</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="machineFaultRegister" class="registers-list mb-4">
+                    <h6 class="text-center mb-3">Machine Fault Register</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="MFR">/</span>
+                            <span class="badge badge-name">MFR</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="col-3">
-                <!--<h3 class="text-center mb-4">Memory</h3>
-                <table class="table table-bordered text-center mb-6">
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                Current Address
-                            </th>
-                            <td id="currentMemoryAddress">
-                                /
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Current Value
-                            </th>
-                            <td id="currentMemoryValue">
-                                /
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>-->
-                <div class="mb-5">
-                    <h3 class="text-center mb-4">Next Instruction</h3>
-                    <div id="instructionArea" class="text-center">
-                        > LDR 1, 0, 0, 1
-                    </div>
+            <h3 class="text-center mb-4">Switches</h3>
+            <div class="row">
+                <div class="col-3 mb-3">
+                    <h6 class="text-right col-form-label mb-3">Control</h6>
                 </div>
-                <div class="mb-5">
-                    <h3 class="text-center mb-4">Program Status</h3>
-                    <div id="statusArea" class="text-center">
-                        <div class="mb-4">
-                            <h6 class="mb-3">Current Status</h6>
-                            <span id="statusNormal">Normal</span>
-                            <span id="statusHalt">Halt</span>
-                            <span id="statusError">Error</span>
-                        </div>
-                        <div>
-                            <h6 class="mb-3">Error Message</h6>
-                            <div id="errorMessage">
-                                /
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-9 mb-3">
+                    <button class="btn btn-outline-danger mb-3 mr-3" type="button" onclick="IPL()">
+                        IPL&nbsp;&nbsp;<i class="fas fa-power-off"></i>
+                    </button>
+                    <button class="btn btn-outline-danger mb-3 mr-3" type="button" onclick="reStart()">
+                        Restart&nbsp;&nbsp;<i class="fas fa-undo"></i>
+                    </button>
+                    <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="run()">
+                        Run&nbsp;&nbsp;<i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="halt()">
+                        Halt&nbsp;&nbsp;<i class="fas fa-stop"></i>
+                    </button>
+                    <button class="btn btn-outline-primary mb-3 mr-3" type="button" onclick="singleStep()">
+                        Single Step&nbsp;&nbsp;<i class="fas fa-step-forward"></i>
+                    </button>
                 </div>
-                <div class="mb-5">
-                    <h3 class="text-center mb-4">Printer</h3>
-                    <textarea rows="3" readonly="readonly" type="text" class="form-control" id="printer" name="printer"></textarea>
+                <div class="col-3 mb-3">
+                    <h6 class="text-right col-form-label mb-3">Settings</h6>
+                </div>
+                <div class="col-9 mb-3">
+                    <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterRegister()">Alter
+                        Register
+                    </button>
+                    <button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="alterMemory()">Alter Memory
+                    </button>
+                    <!--<button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="loadInstruction()">Load Instruction</button>-->
+                    <!--<button class="btn btn-outline-light mb-3 mr-3" type="button" onclick="keyboardInput()">Keyboard Input</button>-->
                 </div>
             </div>
         </div>
-
-        <div id="registerModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Alter Register</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="col-3">
+            <!--<h3 class="text-center mb-4">Memory</h3>
+            <table class="table table-bordered text-center mb-6">
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            Current Address
+                        </th>
+                        <td id="currentMemoryAddress">
+                            /
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            Current Value
+                        </th>
+                        <td id="currentMemoryValue">
+                            /
+                        </td>
+                    </tr>
+                </tbody>
+            </table>-->
+            <div class="mb-5">
+                <h3 class="text-center mb-4">Next Instruction</h3>
+                <div id="instructionArea" class="text-center">
+                    > LDR 1, 0, 0, 1
+                </div>
+            </div>
+            <div class="mb-5">
+                <h3 class="text-center mb-4">Program Status</h3>
+                <div id="statusArea" class="text-center">
+                    <div class="mb-4">
+                        <h6 class="mb-3">Current Status</h6>
+                        <span id="statusNormal">Normal</span>
+                        <span id="statusHalt">Halt</span>
+                        <span id="statusError">Error</span>
                     </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <span class="errorMessage"></span>
+                    <div>
+                        <h6 class="mb-3">Error Message</h6>
+                        <div id="errorMessage">
+                            /
                         </div>
-                        <form id="registerForm">
-                            <div class="row modal-body-row">
-                                <div class="col-3 col-form-label mb-3">
-                                    Register:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <select class="form-control" id="registerToModify" name="register">
-                                        <option value="">Select..</option>
-                                        <option>R0</option>
-                                        <option>R1</option>
-                                        <option>R2</option>
-                                        <option>R3</option>
-                                        <option>X1</option>
-                                        <option>X2</option>
-                                        <option>X3</option>
-                                        <option>PC</option>
-                                        <!--
-                                        <option>CC</option>
-                                        <option>IR</option>
-                                        <option>MAR</option>
-                                        <option>MBR</option>
-                                        <option>MFR</option>
-                                        -->
-                                    </select>
-                                </div>
-                                <div class="col-3 col-form-label mb-3">
-                                    Value:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="registerValue" name="value" placeholder="Register Value">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="submitRegister()">Save</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="memoryModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Alter Memory</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <span class="errorMessage"></span>
-                        </div>
-                        <form id="memoryForm">
-                            <div class="row modal-body-row">
-                                <div class="col-3 col-form-label mb-3">
-                                    Address:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="memoryAddress" name="address" placeholder="Memory Address">
-                                </div>
-                                <div class="col-3 col-form-label mb-3">
-                                    Value:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="memoryValue" name="value" placeholder="Memory Value">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="submitMemory()">Save</button>
-                    </div>
-                </div>
+            <div class="mb-5">
+                <h3 class="text-center mb-4">Printer</h3>
+                <textarea rows="3" readonly="readonly" type="text" class="form-control" id="printer"
+                          name="printer"></textarea>
             </div>
         </div>
+    </div>
 
-        <div id="instructionModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Load Instruction</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="instructionForm">
-                            <div class="row modal-body-row">
-                                <div class="col-3 col-form-label mb-3">
-                                    Instruction:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="inputInstruction" name="instruction" placeholder="Instruction Input">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="submitInstruction()" data-dismiss="modal">Load</button>
-                    </div>
+    <div id="registerModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alter Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-
-        <div id="keyboardModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Keyboard Panel</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span class="errorMessage"></span>
                     </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <span class="errorMessage"></span>
-                        </div>
-                        <form id="keyboardForm">
-                            <div class="row modal-body-row">
-                                <div class="col-3 col-form-label mb-3">
-                                    Keyboard:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="keyboard" name="keyboard" placeholder="Keyboard Input">
-                                </div>
+                    <form id="registerForm">
+                        <div class="row modal-body-row">
+                            <div class="col-3 col-form-label mb-3">
+                                Register:
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="keyboardIN()">Save</button>
-                    </div>
+                            <div class="col-9 mb-3">
+                                <select class="form-control" id="registerToModify" name="register">
+                                    <option value="">Select..</option>
+                                    <option>R0</option>
+                                    <option>R1</option>
+                                    <option>R2</option>
+                                    <option>R3</option>
+                                    <option>X1</option>
+                                    <option>X2</option>
+                                    <option>X3</option>
+                                    <option>PC</option>
+                                    <!--
+                                    <option>CC</option>
+                                    <option>IR</option>
+                                    <option>MAR</option>
+                                    <option>MBR</option>
+                                    <option>MFR</option>
+                                    -->
+                                </select>
+                            </div>
+                            <div class="col-3 col-form-label mb-3">
+                                Value:
+                            </div>
+                            <div class="col-9 mb-3">
+                                <input type="text" class="form-control" id="registerValue" name="value"
+                                       placeholder="Register Value">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </div>
-
-        <div id="cardModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Keyboard Panel</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <span class="errorMessage"></span>
-                        </div>
-                        <form id="cardForm">
-                            <div class="row modal-body-row">
-                                <div class="col-3 col-form-label mb-3">
-                                    Keyboard:
-                                </div>
-                                <div class="col-9 mb-3">
-                                    <input type="text" class="form-control" id="card" name="keyboard" placeholder="Keyboard Input">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="cardIN()">Save</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitRegister()">Save</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="memoryModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alter Memory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span class="errorMessage"></span>
+                    </div>
+                    <form id="memoryForm">
+                        <div class="row modal-body-row">
+                            <div class="col-3 col-form-label mb-3">
+                                Address:
+                            </div>
+                            <div class="col-9 mb-3">
+                                <input type="text" class="form-control" id="memoryAddress" name="address"
+                                       placeholder="Memory Address">
+                            </div>
+                            <div class="col-3 col-form-label mb-3">
+                                Value:
+                            </div>
+                            <div class="col-9 mb-3">
+                                <input type="text" class="form-control" id="memoryValue" name="value"
+                                       placeholder="Memory Value">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitMemory()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="instructionModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Load Instruction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="instructionForm">
+                        <div class="row modal-body-row">
+                            <div class="col-3 col-form-label mb-3">
+                                Instruction:
+                            </div>
+                            <div class="col-9 mb-3">
+                                <input type="text" class="form-control" id="inputInstruction" name="instruction"
+                                       placeholder="Instruction Input">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitInstruction()" data-dismiss="modal">
+                        Load
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="keyboardModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keyboard Panel</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span class="errorMessage"></span>
+                    </div>
+                    <form id="keyboardForm">
+                        <div class="row modal-body-row">
+                            <div class="col-3 col-form-label mb-3">
+                                Keyboard:
+                            </div>
+                            <div class="col-9 mb-3">
+                                <input type="text" maxlength="1" class="form-control" id="keyboard" name="keyboard"
+                                       placeholder="Please input a character">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="keyboardIn()">Input</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

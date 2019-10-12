@@ -129,6 +129,16 @@ public class NewActionController {
         return result.toString();
     }
 
+    @RequestMapping(value = "/action/input")
+    public String deviceIn(Model model, String input) {
+        JSONObject result = new JSONObject();
+        computer.continueIn(input.charAt(0));
+        ComputerUI computerUI = new ComputerUI(computer);
+        result.put("status", 0);
+        result.put("computer", computerUI);
+        return result.toString();
+    }
+
     @RequestMapping(value = "/action/reStart")
     public String reStart(Model model) {
         JSONObject result = new JSONObject();

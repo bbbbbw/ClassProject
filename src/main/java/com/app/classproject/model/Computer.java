@@ -10,19 +10,13 @@ public class Computer {
     public Register[] ccr = new Register[4];
     public Register pc, ir, mar, mbr, mfr;
 
+    public String printer;
+
     public memory[] RAM = new memory[2048];
 
     public int status; // 1: working, 0: halt, -1: error
 
-    public String printer;
-
-    public String getPrinter() {
-		return printer;
-	}
-
-	public void setPrinter(String printer) {
-		this.printer = printer;
-	}
+    public int stopForInput; // Force the computer to stop and wait until the required input is ready.
 
 
     public Computer() {
@@ -41,6 +35,7 @@ public class Computer {
         mar = new Register(Register.Type.MAR);
         mbr = new Register(Register.Type.MBR);
         mfr = new Register(Register.Type.MFR);
+        printer = "";
 
         // Initialize memory
         for (int i = 0; i < RAM.length; i++) {
@@ -49,6 +44,8 @@ public class Computer {
         }
 
         status = 1;
+
+        stopForInput = 0;
     }
    
     ///we do not need this function
@@ -117,7 +114,7 @@ public class Computer {
         RAM[31].MEM = new int[]{0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1}; // 7083
         RAM[31].setup();
         */
-        RAM[26].mem =  26794;
+        RAM[26].mem = 26794;
         RAM[26].loadval();
         RAM[28].mem = 29;
         RAM[28].loadval();
@@ -444,10 +441,12 @@ public class Computer {
      * Run the program and print register/memory information after each instruction
      */
     public void runProgram() {
+        if (stopForInput == 1) {
+            return;
+        }
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
-//            pc.setValue(pc.getBase10Value() + 1);
             this.status = 1;
             runProgram();
         } else if (executionResult == ERROR_RET_CODE) {
@@ -458,10 +457,25 @@ public class Computer {
     }
 
     public void singleStep() {
+        if (stopForInput == 1) {
+            return;
+        }
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
-//            pc.setValue(pc.getBase10Value() + 1);
+            this.status = 1;
+        } else if (executionResult == ERROR_RET_CODE) {
+            this.status = -1;
+        } else if (executionResult == HLT_RET_CODE) {
+            this.status = 0;
+        }
+    }
+
+    public void continueIn(char input) {
+        stopForInput = 0;
+        Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
+        int executionResult = curInstruction.continueIn(input);
+        if (executionResult == SUCCESS_RET_CODE) {
             this.status = 1;
         } else if (executionResult == ERROR_RET_CODE) {
             this.status = -1;

@@ -5,11 +5,13 @@ public class ComputerUI {
     public Register[] idx = new Register[3]; // X0-X2
     public Register[] ccr = new Register[4];
     public Register pc, ir, mar, mbr, mfr;
+    public String printer;
+
 
     public int status;
     public String nextInstruction;
 
-    public String printer;
+    public int stopForInput;
 
 
     public ComputerUI(Computer computer) {
@@ -28,6 +30,8 @@ public class ComputerUI {
         mbr = computer.mbr;
         mfr = computer.mfr;
         printer = computer.printer;
+
+        stopForInput = computer.stopForInput;
 
         status = computer.status;
 

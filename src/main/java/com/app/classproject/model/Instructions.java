@@ -844,7 +844,31 @@ public class Instructions {
      * Input Character To Register from Device
      */
     public int IN() {
+        if (instruction.did == 0) { // keyboard
+            computer.stopForInput = 1;
+        }
+        return Computer.SUCCESS_RET_CODE;
+    }
 
+    public int continueIn(char input) {
+        switch (instruction.gpr) {
+            case 0:
+                computer.gpr[0].setValue((int)input);
+                break;
+            case 1:
+                computer.gpr[1].setValue((int)input);
+                break;
+            case 2:
+                computer.gpr[2].setValue((int)input);
+                break;
+            case 3:
+                computer.gpr[3].setValue((int)input);
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
+        }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
     }
 
     /**
@@ -852,12 +876,12 @@ public class Instructions {
      */
 
     public int OUT() {
-    	if(instruction.did == 1) {
-    		int val = this.getValueFromRById(instruction.gpr);
-        	char c = (char)val;
-            computer.setPrinter(String.valueOf(c));
-    	}
-    	return Computer.SUCCESS_RET_CODE;
+    	if (instruction.did == 1) {
+            int val = this.getValueFromRById(instruction.gpr);
+            char c = (char)val;
+            computer.printer = String.valueOf(c);
+        }
+        return Computer.SUCCESS_RET_CODE;
     }
 
 
