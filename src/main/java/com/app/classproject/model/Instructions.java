@@ -890,7 +890,7 @@ public class Instructions {
     }
 
     public int continueIn(int input) {
-        switch (instruction.gpr) {
+        switch (instruction.r) {
             case 0:
                 computer.gpr[0].setValue((int)input);
                 break;
@@ -916,7 +916,7 @@ public class Instructions {
 
     public int OUT() {
         if (instruction.did == 1) {
-            int val = this.getValueFromRById(instruction.gpr);
+            int val = this.getValueFromRById(instruction.r);
             computer.printer += "\n" + Integer.toString(val);
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
