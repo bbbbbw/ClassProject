@@ -133,12 +133,8 @@ public class NewActionController {
     @RequestMapping(value = "/action/input")
     public String deviceIn(Model model, String input) {
         JSONObject result = new JSONObject();
-        try {
-            int temp = Integer.parseInt(input);
-            computer.continueIn(temp);
-        } catch (Exception e) {
-            computer.continueIn((int)input.charAt(0));
-        }
+        int temp = Integer.parseInt(input);
+        computer.continueIn(temp);
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);

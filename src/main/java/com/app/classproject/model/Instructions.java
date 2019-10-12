@@ -914,14 +914,14 @@ public class Instructions {
      * Output Character to Device from Register
      */
 
-	if(instruction.did == 1) {
-             int val = this.getValueFromRById(instruction.gpr);
-             char c = (char)val;
-             computer.printer = String.valueOf(c);
-         }
-	 computer.pc.setValue(computer.pc.getBase10Value() + 1);
-         return Computer.SUCCESS_RET_CODE;
-     }
+    public int OUT() {
+        if (instruction.did == 1) {
+            int val = this.getValueFromRById(instruction.gpr);
+            computer.printer = Integer.toString(val);
+        }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
+    }
 
 
     // get value by ID from general register R0-R3
