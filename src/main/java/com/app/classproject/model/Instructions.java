@@ -850,7 +850,7 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
     }
 
-    public int continueIn(char input) {
+    public int continueIn(int input) {
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue((int)input);

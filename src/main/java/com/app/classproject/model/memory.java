@@ -152,7 +152,7 @@ public class memory {
             builder.append(value);
         }
         tmp = builder.toString();
-        this.mem = Integer.parseInt(tmp, 2)
+        this.mem = Integer.parseInt(tmp, 2);
             
         //different opcode cases
         if (this.opc == 36) {

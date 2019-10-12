@@ -142,7 +142,7 @@
             $("#MBR").text(computer.mbr.value.toString().replace(/,/g, ''));
             $("#MFR").text(computer.mfr.value.toString().replace(/,/g, ''));
             $("#instructionArea").text("> " + computer.nextInstruction);
-            $("#printer").val(computer.printer.toString().replace(/,/g, ''));
+            $("#printer").val($("#printer").val() + "\n" + computer.printer.toString().replace(/,/g, ''));
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
@@ -723,7 +723,7 @@
                                 Keyboard:
                             </div>
                             <div class="col-9 mb-3">
-                                <input type="text" maxlength="1" class="form-control" id="keyboard" name="keyboard"
+                                <input type="text" class="form-control" id="keyboard" name="keyboard"
                                        placeholder="Please input a character">
                             </div>
                         </div>

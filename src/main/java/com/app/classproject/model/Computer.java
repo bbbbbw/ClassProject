@@ -1,5 +1,7 @@
 package com.app.classproject.model;
 
+import abandoned.model.Instruction;
+
 public class Computer {
     public static int ERROR_RET_CODE = -1;
     public static int HLT_RET_CODE = 0;
@@ -253,7 +255,7 @@ public class Computer {
         test4.gpr = 3;
         test4.idr = 2;
         test4.iad = 1;
-        test4.address = 26;
+        test4.address = 27;
         test4.load();
         RAM[17] = test4;
 
@@ -278,6 +280,38 @@ public class Computer {
         RAM[19] = test4;
 
         ir.setValue(RAM[6].MEM);
+    }
+
+
+    public void loadTestProgramOne() {
+        // Program starts at RAM[6]
+        pc.setValue(6);
+
+        // Set register values
+        gpr[0].setValue(20);
+        // gpr[2].setValue(20);
+        idx[0].setValue(500);
+
+        // Set memory values
+        RAM[31].mem = 500;
+        RAM[31].loadval();
+        RAM[500].mem = 1;
+        RAM[500].loadval();
+
+        // Load instructions
+        memory tempInstruction = new memory();
+        tempInstruction.opc = Instructions.INopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.did = 0;
+        tempInstruction.load();
+        RAM[6] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.did = 0;
+        tempInstruction.load();
+        RAM[7] = tempInstruction;
     }
     
     /**
@@ -471,7 +505,7 @@ public class Computer {
         }
     }
 
-    public void continueIn(char input) {
+    public void continueIn(int input) {
         stopForInput = 0;
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.continueIn(input);

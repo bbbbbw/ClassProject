@@ -97,7 +97,8 @@ public class NewActionController {
     @RequestMapping(value = "/action/IPL")
     public String IPL(Model model) {
         JSONObject result = new JSONObject();
-        computer.loadProgram();
+//        computer.loadProgram();
+        computer.loadTestProgramOne();
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);
@@ -132,7 +133,12 @@ public class NewActionController {
     @RequestMapping(value = "/action/input")
     public String deviceIn(Model model, String input) {
         JSONObject result = new JSONObject();
-        computer.continueIn(input.charAt(0));
+        try {
+            int temp = Integer.parseInt(input);
+            computer.continueIn(temp);
+        } catch (Exception e) {
+            computer.continueIn((int)input.charAt(0));
+        }
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);
