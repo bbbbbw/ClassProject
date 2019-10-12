@@ -143,15 +143,17 @@ public class memory {
             builder.append(value);
         }
         String tmp = builder.toString();
+        
+        this.opc = Integer.parseInt(tmp, 2);
+        
         //calculate the decimal value of whole binary array.
         builder = new StringBuilder();
         for (int value : MEM) {
             builder.append(value);
         }
         tmp = builder.toString();
-        this.mem = Integer.parseInt(tmp, 2);
-
-        this.opc = Integer.parseInt(tmp, 2);
+        this.mem = Integer.parseInt(tmp, 2)
+            
         //different opcode cases
         if (this.opc == 36) {
             System.out.println("trap code setup");
