@@ -132,10 +132,7 @@
             $("#X2").text(computer.idx[1].value.toString().replace(/,/g,''));
             $("#X3").text(computer.idx[2].value.toString().replace(/,/g,''));
             $("#PC").text(computer.pc.value.toString().replace(/,/g,''));
-            $("#CC0").text(computer.ccr[0].value.toString().replace(/,/g,''));
-            $("#CC1").text(computer.ccr[0].value.toString().replace(/,/g,''));
-            $("#CC2").text(computer.ccr[0].value.toString().replace(/,/g,''));
-            $("#CC3").text(computer.ccr[0].value.toString().replace(/,/g,''));
+            $("#CC").text(computer.ccr[0].value.toString().replace(/,/g,'') + computer.ccr[1].value.toString().replace(/,/g,'') + computer.ccr[2].value.toString().replace(/,/g,'') + computer.ccr[3].value.toString().replace(/,/g,''));
             $("#IR").text(computer.ir.value.toString().replace(/,/g,''));
             $("#MAR").text(computer.mar.value.toString().replace(/,/g,''));
             $("#MBR").text(computer.mbr.value.toString().replace(/,/g,''));
@@ -405,21 +402,8 @@
                         <h6 class="text-center mb-3">Condition Code</h6>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC0">/</span>
-                                <span class="badge badge-name">CC0</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC1">/</span>
-                                <span class="badge badge-name">CC1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC2">/</span>
-                                <span class="badge badge-name">CC2</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span id="CC3">/</span>
-                                <span class="badge badge-name">CC3</span>
-                            </li>
+                                <span id="CC">/</span>
+                                <span class="badge badge-name">CC</span>
                         </ul>
                     </div>
                     <div id="programCounter" class="registers-list mb-4">
@@ -549,7 +533,7 @@
                 </div>
                 <div class="mb-5">
                     <h3 class="text-center mb-4">Printer</h3>
-                    <textarea rows="5" readonly="readonly" type="text" class="form-control" id="printer" name="printer"></textarea>
+                    <textarea rows="3" readonly="readonly" type="text" class="form-control" id="printer" name="printer"></textarea>
                 </div>
             </div>
         </div>

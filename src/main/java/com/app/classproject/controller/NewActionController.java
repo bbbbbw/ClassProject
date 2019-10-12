@@ -3,6 +3,7 @@ package com.app.classproject.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.app.classproject.model.Computer;
 import com.app.classproject.model.ComputerUI;
+import com.app.classproject.model.Instructions;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,6 +135,21 @@ public class NewActionController {
         computer = new Computer();
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
+        result.put("computer", computerUI);
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/test/oneInstruction")
+    public String oneInstruction(Model model, String instructionStr) {
+        JSONObject result = new JSONObject();
+        int[] instruction = new int[16];
+        for (int i = 0; i < 16; i++) {
+            instruction[i] = instructionStr.charAt(i) - 48;
+        }
+        Instructions curInstruction = new Instructions(instruction, computer);
+        int executionResult = curInstruction.execute();
+        ComputerUI computerUI = new ComputerUI(computer);
+        result.put("status", executionResult);
         result.put("computer", computerUI);
         return result.toString();
     }
