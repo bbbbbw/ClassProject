@@ -9,7 +9,7 @@ public class ComputerUI {
     public int status;
     public String nextInstruction;
 
-    public int[] printer;
+    public String printer;
 
 
     public ComputerUI(Computer computer) {
