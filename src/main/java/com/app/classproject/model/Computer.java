@@ -14,7 +14,15 @@ public class Computer {
 
     public int status; // 1: working, 0: halt, -1: error
 
-    public int[] printer;
+    public String printer;
+
+    public String getPrinter() {
+		return printer;
+	}
+
+	public void setPrinter(String printer) {
+		this.printer = printer;
+	}
 
 
     public Computer() {
