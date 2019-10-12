@@ -852,7 +852,12 @@ public class Instructions {
      */
 
     public int OUT() {
-
+    	if(instruction.did == 1) {
+    		int val = this.getValueFromRById(instruction.gpr);
+        	char c = (char)val;
+            computer.setPrinter(String.valueOf(c));
+    	}
+    	return Computer.SUCCESS_RET_CODE;
     }
 
 
