@@ -73,10 +73,12 @@ public class Instructions {
     public static final int DIVZERO = 2;
     public static final int EQUALORNOT = 3;
 
+	public static final int	KEYBOARD	= 0;
+	public static final int	PRINTER		= 1;
+	public static final int	CARD_READER	= 2;
 
     public Computer computer;
     public memory instruction = new memory();
-    public Register register;
 
     public Instructions(int[] instruction, Computer computer) {
         this.computer = computer;
@@ -577,6 +579,7 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -606,6 +609,7 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -637,6 +641,7 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -668,6 +673,7 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -700,6 +706,7 @@ public class Instructions {
                 computer.ccr[0].setValue(OVERFLOW);
             }
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -735,6 +742,7 @@ public class Instructions {
                 computer.ccr[2].setValue(DIVZERO);
             }
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -749,6 +757,7 @@ public class Instructions {
         } else {
             computer.ccr[4].setValue(0);
         }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -760,6 +769,7 @@ public class Instructions {
         int temp2 = getValueFromRById(instruction.ry);
 
         setValueToRById(instruction.rx, temp1 & temp2);
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -772,6 +782,7 @@ public class Instructions {
         int temp2 = getValueFromRById(instruction.ry);
 
         setValueToRById(instruction.rx, temp1 | temp2);
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -782,6 +793,7 @@ public class Instructions {
     public int NOT() {
         int temp1 = getValueFromRById(instruction.rx);
         setValueToRById(instruction.rx, ~temp1);
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -792,12 +804,36 @@ public class Instructions {
 
     public int SRC() {
         int tempR = getValueFromRById(instruction.gpr);
-        if (instruction.lr == 1) {
-            this.setValueToRById(instruction.gpr, tempR << instruction.count);
+        
+        if(instruction.al == 0) {
+        	 if (instruction.lr == 0) {
+        		 tempR = (tempR >> instruction.count);
+            }
+        	 if (instruction.lr == 1) {
+        		 tempR = (tempR << instruction.count);
+             }
         }
-        if (instruction.lr == 0) {
-            this.setValueToRById(instruction.gpr, tempR >> instruction.count);
-        }
+       
+  /*    if(instruction.al == 1) {
+        	
+        	if(instruction.lr == 0) {
+        		if(tempR >= 0) {
+        			tempR = (tempR >>> instruction.count);
+        		}else {
+        				String x =Integer.toBinaryString(tempR >>> instruction.count);
+        				x = x.replace("1111111111111111","");
+        				tempR = Integer.parseInt(x,2);
+        			}
+        		}
+        	}
+        
+        	if(instruction.lr == 1) {
+        		tempR = tempR <<  instruction.count;
+        	}
+   */    
+       
+        this.setValueToRById(instruction.gpr, tempR);
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -831,11 +867,14 @@ public class Instructions {
                 temp[i] = binaryR.charAt(16 - instruction.count + i);
             }
         }
+        
         String temp1 = "";
         for (int i = 0; i < 16; i++) {
             temp1 = temp1 + temp[i];
         }
+        
         this.setValueToRById(instruction.gpr, Integer.parseInt(temp1));
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -875,14 +914,14 @@ public class Instructions {
      * Output Character to Device from Register
      */
 
-    public int OUT() {
-    	if (instruction.did == 1) {
-            int val = this.getValueFromRById(instruction.gpr);
-            char c = (char)val;
-            computer.printer = String.valueOf(c);
-        }
-        return Computer.SUCCESS_RET_CODE;
-    }
+	if(instruction.did == 1) {
+             int val = this.getValueFromRById(instruction.gpr);
+             char c = (char)val;
+             computer.printer = String.valueOf(c);
+         }
+	 computer.pc.setValue(computer.pc.getBase10Value() + 1);
+         return Computer.SUCCESS_RET_CODE;
+     }
 
 
     // get value by ID from general register R0-R3
