@@ -231,14 +231,14 @@ public class memory {
 
         } else if (this.opc >= 61 && this.opc <= 63) {
             System.out.println("I/O Operations setup");
-            System.arraycopy(mem, 6, memory.this.R, 0, 2);
+            System.arraycopy(MEM, 6, memory.this.R, 0, 2);
             builder = new StringBuilder();
             for (int value : R) {
                 builder.append(value);
             }
             tmp = builder.toString();
             this.r = Integer.parseInt(tmp, 2);
-            System.arraycopy(mem, 11, memory.this.DID, 0, 5);
+            System.arraycopy(MEM, 11, memory.this.DID, 0, 5);
             builder = new StringBuilder();
             for (int value : DID) {
                 builder.append(value);

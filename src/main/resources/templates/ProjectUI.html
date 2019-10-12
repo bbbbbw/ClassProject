@@ -82,6 +82,15 @@
             background-color: #222831;
         }
 
+        #printer {
+            padding: 1rem 2rem;
+            border-radius: .5rem;
+            background-color: #eeeeee;
+            color: black;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         #statusNormal {
             font-size: 22px;
             color: #28a745;
@@ -99,12 +108,6 @@
 
         #errorMessage {
             font-size: 13px;
-        }
-
-        #printer {
-            padding: 1rem 2rem;
-            background-color: #eeeeee;
-            font-size: 18px;
         }
     </style>
 
@@ -142,7 +145,7 @@
             $("#MBR").text(computer.mbr.value.toString().replace(/,/g, ''));
             $("#MFR").text(computer.mfr.value.toString().replace(/,/g, ''));
             $("#instructionArea").text("> " + computer.nextInstruction);
-            $("#printer").val($("#printer").val() + "\n" + computer.printer.toString().replace(/,/g, ''));
+            $("#printer").text(computer.printer.toString().replace(/,/g, ''));
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
@@ -551,7 +554,7 @@
             <div class="mb-5">
                 <h3 class="text-center mb-4">Next Instruction</h3>
                 <div id="instructionArea" class="text-center">
-                    > LDR 1, 0, 0, 1
+                    >
                 </div>
             </div>
             <div class="mb-5">
@@ -573,8 +576,7 @@
             </div>
             <div class="mb-5">
                 <h3 class="text-center mb-4">Printer</h3>
-                <textarea rows="3" readonly="readonly" type="text" class="form-control" id="printer"
-                          name="printer"></textarea>
+                <div id="printer" name="printer"></div>
             </div>
         </div>
     </div>

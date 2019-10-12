@@ -309,7 +309,7 @@ public class Computer {
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.gpr = 1;
-        tempInstruction.did = 0;
+        tempInstruction.did = 1;
         tempInstruction.load();
         RAM[7] = tempInstruction;
     }
