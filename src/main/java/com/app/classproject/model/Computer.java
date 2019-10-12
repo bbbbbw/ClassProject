@@ -301,17 +301,26 @@ public class Computer {
         // Load instructions
         memory tempInstruction = new memory();
         tempInstruction.opc = Instructions.INopc;
-        tempInstruction.gpr = 1;
+        tempInstruction.r = 1;
         tempInstruction.did = 0;
         tempInstruction.load();
         RAM[6] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
-        tempInstruction.gpr = 1;
+        tempInstruction.r = 1;
         tempInstruction.did = 1;
         tempInstruction.load();
         RAM[7] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[8] = tempInstruction;
     }
     
     /**
