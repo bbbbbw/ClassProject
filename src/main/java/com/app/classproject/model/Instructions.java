@@ -626,7 +626,7 @@ public class Instructions {
             case 0:
                 if (computer.gpr[0].getBase10Value() - computer.RAM[EA].mem < 0) {
                     computer.ccr[1].setValue(1);
-                    // computer.gpr[0].setValue(0);
+                    computer.gpr[0].setValue(computer.RAM[EA].mem - computer.gpr[0].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
                     computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
@@ -635,7 +635,7 @@ public class Instructions {
             case 1:
                 if (computer.gpr[1].getBase10Value() - computer.RAM[EA].mem < 0) {
                     computer.ccr[1].setValue(1);
-                    // computer.gpr[1].setValue(0);
+                    computer.gpr[1].setValue(computer.RAM[EA].mem - computer.gpr[1].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
                     computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.RAM[EA].mem);
@@ -644,7 +644,7 @@ public class Instructions {
             case 2:
                 if (computer.gpr[2].getBase10Value() - computer.RAM[EA].mem < 0) {
                     computer.ccr[1].setValue(1);
-                    // computer.gpr[2].setValue(0);
+                    computer.gpr[2].setValue(computer.RAM[EA].mem - computer.gpr[2].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
                     computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.RAM[EA].mem);
@@ -653,7 +653,7 @@ public class Instructions {
             case 3:
                 if (computer.gpr[3].getBase10Value() - computer.RAM[EA].mem < 0) {
                     computer.ccr[1].setValue(1);
-                    // computer.gpr[3].setValue(0);
+                    computer.gpr[3].setValue(computer.RAM[EA].mem - computer.gpr[3].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
                     computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.RAM[EA].mem);
