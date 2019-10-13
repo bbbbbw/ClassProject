@@ -18,7 +18,7 @@ Models a fully associative, unified cache using a LinkedList data structure. 16 
 Contains definitions of program instructions. Each instruction takes a 16-bit binary input.  
 
 ### Computer.java ###
-(Correspond to old **Main.java**). Define the virtual computer, could initialize registers and memory, pre-load and run program.
+Define the virtual computer, could initialize registers and memory, pre-load and run program.
 
 ### ComputerUI.java ###
 Links architecture models to UI
