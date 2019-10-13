@@ -239,22 +239,26 @@ public class Instructions {
         switch (instruction.gpr) {
             case 0:
                 computer.mbr.setValue(computer.gpr[0].getValue());
-                computer.RAM[EA].MEM = computer.gpr[0].getValue();
+                System.arraycopy(computer.gpr[0].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.gpr[0].getValue();
                 computer.RAM[EA].setup();
                 break;
             case 1:
                 computer.mbr.setValue(computer.gpr[1].getValue());
-                computer.RAM[EA].MEM = computer.gpr[1].getValue();
+                System.arraycopy(computer.gpr[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.gpr[1].getValue();
                 computer.RAM[EA].setup();
                 break;
             case 2:
                 computer.mbr.setValue(computer.gpr[2].getValue());
-                computer.RAM[EA].MEM = computer.gpr[2].getValue();
+                System.arraycopy(computer.gpr[2].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.gpr[2].getValue();
                 computer.RAM[EA].setup();
                 break;
             case 3:
                 computer.mbr.setValue(computer.gpr[3].getValue());
-                computer.RAM[EA].MEM = computer.gpr[3].getValue();
+                System.arraycopy(computer.gpr[3].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.gpr[3].getValue();
                 computer.RAM[EA].setup();
                 break;
             default:
@@ -332,17 +336,20 @@ public class Instructions {
         switch (instruction.idr) {
             case 1:
                 computer.mbr.setValue(computer.idx[0].getValue());
-                computer.RAM[EA].MEM = computer.idx[0].getValue();
+                System.arraycopy(computer.idx[0].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.idx[0].getValue();
                 computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             case 2:
                 computer.mbr.setValue(computer.idx[1].getValue());
-                computer.RAM[EA].MEM = computer.idx[1].getValue();
+                System.arraycopy(computer.idx[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.idx[1].getValue();
                 computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             case 3:
                 computer.mbr.setValue(computer.idx[2].getValue());
-                computer.RAM[EA].MEM = computer.idx[2].getValue();
+                System.arraycopy(computer.idx[2].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                // computer.RAM[EA].MEM = computer.idx[2].getValue();
                 computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             default:
@@ -579,7 +586,6 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -609,12 +615,11 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
     /**
-     * Add  Immediate to Register
+     * Add Immediate to Register
      * IX and I are ignored in this instruction
      */
     public int AIR() {
@@ -913,7 +918,6 @@ public class Instructions {
     /**
      * Output Character to Device from Register
      */
-
     public int OUT() {
         if (instruction.did == 1) {
             int val = this.getValueFromRById(instruction.r);
