@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Receive requests submitted by the front-end, execute the action, and return the result
+ */
 @RestController
 public class NewActionController {
     Computer computer = new Computer();
@@ -21,6 +24,9 @@ public class NewActionController {
         return result.toString();
     }
 
+    /**
+     * User changed contents of a register
+     */
     @RequestMapping(value = "/action/submitRegister")
     public String alterRegister(Model model, String register, String value) {
         JSONObject result = new JSONObject();
@@ -66,6 +72,9 @@ public class NewActionController {
         return result.toString();
     }
 
+    /**
+     * User changed value of a memory location
+     */
     @RequestMapping(value = "/action/submitMemory")
     public String alterMemory(Model model, String address, String value) {
         JSONObject result = new JSONObject();
@@ -88,12 +97,18 @@ public class NewActionController {
         return result.toString();
     }
 
+    /**
+     * User changed value of instruction
+     */
     @RequestMapping(value = "/action/submitInstruction")
     public String alterInstruction(Model model, String instruction) {
         JSONObject result = new JSONObject();
         return result.toString();
     }
 
+    /**
+     * IPL button pressed
+     */
     @RequestMapping(value = "/action/IPL")
     public String IPL(Model model) {
         JSONObject result = new JSONObject();
@@ -105,6 +120,9 @@ public class NewActionController {
         return result.toString();
     }
 
+    /**
+     * Run button pressed
+     */
     @RequestMapping(value = "/action/run")
     public String run(Model model) {
         JSONObject result = new JSONObject();
