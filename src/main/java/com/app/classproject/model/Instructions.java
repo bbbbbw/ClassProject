@@ -817,7 +817,7 @@ public class Instructions {
     /**
      * Logical And of Register and Register
      */
-    public int AND() {
+    public int ANDd() {
         int temp1 = getValueFromRById(instruction.rx);
         int temp2 = getValueFromRById(instruction.ry);
 
@@ -825,12 +825,24 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
-
+    public int AND() {
+        int temp1 [] = computer.gpr[instruction.rx].getValue();
+        int temp2 [] = computer.gpr[instruction.ry].getValue();
+        
+        for(int i = 0; i < 16; i++) {
+        	if(temp2[i] == 0) {
+        		temp1[i] = 0;
+        	}
+        }
+        computer.gpr[instruction.rx].setValue(temp1);
+        computer.pc.setValue(temp1);
+        return Computer.SUCCESS_RET_CODE;
+    }
 
     /**
      * Logical Or of Register and Register
      */
-    public int ORR() {
+    public int ORRr() {
         int temp1 = getValueFromRById(instruction.rx);
         int temp2 = getValueFromRById(instruction.ry);
 
@@ -838,18 +850,43 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
-
+    public int ORR() {
+        int temp1 [] = computer.gpr[instruction.rx].getValue();
+        int temp2 [] = computer.gpr[instruction.ry].getValue();
+        
+        for(int i = 0; i < 16; i++) {
+        	if(temp2[i] == 1) {
+        		temp1[i] = 1;
+        	}
+        }
+        computer.gpr[instruction.rx].setValue(temp1);
+        computer.pc.setValue(temp1);
+        return Computer.SUCCESS_RET_CODE;
+    }
 
     /**
      * Logical Not of Register To Register
      */
-    public int NOT() {
+    public int NOTt() {
         int temp1 = getValueFromRById(instruction.rx);
         setValueToRById(instruction.rx, ~temp1);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
-
+    public int NOT() {
+        int temp [] = computer.gpr[instruction.rx].getValue();
+        
+        for(int i = 0; i < 16; i++) {
+        	if(temp[i] == 1) {
+        		temp[i] = 0;
+        	}else {
+        		temp[i]=1;
+        	}
+        }
+        computer.gpr[instruction.rx].setValue(temp);
+        computer.pc.setValue(temp);
+        return Computer.SUCCESS_RET_CODE;
+    }
 
     /**
      * Shift Register by Count
