@@ -301,6 +301,9 @@ public class Computer {
         // Load instructions
         memory tempInstruction;
 
+        /*
+        Requests 20 numbers from the user, store them and print them
+         */
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDRopc;//1
         tempInstruction.gpr = 1;
@@ -338,7 +341,7 @@ public class Computer {
         RAM[9] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.opc = Instructions.LDXopc;//41
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
@@ -347,7 +350,7 @@ public class Computer {
         RAM[10] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.INopc;
+        tempInstruction.opc = Instructions.INopc;//61
         tempInstruction.r = 1;
         tempInstruction.did = 0;
         tempInstruction.load();
@@ -386,6 +389,25 @@ public class Computer {
         tempInstruction.address = 6;
         tempInstruction.load();
         RAM[15] = tempInstruction;
+
+        /*
+        Requests a number from the user and store in 530
+         */
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.INopc;//61
+        tempInstruction.r = 1;
+        tempInstruction.did = 0;
+        tempInstruction.load();
+        RAM[11] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;//2
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[11] = tempInstruction;
 
         ir.setValue(RAM[6].MEM);
     }

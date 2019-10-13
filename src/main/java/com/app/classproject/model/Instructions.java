@@ -571,16 +571,40 @@ public class Instructions {
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
         switch (instruction.gpr) {
             case 0:
-                computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.RAM[EA].mem);
+                if (computer.gpr[0].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                    computer.ccr[0].setValue(1);
+                    // computer.gpr[0].setValue(65535);
+                } else {
+                    computer.ccr[0].setValue(0);
+                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.RAM[EA].mem);
+                }
                 break;
             case 1:
-                computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + computer.RAM[EA].mem);
+                if (computer.gpr[1].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                    computer.ccr[0].setValue(1);
+                    // computer.gpr[1].setValue(65535);
+                } else {
+                    computer.ccr[0].setValue(0);
+                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + computer.RAM[EA].mem);
+                }
                 break;
             case 2:
-                computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + computer.RAM[EA].mem);
+                if (computer.gpr[2].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                    computer.ccr[0].setValue(1);
+                    // computer.gpr[2].setValue(65535);
+                } else {
+                    computer.ccr[0].setValue(0);
+                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + computer.RAM[EA].mem);
+                }
                 break;
             case 3:
-                computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + computer.RAM[EA].mem);
+                if (computer.gpr[3].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                    computer.ccr[0].setValue(1);
+                    // computer.gpr[3].setValue(65535);
+                } else {
+                    computer.ccr[0].setValue(0);
+                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + computer.RAM[EA].mem);
+                }
                 break;
             default:
                 System.out.println("Error");
@@ -600,16 +624,40 @@ public class Instructions {
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
         switch (instruction.gpr) {
             case 0:
-                computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
+                if (computer.gpr[0].getBase10Value() - computer.RAM[EA].mem < 0) {
+                    computer.ccr[1].setValue(1);
+                    // computer.gpr[0].setValue(0);
+                } else {
+                    computer.ccr[1].setValue(0);
+                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
+                }
                 break;
             case 1:
-                computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.RAM[EA].mem);
+                if (computer.gpr[1].getBase10Value() - computer.RAM[EA].mem < 0) {
+                    computer.ccr[1].setValue(1);
+                    // computer.gpr[1].setValue(0);
+                } else {
+                    computer.ccr[1].setValue(0);
+                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.RAM[EA].mem);
+                }
                 break;
             case 2:
-                computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.RAM[EA].mem);
+                if (computer.gpr[2].getBase10Value() - computer.RAM[EA].mem < 0) {
+                    computer.ccr[1].setValue(1);
+                    // computer.gpr[2].setValue(0);
+                } else {
+                    computer.ccr[1].setValue(0);
+                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.RAM[EA].mem);
+                }
                 break;
             case 3:
-                computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.RAM[EA].mem);
+                if (computer.gpr[3].getBase10Value() - computer.RAM[EA].mem < 0) {
+                    computer.ccr[1].setValue(1);
+                    // computer.gpr[3].setValue(0);
+                } else {
+                    computer.ccr[1].setValue(0);
+                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.RAM[EA].mem);
+                }
                 break;
             default:
                 System.out.println("Error");
