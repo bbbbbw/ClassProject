@@ -333,23 +333,32 @@ public class Computer {
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 31;
+        tempInstruction.address = 1;
         tempInstruction.load();
         RAM[9] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[10] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.INopc;
         tempInstruction.r = 1;
         tempInstruction.did = 0;
         tempInstruction.load();
-        RAM[10] = tempInstruction;
+        RAM[11] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 1;
         tempInstruction.did = 1;
         tempInstruction.load();
-        RAM[11] = tempInstruction;
+        RAM[12] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -358,7 +367,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[12] = tempInstruction;
+        RAM[13] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.SMRopc;
@@ -367,7 +376,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[13] = tempInstruction;
+        RAM[14] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JNEopc;
@@ -376,7 +385,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 6;
         tempInstruction.load();
-        RAM[14] = tempInstruction;
+        RAM[15] = tempInstruction;
 
         ir.setValue(RAM[6].MEM);
     }
