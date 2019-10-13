@@ -2,6 +2,9 @@ package com.app.classproject.model;
 
 import abandoned.model.Instruction;
 
+/**
+ * Define the virtual computer, initialize registers and memory, and pre-load and run program.
+ */
 public class Computer {
     public static int ERROR_RET_CODE = -1;
     public static int HLT_RET_CODE = 0;
@@ -588,6 +591,9 @@ public class Computer {
         }
     }
 
+    /**
+     * Get the next instruction and execute
+     */
     public void singleStep() {
         if (stopForInput == 1) {
             return;
@@ -603,6 +609,9 @@ public class Computer {
         }
     }
 
+    /**
+     * Continue program after pausing
+     */
     public void continueIn(int input) {
         stopForInput = 0;
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
