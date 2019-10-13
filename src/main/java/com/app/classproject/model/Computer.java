@@ -302,7 +302,7 @@ public class Computer {
         memory tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.opc = Instructions.LDRopc;//1
         tempInstruction.gpr = 1;
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
@@ -311,7 +311,7 @@ public class Computer {
         RAM[6] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.AMRopc;
+        tempInstruction.opc = Instructions.AMRopc;//4
         tempInstruction.gpr = 1;
         tempInstruction.idr = 2;
         tempInstruction.iad = 0;
@@ -320,7 +320,7 @@ public class Computer {
         RAM[7] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.opc = Instructions.STRopc;//2
         tempInstruction.gpr = 1;
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
@@ -329,7 +329,7 @@ public class Computer {
         RAM[8] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.opc = Instructions.LDXopc;//41
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
@@ -338,21 +338,21 @@ public class Computer {
         RAM[9] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.INopc;
+        tempInstruction.opc = Instructions.INopc;//61
         tempInstruction.r = 1;
         tempInstruction.did = 0;
         tempInstruction.load();
         RAM[10] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.opc = Instructions.OUTopc;//62
         tempInstruction.r = 1;
         tempInstruction.did = 1;
         tempInstruction.load();
         RAM[11] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.opc = Instructions.STRopc;//2
         tempInstruction.gpr = 1;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
@@ -361,7 +361,7 @@ public class Computer {
         RAM[12] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.SMRopc;
+        tempInstruction.opc = Instructions.SMRopc;//5
         tempInstruction.gpr = 0;
         tempInstruction.idr = 2;
         tempInstruction.iad = 0;
@@ -370,7 +370,7 @@ public class Computer {
         RAM[13] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.JNEopc;
+        tempInstruction.opc = Instructions.JNEopc;//11
         tempInstruction.gpr = 0;
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
