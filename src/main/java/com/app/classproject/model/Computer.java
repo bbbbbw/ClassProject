@@ -1,7 +1,5 @@
 package com.app.classproject.model;
 
-import abandoned.model.Instruction;
-
 /**
  * Define the virtual computer, initialize registers and memory, and pre-load and run program.
  */
@@ -18,6 +16,7 @@ public class Computer {
     public String printer;
 
     public memory[] RAM = new memory[2048];
+    public Cache cache = new Cache();
 
     public int status; // 1: working, 0: halt, -1: error
 

@@ -196,32 +196,36 @@ public class Instructions {
      */
     public int LDR() {
         int EA = getEffectiveAdr();
+        
+        // Check cache
+        int[] memVal = checkCache(EA);
+        
         computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
+        computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
-        System.out.println("\nRAM[" + EA + "] = " + computer.RAM[EA].mem + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
+        System.out.println("\nRAM[" + EA + "] = " + memVal + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
         System.out.println("Loading RAM[" + EA + "] into gpr[" + instruction.gpr + "]");
 
         switch (instruction.gpr) {
             case 0:
-                computer.gpr[0].setValue(computer.RAM[EA].MEM);
+                computer.gpr[0].setValue(memVal);
                 break;
             case 1:
-                computer.gpr[1].setValue(computer.RAM[EA].MEM);
+                computer.gpr[1].setValue(memVal);
                 break;
             case 2:
-                computer.gpr[2].setValue(computer.RAM[EA].MEM);
+                computer.gpr[2].setValue(memVal);
                 break;
             case 3:
-                computer.gpr[3].setValue(computer.RAM[EA].MEM);
+                computer.gpr[3].setValue(memVal);
                 break;
             default:
                 return Computer.ERROR_RET_CODE;
         }
 
-        System.out.println("RAM[" + EA + "] = " + computer.RAM[EA].mem + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value() + "\n");
+        System.out.println("RAM[" + EA + "] = " + memVal + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value() + "\n");
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -304,20 +308,24 @@ public class Instructions {
      */
     public int LDX() {
         int EA = getEffectiveAdr();
+        
+        // Check cache
+        int[] memVal = checkCache(EA);
+        
         computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
+        computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
         switch (instruction.idr) {
             case 1:
-                computer.idx[0].setValue(computer.RAM[EA].MEM);
+                computer.idx[0].setValue(memVal);
                 return Computer.SUCCESS_RET_CODE;
             case 2:
-                computer.idx[1].setValue(computer.RAM[EA].MEM);
+                computer.idx[1].setValue(memVal);
                 return Computer.SUCCESS_RET_CODE;
             case 3:
-                computer.idx[2].setValue(computer.RAM[EA].MEM);
+                computer.idx[2].setValue(memVal);
                 return Computer.SUCCESS_RET_CODE;
             default:
                 System.out.println("Error");
@@ -1076,5 +1084,22 @@ public class Instructions {
     public void printInfo() {
 
     }
-
+    
+    /**
+     * Checks if EA is stored in cache. If not, store in cache
+     * @param EA
+     * @return Value stored at EA
+     */
+    public int[] checkCache(int EA) {
+        int[] memVal = computer.cache.checkCache(EA);
+        if(memVal == null) {
+        	// Address not found in cache
+        	memVal = computer.RAM[EA].MEM;
+        	
+        	// Add address to cache
+        	computer.cache.addToCache(EA, memVal);
+        }
+        
+        return memVal;
+    }
 }

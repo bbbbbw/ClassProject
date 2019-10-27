@@ -15,7 +15,7 @@ public class Cache {
 		return cacheLine;
 	}
 
-	public void addToCache(int key, String value) {
+	public void addToCache(int key, int[] value) {
 		if(cacheLine.size() >= numCacheLines) {
 			cacheLine.removeLast(); // FIFO
 		}
@@ -24,13 +24,28 @@ public class Cache {
 		}
 	}
 	
+	/**
+	 * Check to see if cache contains value for given address
+	 * @param address
+	 * @return value or null
+	 */
+	public int[] checkCache(int address) {
+		for(int i = 0; i < cacheLine.size(); i++) {
+			if(cacheLine.get(i).key == address) {
+				return cacheLine.get(i).value;
+			}
+		}
+		
+		return null;
+	}
+	
 	public class CacheLine {
 		private int key; // Address
-		private String value; // Data stored at address
+		private int[] value; // Data stored at address
 		
-		public CacheLine(int key, String value) {
+		public CacheLine(int key, int[] value) {
 			this.key = key;
-			this.value = value;
+			this.value = value.clone();
 		}
 		
 		public int getKey() {
@@ -41,12 +56,12 @@ public class Cache {
 			this.key = key;
 		}
 		
-		public String getValue() {
+		public int[] getValue() {
 			return value;
 		}
 		
-		public void setValue(String value) {
-			this.value = value;
+		public void setValue(int[] value) {
+			this.value = value.clone();
 		}
 	}
 }
