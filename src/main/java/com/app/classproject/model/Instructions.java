@@ -338,27 +338,32 @@ public class Instructions {
      */
     public int STX() {
         int EA = getEffectiveAdr();
+	    
+        computer.mar.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
         switch (instruction.idr) {
             case 1:
                 computer.mbr.setValue(computer.idx[0].getValue());
-                System.arraycopy(computer.idx[0].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                computer.cache.addToCache(EA, computer.idx[0].getValue());
+                // System.arraycopy(computer.idx[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.idx[0].getValue();
-                computer.RAM[EA].setup();
+                // computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             case 2:
                 computer.mbr.setValue(computer.idx[1].getValue());
-                System.arraycopy(computer.idx[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                computer.cache.addToCache(EA, computer.idx[1].getValue());
+                // System.arraycopy(computer.idx[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.idx[1].getValue();
-                computer.RAM[EA].setup();
+                // computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             case 3:
                 computer.mbr.setValue(computer.idx[2].getValue());
-                System.arraycopy(computer.idx[2].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                computer.cache.addToCache(EA, computer.idx[2].getValue());
+                // System.arraycopy(computer.idx[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.idx[2].getValue();
-                computer.RAM[EA].setup();
+                // computer.RAM[EA].setup();
                 return Computer.SUCCESS_RET_CODE;
             default:
                 System.out.println("Error");
