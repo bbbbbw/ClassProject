@@ -1024,7 +1024,26 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
-
+    /**
+     * Check Device Status to Register,
+     */
+    
+     public int CHK() {
+    
+    	 if(instruction.did == KEYBOARD) {
+    		this.setValueToRById(instruction.r, 0);
+    	}
+    	 if(instruction.did == PRINTER) {
+    		this.setValueToRById(instruction.r, 1);
+    	}
+    	 if(instruction.did == CARD_READER) {
+    		this.setValueToRById(instruction.r, 2);
+    	}
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+    	return Computer.SUCCESS_RET_CODE;
+    }
+    
+    
 
     // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
