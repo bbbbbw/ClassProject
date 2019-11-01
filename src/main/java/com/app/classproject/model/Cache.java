@@ -27,7 +27,7 @@ public class Cache {
 	/**
 	 * Check to see if cache contains value for given address
 	 * @param address
-	 * @return value or null
+	 * @return value (base 2 array) or null
 	 */
 	public int[] checkCache(int address) {
 		for(int i = 0; i < cacheLine.size(); i++) {
@@ -38,6 +38,38 @@ public class Cache {
 		
 		return null;
 	}
+	
+	/**
+	 * Check to see if cache contains value for given address
+	 * @param address
+	 * @return value (base 10 integer) or -1
+	 */
+	public int checkCacheInt(int address) {
+		for(int i = 0; i < cacheLine.size(); i++) {
+			if(cacheLine.get(i).key == address) {
+				return getBase10Value(cacheLine.get(i).value);
+			}
+		}
+		
+		return -1;
+	}
+	
+    /**
+     * Covert value from base 2 array to base 10 integer and return
+     */
+    public int getBase10Value(int[] base2Arr) {
+        int base10Value = 0;
+        int multiplier = 1;
+
+        for (int i = base2Arr.length - 1; i >= 0; i--) {
+            if (base2Arr[i] == 1) {
+                base10Value += multiplier;
+            }
+            multiplier *= 2;
+        }
+
+        return base10Value;
+    }
 	
 	public class CacheLine {
 		private int key; // Address
