@@ -578,45 +578,48 @@ public class Instructions {
      */
     public int AMR() {
         int EA = getEffectiveAdr();
+        int[] memVal = checkCache(EA);
+        
         computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
+        computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
         switch (instruction.gpr) {
             case 0:
-                if (computer.gpr[0].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                if (computer.gpr[0].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
                     computer.ccr[0].setValue(1);
                     // computer.gpr[0].setValue(65535);
                 } else {
                     computer.ccr[0].setValue(0);
-                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.RAM[EA].mem);
+                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + computer.mbr.getBase10Value());
                 }
                 break;
             case 1:
-                if (computer.gpr[1].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                if (computer.gpr[1].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
                     computer.ccr[0].setValue(1);
                     // computer.gpr[1].setValue(65535);
                 } else {
                     computer.ccr[0].setValue(0);
-                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + computer.RAM[EA].mem);
+                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() + computer.mbr.getBase10Value());
                 }
                 break;
             case 2:
-                if (computer.gpr[2].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                if (computer.gpr[2].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
                     computer.ccr[0].setValue(1);
                     // computer.gpr[2].setValue(65535);
                 } else {
                     computer.ccr[0].setValue(0);
-                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + computer.RAM[EA].mem);
+                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() + computer.mbr.getBase10Value());
                 }
                 break;
             case 3:
-                if (computer.gpr[3].getBase10Value() + computer.RAM[EA].mem > 65535) {
+                if (computer.gpr[3].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
                     computer.ccr[0].setValue(1);
                     // computer.gpr[3].setValue(65535);
                 } else {
                     computer.ccr[0].setValue(0);
-                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + computer.RAM[EA].mem);
+                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() + computer.mbr.getBase10Value());
                 }
                 break;
             default:
@@ -631,45 +634,47 @@ public class Instructions {
      */
     public int SMR() {
         int EA = getEffectiveAdr();
+        int[] memVal = checkCache(EA);
+        
         computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
+        computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
         switch (instruction.gpr) {
             case 0:
-                if (computer.gpr[0].getBase10Value() - computer.RAM[EA].mem < 0) {
+                if (computer.gpr[0].getBase10Value() - computer.mbr.getBase10Value() < 0) {
                     computer.ccr[1].setValue(1);
-                    computer.gpr[0].setValue(computer.RAM[EA].mem - computer.gpr[0].getBase10Value());
+                    computer.gpr[0].setValue(computer.mbr.getBase10Value() - computer.gpr[0].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
-                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.RAM[EA].mem);
+                    computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - computer.mbr.getBase10Value());
                 }
                 break;
             case 1:
-                if (computer.gpr[1].getBase10Value() - computer.RAM[EA].mem < 0) {
+                if (computer.gpr[1].getBase10Value() - computer.mbr.getBase10Value() < 0) {
                     computer.ccr[1].setValue(1);
-                    computer.gpr[1].setValue(computer.RAM[EA].mem - computer.gpr[1].getBase10Value());
+                    computer.gpr[1].setValue(computer.mbr.getBase10Value() - computer.gpr[1].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
-                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.RAM[EA].mem);
+                    computer.gpr[1].setValue(computer.gpr[1].getBase10Value() - computer.mbr.getBase10Value());
                 }
                 break;
             case 2:
-                if (computer.gpr[2].getBase10Value() - computer.RAM[EA].mem < 0) {
+                if (computer.gpr[2].getBase10Value() - computer.mbr.getBase10Value() < 0) {
                     computer.ccr[1].setValue(1);
-                    computer.gpr[2].setValue(computer.RAM[EA].mem - computer.gpr[2].getBase10Value());
+                    computer.gpr[2].setValue(computer.mbr.getBase10Value() - computer.gpr[2].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
-                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.RAM[EA].mem);
+                    computer.gpr[2].setValue(computer.gpr[2].getBase10Value() - computer.mbr.getBase10Value());
                 }
                 break;
             case 3:
-                if (computer.gpr[3].getBase10Value() - computer.RAM[EA].mem < 0) {
+                if (computer.gpr[3].getBase10Value() - computer.mbr.getBase10Value() < 0) {
                     computer.ccr[1].setValue(1);
-                    computer.gpr[3].setValue(computer.RAM[EA].mem - computer.gpr[3].getBase10Value());
+                    computer.gpr[3].setValue(computer.mbr.getBase10Value() - computer.gpr[3].getBase10Value());
                 } else {
                     computer.ccr[1].setValue(0);
-                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.RAM[EA].mem);
+                    computer.gpr[3].setValue(computer.gpr[3].getBase10Value() - computer.mbr.getBase10Value());
                 }
                 break;
             default:
