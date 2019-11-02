@@ -59,7 +59,33 @@ public class Computer {
         printType = 0;
         reader = new ProjectReader();
     }
-   
+	
+	
+    public enum MachineFaultCode{
+		
+	 IllEGAL_RESERVED_LOCATION(0,"Illegal Memory Address to Reserved Locations. MFR set to binary 0001"),
+	 ILLEGAL_TRAP_CODE(1, "Illegal TRAP code. MFR set to binary 0010"),
+	 ILLEGAL_OP_CODE(2, "Illegal Operation Code. MFR set to 0100"),
+	 ILLEGAL_BEYOND_ADDRESS(3, "Illegal Memory Address beyond 2048 (memory installed).  MFR set to binary 1000");
+		
+		int value;
+		String message;
+		
+		private MachineFaultCode(int value, String message) {
+			this.value = value;
+			this.message = message;
+		}
+		
+		public int getFaultValue() {
+			return this.value;
+		}
+		
+		public String getFaultMessage() {
+			return this.message;
+		}
+	}
+	
+	
     ///we do not need this function
     
     /**
