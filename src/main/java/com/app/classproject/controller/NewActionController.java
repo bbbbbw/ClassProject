@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.app.classproject.model.Computer;
 import com.app.classproject.model.ComputerUI;
 import com.app.classproject.model.Instructions;
+import com.app.classproject.model.ProjectReader;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * Receive requests submitted by the front-end, execute the action, and return the result
@@ -182,5 +185,19 @@ public class NewActionController {
         result.put("status", executionResult);
         result.put("computer", computerUI);
         return result.toString();
+    }
+
+    @RequestMapping(value = "/test/read")
+    public void read(Model model) throws IOException {
+        ProjectReader r = new ProjectReader();
+        while (true) {
+            int c = r.readOneChar();
+            if (c != -1) {
+                System.out.print((char)c);
+                System.out.println(c);
+            } else {
+                break;
+            }
+        }
     }
 }

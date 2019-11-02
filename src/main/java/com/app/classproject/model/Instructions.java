@@ -993,6 +993,11 @@ public class Instructions {
     public int IN() {
         if (instruction.did == 0) { // keyboard
             computer.stopForInput = 1;
+        } else if (instruction.did == 31) { // Outer file
+            int in =  computer.reader.readOneChar();
+            if (in != -1) {
+                return continueIn(in);
+            }
         }
         return Computer.SUCCESS_RET_CODE;
     }

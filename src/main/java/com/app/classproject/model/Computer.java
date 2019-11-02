@@ -1,5 +1,7 @@
 package com.app.classproject.model;
 
+import java.io.IOException;
+
 /**
  * Define the virtual computer, initialize registers and memory, and pre-load and run program.
  */
@@ -21,6 +23,8 @@ public class Computer {
     public int status; // 1: working, 0: halt, -1: error
 
     public int stopForInput; // Force the computer to stop and wait until the required input is ready.
+
+    public ProjectReader reader; // A reader for computer to read outer files (test program 2)
 
 
     public Computer() {
@@ -50,6 +54,8 @@ public class Computer {
         status = 1;
 
         stopForInput = 0;
+
+        reader = new ProjectReader();
     }
    
     ///we do not need this function
