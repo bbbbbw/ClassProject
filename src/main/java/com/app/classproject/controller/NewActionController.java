@@ -116,7 +116,8 @@ public class NewActionController {
     public String IPL(Model model) {
         JSONObject result = new JSONObject();
 //        computer.loadProgram();
-        computer.loadTestProgramOne();
+//        computer.loadTestProgramOne();
+        computer.loadTestProgramTwo();
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);
@@ -154,10 +155,30 @@ public class NewActionController {
     @RequestMapping(value = "/action/input")
     public String deviceIn(Model model, String input) {
         JSONObject result = new JSONObject();
-        int temp = Integer.parseInt(input);
-        computer.continueIn(temp);
+        try {
+            // Input is an integer
+            int temp = Integer.parseInt(input);
+            if (temp > 65535 || temp < 0) {
+                result.put("status", -1);
+                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or a valid character");
+            } else {
+                computer.continueIn(temp);
+                result.put("status", 0);
+            }
+        } catch (NumberFormatException e) {
+            // Input is a string
+            if (input != null && input.length() > 1) {
+                result.put("status", -1);
+                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or a valid character");
+            } else {
+                if (input == null || input == "") {
+                    computer.continueIn(0);
+                }
+                computer.continueIn((int) input.charAt(0));
+                result.put("status", 0);
+            }
+        }
         ComputerUI computerUI = new ComputerUI(computer);
-        result.put("status", 0);
         result.put("computer", computerUI);
         return result.toString();
     }
@@ -185,19 +206,5 @@ public class NewActionController {
         result.put("status", executionResult);
         result.put("computer", computerUI);
         return result.toString();
-    }
-
-    @RequestMapping(value = "/test/read")
-    public void read(Model model) throws IOException {
-        ProjectReader r = new ProjectReader();
-        while (true) {
-            int c = r.readOneChar();
-            if (c != -1) {
-                System.out.print((char)c);
-                System.out.println(c);
-            } else {
-                break;
-            }
-        }
     }
 }

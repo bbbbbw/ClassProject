@@ -245,24 +245,28 @@ public class Instructions {
                 computer.mbr.setValue(computer.gpr[0].getValue());
                 System.arraycopy(computer.gpr[0].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.gpr[0].getValue();
+                computer.cache.addToCache(EA, computer.gpr[0].getValue());
                 computer.RAM[EA].setup();
                 break;
             case 1:
                 computer.mbr.setValue(computer.gpr[1].getValue());
                 System.arraycopy(computer.gpr[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.gpr[1].getValue();
+                computer.cache.addToCache(EA, computer.gpr[1].getValue());
                 computer.RAM[EA].setup();
                 break;
             case 2:
                 computer.mbr.setValue(computer.gpr[2].getValue());
                 System.arraycopy(computer.gpr[2].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.gpr[2].getValue();
+                computer.cache.addToCache(EA, computer.gpr[2].getValue());
                 computer.RAM[EA].setup();
                 break;
             case 3:
                 computer.mbr.setValue(computer.gpr[3].getValue());
                 System.arraycopy(computer.gpr[3].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
                 // computer.RAM[EA].MEM = computer.gpr[3].getValue();
+                computer.cache.addToCache(EA, computer.gpr[3].getValue());
                 computer.RAM[EA].setup();
                 break;
             default:
@@ -995,9 +999,7 @@ public class Instructions {
             computer.stopForInput = 1;
         } else if (instruction.did == 31) { // Outer file
             int in =  computer.reader.readOneChar();
-            if (in != -1) {
-                return continueIn(in);
-            }
+            return continueIn(in);
         }
         return Computer.SUCCESS_RET_CODE;
     }
@@ -1029,7 +1031,13 @@ public class Instructions {
     public int OUT() {
         if (instruction.did == 1) {
             int val = this.getValueFromRById(instruction.r);
-            computer.printer += "\n" + Integer.toString(val);
+            if (computer.printType == 0) {
+                computer.printer += " " + Integer.toString(val);
+            } else if (computer.printType == 1 && val > 31) {
+                StringBuffer temp = new StringBuffer();
+                temp.append((char)val);
+                computer.printer += temp.toString();
+            }
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;

@@ -23,7 +23,7 @@ public class ProjectReader {
             ind += 1;
             return (int)paragraph.charAt(ind - 1);
         } else {
-            return -1;
+            return 0;
         }
     }
 }

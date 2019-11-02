@@ -24,6 +24,7 @@ public class Computer {
 
     public int stopForInput; // Force the computer to stop and wait until the required input is ready.
 
+    public int printType; // 0: print number, 1: print character
     public ProjectReader reader; // A reader for computer to read outer files (test program 2)
 
 
@@ -55,6 +56,7 @@ public class Computer {
 
         stopForInput = 0;
 
+        printType = 0;
         reader = new ProjectReader();
     }
    
@@ -599,6 +601,108 @@ public class Computer {
         tempInstruction.did = 1;
         tempInstruction.load();
         RAM[553] = tempInstruction;
+
+        ir.setValue(RAM[6].MEM);
+    }
+
+
+    public void loadTestProgramTwo() {
+        this.printType = 1;
+
+        // Program starts at RAM[6]
+        pc.setValue(6);
+
+        // Set register values
+        idx[1].setValue(600);
+
+        // Set memory values
+        RAM[31].mem = 600;
+        RAM[31].loadval();
+        RAM[600].mem = 1;
+        RAM[600].loadval();
+
+        // Load instructions
+        memory tempInstruction;
+
+        /*
+        Read the paragraph from target file, store them and print them
+         */
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[6] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AMRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 2;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 0;
+        tempInstruction.load();
+        RAM[7] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[8] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[9] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[10] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.INopc;
+        tempInstruction.r = 1;
+        tempInstruction.did = 31;
+        tempInstruction.load();
+        RAM[11] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.r = 1;
+        tempInstruction.did = 1;
+        tempInstruction.load();
+        RAM[12] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 0;
+        tempInstruction.load();
+        RAM[13] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JNEopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 6;
+        tempInstruction.load();
+        RAM[14] = tempInstruction;
 
         ir.setValue(RAM[6].MEM);
     }
