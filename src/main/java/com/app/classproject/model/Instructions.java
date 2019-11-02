@@ -94,7 +94,7 @@ public class Instructions {
         System.out.println(Arrays.toString(instruction.MEM));
         switch (instruction.opc) {
             case 0:
-                return Computer.HLT_RET_CODE;
+                return HALT();
             case 1:
                 return LDR();
             case 2:
@@ -1061,7 +1061,14 @@ public class Instructions {
     	return Computer.SUCCESS_RET_CODE;
     }
     
-    
+      public int HALT() {
+    	String haltInstruction = Arrays.toString(instruction.MEM).replaceAll("\\[|\\]|,|\\s", "");
+    	if (haltInstruction.substring(8,16).equals("00000000")) {
+    		System.out.println("HALT!");
+    		System.out.println("Stop the machine!");
+    	}
+    	return Computer.HLT_RET_CODE;
+    }
 
     // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
