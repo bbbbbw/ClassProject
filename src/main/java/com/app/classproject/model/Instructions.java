@@ -1028,7 +1028,7 @@ public class Instructions {
     /**
      * Output Character to Device from Register
      */
-    public int OUT() {
+   public int OUT() {
         if (instruction.did == 1) {
             int val = this.getValueFromRById(instruction.r);
             if (computer.printType == 0) {
@@ -1046,7 +1046,7 @@ public class Instructions {
      * Check Device Status to Register,
      */
     
-     public int CHK() {
+   public int CHK() {
     
     	 if(instruction.did == KEYBOARD) {
     		this.setValueToRById(instruction.r, 0);
@@ -1061,13 +1061,14 @@ public class Instructions {
     	return Computer.SUCCESS_RET_CODE;
     }
     
-      public int HALT() {
+    public int HALT() {
     	String haltInstruction = Arrays.toString(instruction.MEM).replaceAll("\\[|\\]|,|\\s", "");
     	if (haltInstruction.substring(8,16).equals("00000000")) {
     		System.out.println("HALT!");
     		System.out.println("Stop the machine!");
+    		return Computer.HLT_RET_CODE;
     	}
-    	return Computer.HLT_RET_CODE;
+    	return Computer.SUCCESS_RET_CODE;
     }
 
     // get value by ID from general register R0-R3
