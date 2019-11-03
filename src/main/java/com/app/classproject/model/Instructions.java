@@ -200,8 +200,8 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
-        System.out.println("\nRAM[" + EA + "] = " + Arrays.toString(memVal) + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
-        System.out.println("Loading RAM[" + EA + "] into gpr[" + instruction.gpr + "]");
+        System.out.println("\nRAM[" + EA + "] = " + computer.RAM[EA].mem + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
+        System.out.println("Loading RAM[" + EA + "] into gpr[" + instruction.gpr + "]\n");
 
         switch (instruction.gpr) {
             case 0:
@@ -220,7 +220,7 @@ public class Instructions {
                 return Computer.ERROR_RET_CODE;
         }
 
-        System.out.println("RAM[" + EA + "] = " + memVal + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value() + "\n");
+        System.out.println("RAM[" + EA + "] = " + Arrays.toString(memVal) + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value() + "\n");
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -711,7 +711,6 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -743,7 +742,6 @@ public class Instructions {
                 System.out.println("Error");
                 return Computer.ERROR_RET_CODE;
         }
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
@@ -842,6 +840,7 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+
     public int AND() {
         int temp1 [] = computer.gpr[instruction.rx].getValue();
         int temp2 [] = computer.gpr[instruction.ry].getValue();
@@ -890,6 +889,7 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+
     public int NOT() {
         int temp [] = computer.gpr[instruction.rx].getValue();
         

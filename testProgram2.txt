@@ -1,0 +1,112 @@
+set r2 = 600
+set r3 = 500
+set x2 = 600 // fixed
+set x3 = 500 // fixed
+set address 6 = 600 // +1 at a time
+set address 7 = 500 // +1 at a time
+set address 8 = 44 // fixed
+set address 500 = 1 // fixed
+set address 600 = 1 // fixed
+
+
+/* Read the paragraph from target file */
+9		LDR r1, 00, 6, 0		// r1 = MEN[6]
+10		AMR r1, x2, 0, 0		// r1 += 1
+11		STR r1, 00, 6, 0		// MEN[6] = r1
+
+12		LDX x1, 1, 0			// clear x1
+13		LDX x1, 6, 0			// x1 = MEN[6]
+
+14		IN r1, 31				// read one character at a time
+15		OUT r1, 1				// Output character
+16		STR r1, x1, 0			// store input into address (601 - )
+
+17		JNE r1, 00, 9			// if r1 != 0, pc jump to line 9
+
+/* Require a word (split by character) from user */
+18		LDR r1, 00, 7, 0		// r1 = MEN[7]
+19		AMR r1, x2, 0, 0		// r1 += 1
+20		STR r1, 00, 7, 0		// MEN[7] = r1
+
+21		LDX x1, 1, 0			// clear x1
+22		LDX x1, 7, 0			// x1 = MEN[7]
+
+23		IN r1, 0				// read a character from keyboard
+24		STR r1, x1, 0			// store input into address (501 - )
+
+25		JNE r1, 00, 18			// if r1 != 0, pc jump to line 18
+
+/* Load and compare character by character */
+26		STR r2, 0, 9, 0			// store pointer of current paragraph character into address 9
+27		STR r3, 0, 10, 0		// store pointer of current word character into address 10
+
+28		STR r1, 0, 11, 0		// store word number into address 11 (start from 0)
+29		STR r1, 0, 12, 0		// store sentence number into address 12 (start from 0)
+
+
+/* Loop */
+30		LDX x1, 31, 0			// clear x1
+31		LDX x1, 8, 0			// x1 = MEN[8] = 44
+32		LDR r0, 0, 9, 1			// load r0 according to paragraph pointer
+33		LDR r1, 0, 10, 1		// load r1 according to word pointer
+
+34		JZ r0, x2, 0, 0			// jump out to stop if r0 == 0 (finish the paragraph and cannot find word)
+
+35		TRR r0, r1				// Compare r0 and r1
+36		JCC cc3, x1, 17, 0		// if r0 == r1, jump to address 61
+
+// if r0 != r1
+37		LDA	r2, x3, 0, 0		
+38		STR r2, 0, 10, 0		// reset word pointer to start (500)
+		
+39		SIR r0, 31				// r0 -= 31
+40		SIR r0, 1				// r0 -= 1
+41		JZ r0, x1, 7, 0			// jump if original r0 == 32 (space)
+42		SIR r0, 14				// r0 -= 14
+43		JZ r0, x1, 11, 0		// jump if original r0 == 46 (stop mark)
+
+// paragraph pointer ++, word pointer ++, go back to loop
+44		LDR r2, 0, 9, 0
+45		AIR r2, 1
+46		STR r2, 0, 9, 0			// paragraph pointer += 1
+47		LDR r2, 0, 10, 0
+48		AIR r2, 1
+49		STR r2, 0, 10, 0		// word pointer += 1
+50		JMA 0, 30				// jump to start another round of loop
+
+// if r0 == 32 (space)
+51		LDR r2, 0, 11, 0
+52		AIR r2, 1
+53		STR r2, 0, 11, 0		// word count += 1
+54		JMA 0, 8, 1				// jump to 44
+
+// if r0 == 46 (stop mark)
+55		LDR r2, 0, 12, 0
+56		AIR r2, 1
+57		STR r2, 0, 12, 0		// sentence count += 1
+58		LDR r2, 0, 3, 0			
+59		STR r2, 0, 11, 0		// word count = 0
+60		JMA 0, 8, 1				// jump to 44
+
+// if r0 == r1
+// if r1 == 0 (find word)
+61		JZ r1, x1, 19			// jump out to print if find word
+// if r1 != 0 (compare next character)
+62		JMA 0, 8, 1				// jump to 44
+
+
+/* print sentence number, and the word number if find the word */
+63		LDA	r2, x3, 0, 0		// reset word pointer to start
+		
+// loop to print word
+64		AIR r2, 1				
+65		STR r2, 0, 10, 0		// word pointer += 1
+66		LDR r1, 0, 10, 1		// load character to r1
+67		OUT r1, 1				// print r1
+68		JNE r1, x1, 20, 0		// If not finished the word, go back
+
+69		LDR	r2, 0, 12, 0
+70		AIR r2, 1
+71		OUT r2, 1				// print sentence number
+72		LDR	r2, 0, 11, 0
+73		OUT r2, 1				// print word number
