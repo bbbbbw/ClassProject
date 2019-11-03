@@ -42,7 +42,7 @@ public class memory {
     public int r;
     public int al;// Arithmetic Shift or logical;
     public int lr;// left or right?
-       public int[] COUNT = new int[4]; // 4 digits for number of count notation in binary array
+    public int[] COUNT = new int[4]; // 4 digits for number of count notation in binary array
     public int count;// number of the movement;
 
     //opcode 30
@@ -146,7 +146,7 @@ public class memory {
         }
         String tmp = builder.toString();
         this.opc = Integer.parseInt(tmp, 2);
-        
+
         //calculate the decimal value of whole binary array.
         builder = new StringBuilder();
         for (int value : MEM) {
@@ -154,7 +154,7 @@ public class memory {
         }
         tmp = builder.toString();
         this.mem = Integer.parseInt(tmp, 2);
-            
+
         //different opcode cases
         if (this.opc == 30) {
             System.out.println("trap code setup");

@@ -6,66 +6,68 @@ import java.util.LinkedList;
  * Fully associative, unified cache. 16 cache lines and FIFO policy
  */
 public class Cache {
-	private int numCacheLines = 16;
-	private LinkedList<CacheLine> cacheLine;
-	
-	public Cache() {
-		this.cacheLine = new LinkedList<CacheLine>();
-	}
-	
-	public LinkedList<CacheLine> getCacheLine(){
-		return cacheLine;
-	}
+    private int numCacheLines = 16;
+    private LinkedList<CacheLine> cacheLine;
 
-	/**
-	 * @param key Address
-	 * @param value Data stored at address
-	 */
-	public void addToCache(int key, int[] value) {
-		for (int i = 0; i < cacheLine.size(); i++) {
-			if (cacheLine.get(i).key == key) {
-				CacheLine cl = cacheLine.get(i);
-				cl.setValue(value);
-				cacheLine.set(i, cl);
-				return;
-			}
-		}
-		if (cacheLine.size() >= numCacheLines) {
-			cacheLine.removeLast(); // FIFO
-		}
-		cacheLine.addFirst(new CacheLine(key, value));
-	}
-	
-	/**
-	 * Check to see if cache contains value for given address
-	 * @param address
-	 * @return value (base 2 array) or null
-	 */
-	public int[] checkCache(int address) {
-		for(int i = 0; i < cacheLine.size(); i++) {
-			if(cacheLine.get(i).key == address) {
-				return cacheLine.get(i).value;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Check to see if cache contains value for given address
-	 * @param address
-	 * @return value (base 10 integer) or -1
-	 */
-	public int checkCacheInt(int address) {
-		for(int i = 0; i < cacheLine.size(); i++) {
-			if(cacheLine.get(i).key == address) {
-				return getBase10Value(cacheLine.get(i).value);
-			}
-		}
-		
-		return -1;
-	}
-	
+    public Cache() {
+        this.cacheLine = new LinkedList<CacheLine>();
+    }
+
+    public LinkedList<CacheLine> getCacheLine() {
+        return cacheLine;
+    }
+
+    /**
+     * @param key   Address
+     * @param value Data stored at address
+     */
+    public void addToCache(int key, int[] value) {
+        for (int i = 0; i < cacheLine.size(); i++) {
+            if (cacheLine.get(i).key == key) {
+                CacheLine cl = cacheLine.get(i);
+                cl.setValue(value);
+                cacheLine.set(i, cl);
+                return;
+            }
+        }
+        if (cacheLine.size() >= numCacheLines) {
+            cacheLine.removeLast(); // FIFO
+        }
+        cacheLine.addFirst(new CacheLine(key, value));
+    }
+
+    /**
+     * Check to see if cache contains value for given address
+     *
+     * @param address
+     * @return value (base 2 array) or null
+     */
+    public int[] checkCache(int address) {
+        for (int i = 0; i < cacheLine.size(); i++) {
+            if (cacheLine.get(i).key == address) {
+                return cacheLine.get(i).value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check to see if cache contains value for given address
+     *
+     * @param address
+     * @return value (base 10 integer) or -1
+     */
+    public int checkCacheInt(int address) {
+        for (int i = 0; i < cacheLine.size(); i++) {
+            if (cacheLine.get(i).key == address) {
+                return getBase10Value(cacheLine.get(i).value);
+            }
+        }
+
+        return -1;
+    }
+
     /**
      * Covert value from base 2 array to base 10 integer and return
      */
@@ -82,33 +84,33 @@ public class Cache {
 
         return base10Value;
     }
-	
+
     /**
      * Each cache line stores 1 key-value pair
      */
-	public class CacheLine {
-		private int key; // Address
-		private int[] value; // Data stored at address
-		
-		public CacheLine(int key, int[] value) {
-			this.key = key;
-			this.value = value.clone();
-		}
-		
-		public int getKey() {
-			return key;
-		}
-		
-		public void setKey(int key) {
-			this.key = key;
-		}
-		
-		public int[] getValue() {
-			return value;
-		}
-		
-		public void setValue(int[] value) {
-			this.value = value.clone();
-		}
-	}
+    public class CacheLine {
+        private int key; // Address
+        private int[] value; // Data stored at address
+
+        public CacheLine(int key, int[] value) {
+            this.key = key;
+            this.value = value.clone();
+        }
+
+        public int getKey() {
+            return key;
+        }
+
+        public void setKey(int key) {
+            this.key = key;
+        }
+
+        public int[] getValue() {
+            return value;
+        }
+
+        public void setValue(int[] value) {
+            this.value = value.clone();
+        }
+    }
 }

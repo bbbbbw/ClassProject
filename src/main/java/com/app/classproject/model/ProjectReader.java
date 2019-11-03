@@ -10,18 +10,18 @@ public class ProjectReader {
     public ProjectReader() {
         try {
             DataInputStream in = new DataInputStream(new FileInputStream(fileName));
-            BufferedReader br  = new BufferedReader(new InputStreamReader(in));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             paragraph = " " + br.readLine() + " ";
         } catch (IOException e) {
             paragraph = " ";
         }
-        ind  = 0;
+        ind = 0;
     }
 
     public int readOneChar() {
         if (ind < paragraph.length()) {
             ind += 1;
-            return (int)paragraph.charAt(ind - 1);
+            return (int) paragraph.charAt(ind - 1);
         } else {
             return 0;
         }

@@ -68,13 +68,16 @@ public class Instructions {
     public static final int INopc = 61;
     public static final int OUTopc = 62;
     public static final int CHKopc = 63;
-    
+
     // Part 3
     public static final int TRAPopc = 30;
 
-	public static final int	KEYBOARD	= 0;
-	public static final int	PRINTER		= 1;
-	public static final int	CARD_READER	= 2;
+    public static final int KEYBOARD = 0;
+    public static final int PRINTER = 1;
+    public static final int CARD_READER = 2;
+    public static final int CHAR_PRINTER = 30;
+    public static final int OUTER_FILE = 31;
+
 
     public Computer computer;
     public memory instruction = new memory();
@@ -83,7 +86,6 @@ public class Instructions {
         this.computer = computer;
         this.instruction.MEM = instruction;
         this.instruction.setup();
-
     }
 
     /**
@@ -149,7 +151,7 @@ public class Instructions {
             case 62:
                 return OUT();
             case 30:
-            	return TRAP();
+                return TRAP();
             default:
                 return Computer.ERROR_RET_CODE;
         }
@@ -197,10 +199,10 @@ public class Instructions {
      */
     public int LDR() {
         int EA = getEffectiveAdr();
-        
+
         // Check cache
         int[] memVal = checkCache(EA);
-        
+
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
@@ -313,10 +315,10 @@ public class Instructions {
      */
     public int LDX() {
         int EA = getEffectiveAdr();
-        
+
         // Check cache
         int[] memVal = checkCache(EA);
-        
+
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
@@ -343,7 +345,7 @@ public class Instructions {
      */
     public int STX() {
         int EA = getEffectiveAdr();
-	    
+
         computer.mar.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
@@ -584,12 +586,12 @@ public class Instructions {
     public int AMR() {
         int EA = getEffectiveAdr();
         int[] memVal = checkCache(EA);
-        
+
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-        
+
         switch (instruction.gpr) {
             case 0:
                 if (computer.gpr[0].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
@@ -640,7 +642,7 @@ public class Instructions {
     public int SMR() {
         int EA = getEffectiveAdr();
         int[] memVal = checkCache(EA);
-        
+
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
@@ -848,13 +850,13 @@ public class Instructions {
     }
 
     public int AND() {
-        int temp1 [] = computer.gpr[instruction.rx].getValue();
-        int temp2 [] = computer.gpr[instruction.ry].getValue();
-        
-        for(int i = 0; i < 16; i++) {
-        	if(temp2[i] == 0) {
-        		temp1[i] = 0;
-        	}
+        int temp1[] = computer.gpr[instruction.rx].getValue();
+        int temp2[] = computer.gpr[instruction.ry].getValue();
+
+        for (int i = 0; i < 16; i++) {
+            if (temp2[i] == 0) {
+                temp1[i] = 0;
+            }
         }
         computer.gpr[instruction.rx].setValue(temp1);
         computer.pc.setValue(temp1);
@@ -872,14 +874,15 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+
     public int ORR() {
-        int temp1 [] = computer.gpr[instruction.rx].getValue();
-        int temp2 [] = computer.gpr[instruction.ry].getValue();
-        
-        for(int i = 0; i < 16; i++) {
-        	if(temp2[i] == 1) {
-        		temp1[i] = 1;
-        	}
+        int temp1[] = computer.gpr[instruction.rx].getValue();
+        int temp2[] = computer.gpr[instruction.ry].getValue();
+
+        for (int i = 0; i < 16; i++) {
+            if (temp2[i] == 1) {
+                temp1[i] = 1;
+            }
         }
         computer.gpr[instruction.rx].setValue(temp1);
         computer.pc.setValue(temp1);
@@ -897,14 +900,14 @@ public class Instructions {
     }
 
     public int NOT() {
-        int temp [] = computer.gpr[instruction.rx].getValue();
-        
-        for(int i = 0; i < 16; i++) {
-        	if(temp[i] == 1) {
-        		temp[i] = 0;
-        	}else {
-        		temp[i]=1;
-        	}
+        int temp[] = computer.gpr[instruction.rx].getValue();
+
+        for (int i = 0; i < 16; i++) {
+            if (temp[i] == 1) {
+                temp[i] = 0;
+            } else {
+                temp[i] = 1;
+            }
         }
         computer.gpr[instruction.rx].setValue(temp);
         computer.pc.setValue(temp);
@@ -917,14 +920,14 @@ public class Instructions {
 
     public int SRC() {
         int tempR = getValueFromRById(instruction.gpr);
-        
-        if(instruction.al == 0) {
-        	 if (instruction.lr == 0) {
-        		 tempR = (tempR >> instruction.count);
+
+        if (instruction.al == 0) {
+            if (instruction.lr == 0) {
+                tempR = (tempR >> instruction.count);
             }
-        	 if (instruction.lr == 1) {
-        		 tempR = (tempR << instruction.count);
-             }
+            if (instruction.lr == 1) {
+                tempR = (tempR << instruction.count);
+            }
         }
        
   /*    if(instruction.al == 1) {
@@ -943,8 +946,8 @@ public class Instructions {
         	if(instruction.lr == 1) {
         		tempR = tempR <<  instruction.count;
         	}
-   */    
-       
+   */
+
         this.setValueToRById(instruction.gpr, tempR);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
@@ -980,12 +983,12 @@ public class Instructions {
                 temp[i] = binaryR.charAt(16 - instruction.count + i);
             }
         }
-        
+
         String temp1 = "";
         for (int i = 0; i < 16; i++) {
             temp1 = temp1 + temp[i];
         }
-        
+
         this.setValueToRById(instruction.gpr, Integer.parseInt(temp1));
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
@@ -999,7 +1002,7 @@ public class Instructions {
         if (instruction.did == 0) { // keyboard
             computer.stopForInput = 1;
         } else if (instruction.did == 31) { // Outer file
-            int in =  computer.reader.readOneChar();
+            int in = computer.reader.readOneChar();
             return continueIn(in);
         }
         return Computer.SUCCESS_RET_CODE;
@@ -1008,16 +1011,16 @@ public class Instructions {
     public int continueIn(int input) {
         switch (instruction.r) {
             case 0:
-                computer.gpr[0].setValue((int)input);
+                computer.gpr[0].setValue((int) input);
                 break;
             case 1:
-                computer.gpr[1].setValue((int)input);
+                computer.gpr[1].setValue((int) input);
                 break;
             case 2:
-                computer.gpr[2].setValue((int)input);
+                computer.gpr[2].setValue((int) input);
                 break;
             case 3:
-                computer.gpr[3].setValue((int)input);
+                computer.gpr[3].setValue((int) input);
                 break;
             default:
                 return Computer.ERROR_RET_CODE;
@@ -1029,14 +1032,14 @@ public class Instructions {
     /**
      * Output Character to Device from Register
      */
-   public int OUT() {
-       int val = this.getValueFromRById(instruction.r);
+    public int OUT() {
+        int val = this.getValueFromRById(instruction.r);
         if (instruction.did == 1) { // integer printer
             computer.printer += " " + Integer.toString(val);
         } else if (instruction.did == 30) { // character printer
             if (val > 31 && val < 127) {
                 StringBuffer temp = new StringBuffer();
-                temp.append((char)val);
+                temp.append((char) val);
                 computer.printer += temp.toString();
             }
         }
@@ -1047,54 +1050,53 @@ public class Instructions {
     /**
      * Check Device Status to Register,
      */
-    
-   public int CHK() {
-    
-    	 if(instruction.did == KEYBOARD) {
-    		this.setValueToRById(instruction.r, 0);
-    	}
-    	 if(instruction.did == PRINTER) {
-    		this.setValueToRById(instruction.r, 1);
-    	}
-    	 if(instruction.did == CARD_READER) {
-    		this.setValueToRById(instruction.r, 2);
-    	}
-    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
-    	return Computer.SUCCESS_RET_CODE;
+
+    public int CHK() {
+        if (instruction.did == KEYBOARD) {
+            this.setValueToRById(instruction.r, 0);
+        }
+        if (instruction.did == PRINTER) {
+            this.setValueToRById(instruction.r, 1);
+        }
+        if (instruction.did == CARD_READER) {
+            this.setValueToRById(instruction.r, 2);
+        }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
     }
-    
+
     public int HALT() {
-    	String haltInstruction = Arrays.toString(instruction.MEM).replaceAll("\\[|\\]|,|\\s", "");
-    	if (haltInstruction.substring(8,16).equals("00000000")) {
-    		System.out.println("HALT!");
-    		System.out.println("Stop the machine!");
-    		computer.status = 0;
-    		return Computer.HLT_RET_CODE;
-    	}
-    	return Computer.SUCCESS_RET_CODE;
+        String haltInstruction = Arrays.toString(instruction.MEM).replaceAll("\\[|\\]|,|\\s", "");
+        if (haltInstruction.substring(8, 16).equals("00000000")) {
+            System.out.println("HALT!");
+            System.out.println("Stop the machine!");
+            computer.status = 0;
+            return Computer.HLT_RET_CODE;
+        }
+        return Computer.SUCCESS_RET_CODE;
     }
-    
+
     public int TRAP() {
-    	// Calculate PC + 1
-    	int[] pcVal = computer.pc.getValue();
-    	int[] pcPlus1 = new int[16];
-    	
-    	for(int i = 15; i >= 0; i--) {
-    		if(pcVal[i] == 0) {
-    			pcPlus1[i] = 1;
-    			break;
-    		} else {
-    			pcPlus1[i] = 0;
-    		}
-    	}
-    	
-    	// Store PC + 1 in memory location 2
-    	computer.RAM[2].MEM = pcPlus1;
-    	
-    	// Execute routine whose address is in memory location 0 + trap code
-    	computer.pc.setValue(computer.RAM[0].mem + computer.tcr.getBase10Value() * 10);
-    	
-    	return Computer.SUCCESS_RET_CODE;
+        // Calculate PC + 1
+        int[] pcVal = computer.pc.getValue();
+        int[] pcPlus1 = new int[16];
+
+        for (int i = 15; i >= 0; i--) {
+            if (pcVal[i] == 0) {
+                pcPlus1[i] = 1;
+                break;
+            } else {
+                pcPlus1[i] = 0;
+            }
+        }
+
+        // Store PC + 1 in memory location 2
+        computer.RAM[2].MEM = pcPlus1;
+
+        // Execute routine whose address is in memory location 0 + trap code
+        computer.pc.setValue(computer.RAM[0].mem + computer.tcr.getBase10Value() * 10);
+
+        return Computer.SUCCESS_RET_CODE;
     }
 
     // get value by ID from general register R0-R3
@@ -1160,25 +1162,26 @@ public class Instructions {
     public void printInfo() {
 
     }
-    
+
     /**
      * Checks if EA is stored in cache. If not, store in cache
+     *
      * @param EA
      * @return Value stored at EA
      */
     public int[] checkCache(int EA) {
         int[] memVal = computer.cache.checkCache(EA);
-        if(memVal == null) {
-        	// Address not found in cache
-        	memVal = computer.RAM[EA].MEM;
-        	
-        	// Add address to cache
-        	computer.cache.addToCache(EA, memVal);
+        if (memVal == null) {
+            // Address not found in cache
+            memVal = computer.RAM[EA].MEM;
+
+            // Add address to cache
+            computer.cache.addToCache(EA, memVal);
         }
-        
+
         return memVal;
     }
-    
+
     /**
      * Covert value from base 2 array to base 10 integer and return
      */
@@ -1195,35 +1198,31 @@ public class Instructions {
 
         return base10Value;
     }
-	
-      public void checkEA(int value){
-    	if( value  <= 6 && value >0 ) {
-    		
-        	computer.mfr.setErr(1, 3);
-        	
-        }else{
-        	computer.mfr.setValue(0);
+
+    public void checkEA(int value) {
+        if (value <= 6 && value > 0) {
+            computer.mfr.setErr(1, 3);
+        } else {
+            computer.mfr.setValue(0);
         }
     }
-    
-      public void checkOpc(int opc){
-    	if(( opc >= 1 &&  opc  < 8) || ( opc >= 10 &&  opc <= 17) ||  opc == 41
-    		||  opc == 42 || ( opc >= 20 && opc <= 25) || ( opc >= 31 && opc <= 32) 
-    	    || ( opc >= 61 && opc <= 63) ||opc == 30 || opc == 0 ){
-    		
-    		     computer.mfr.setValue(0);
-    		    	
-    		            }else{
-    		     computer.mfr.setErr(1, 1);
+
+    public void checkOpc(int opc) {
+        if ((opc >= 1 && opc < 8) || (opc >= 10 && opc <= 17) || opc == 41
+                || opc == 42 || (opc >= 20 && opc <= 25) || (opc >= 31 && opc <= 32)
+                || (opc >= 61 && opc <= 63) || opc == 30 || opc == 0) {
+            computer.mfr.setValue(0);
+        } else {
+            computer.mfr.setErr(1, 1);
         }
     }
-    
-       public void checkBeyond(int value){
-    	if(value > 2047 || value < 0){
-    		computer.mfr.setErr(1, 0);
-    	}else{
-    		computer.mfr.setValue(0);
-    	}
+
+    public void checkBeyond(int value) {
+        if (value > 2047 || value < 0) {
+            computer.mfr.setErr(1, 0);
+        } else {
+            computer.mfr.setValue(0);
+        }
     }
-   
+
 }

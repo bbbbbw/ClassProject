@@ -35,7 +35,7 @@ public class Computer {
         for (int i = 0; i < idx.length; i++) {
             idx[i] = new Register(Register.Type.IDX);
         }
-        for(int i = 0; i < ccr.length; i++) {
+        for (int i = 0; i < ccr.length; i++) {
             ccr[i] = new Register(Register.Type.CCR);
         }
         pc = new Register(Register.Type.PC);
@@ -44,7 +44,7 @@ public class Computer {
         mbr = new Register(Register.Type.MBR);
         mfr = new Register(Register.Type.MFR);
         tcr = new Register(Register.Type.TCR);
-        
+
         printer = "";
 
         // Initialize memory
@@ -52,10 +52,10 @@ public class Computer {
             RAM[i] = new memory();
             RAM[i].ini();
         }
-        
+
         // Initialize memory address 0 for TRAP instruction. (Memory address 1800)
-        RAM[0].MEM = new int[] {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0};
-        
+        RAM[0].MEM = new int[]{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+
         // TODO: Initialize 16 trap routines
         // Print trap code
 //        RAM[1600].MEM = 
@@ -67,35 +67,35 @@ public class Computer {
 
         reader = new ProjectReader();
     }
-	
-	
-    public enum MachineFaultCode{
-		
-	 IllEGAL_RESERVED_LOCATION(0,"Illegal Memory Address to Reserved Locations. MFR set to binary 0001"),
-	 ILLEGAL_TRAP_CODE(1, "Illegal TRAP code. MFR set to binary 0010"),
-	 ILLEGAL_OP_CODE(2, "Illegal Operation Code. MFR set to 0100"),
-	 ILLEGAL_BEYOND_ADDRESS(3, "Illegal Memory Address beyond 2048 (memory installed).  MFR set to binary 1000");
-		
-		int value;
-		String message;
-		
-		private MachineFaultCode(int value, String message) {
-			this.value = value;
-			this.message = message;
-		}
-		
-		public int getFaultValue() {
-			return this.value;
-		}
-		
-		public String getFaultMessage() {
-			return this.message;
-		}
-	}
-	
-	
+
+
+    public enum MachineFaultCode {
+
+        IllEGAL_RESERVED_LOCATION(0, "Illegal Memory Address to Reserved Locations. MFR set to binary 0001"),
+        ILLEGAL_TRAP_CODE(1, "Illegal TRAP code. MFR set to binary 0010"),
+        ILLEGAL_OP_CODE(2, "Illegal Operation Code. MFR set to 0100"),
+        ILLEGAL_BEYOND_ADDRESS(3, "Illegal Memory Address beyond 2048 (memory installed).  MFR set to binary 1000");
+
+        int value;
+        String message;
+
+        private MachineFaultCode(int value, String message) {
+            this.value = value;
+            this.message = message;
+        }
+
+        public int getFaultValue() {
+            return this.value;
+        }
+
+        public String getFaultMessage() {
+            return this.message;
+        }
+    }
+
+
     ///we do not need this function
-    
+
     /**
      * Build 16-bit instruction array based on given input
      */
@@ -129,8 +129,7 @@ public class Computer {
     
     */
 
-    
-    
+
     /**
      * Specify instructions and load into memory
      */
@@ -144,7 +143,7 @@ public class Computer {
         idx[2].setValue(3);
 
         // Set memory values
-        RAM[25].mem=  26;
+        RAM[25].mem = 26;
         RAM[25].loadval();
         //RAM[25].MEM = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0}; // 26
         //RAM[25].setup();
@@ -171,7 +170,7 @@ public class Computer {
         RAM[31].mem = 7083;
         RAM[31].loadval();
         memory test4 = new memory();
-        
+
         // Load register 0 from RAM[31]. LDR, no indexing, direct
         //RAM[6].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 0}, new int[]{0, 0}, 0, new int[]{1, 1, 1, 1, 1});
         //RAM[6].setup();
@@ -183,7 +182,7 @@ public class Computer {
         test4.address = 31;
         test4.load();
         RAM[6] = test4;
-        
+
 
         // Load register 2 from RAM[30]. LDR, indexing 2, direct
         //RAM[7].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 1}, new int[]{1, 0}, 0, new int[]{1, 1, 1, 0, 1});
@@ -196,7 +195,7 @@ public class Computer {
         test4.address = 30;
         test4.load();
         RAM[7] = test4;
-        
+
         // Load register 1 from RAM[29]. LDR, no indexing, indirect
         //RAM[8].MEM = buildInstruction(Instructions.LDR_opc, new int[]{0, 0}, new int[]{0, 1}, 1, new int[]{1, 1, 1, 0, 0});
         //RAM[8].setup();
@@ -255,7 +254,7 @@ public class Computer {
         // Store register 3 to RAM[26]. STR, indexing 3 , indirect
         //RAM[13].MEM = buildInstruction(Instructions.STR_opc, new int[]{0, 1}, new int[]{1, 1}, 1, new int[]{1, 1, 0, 0, 0});
         //RAM[13].setup();
-		test4 = new memory();
+        test4 = new memory();
         test4.opc = Instructions.STRopc;
         test4.gpr = 3;
         test4.idr = 3;
@@ -322,8 +321,8 @@ public class Computer {
         test4.address = 29;
         test4.load();
         RAM[19] = test4;
-	    
-	            
+
+
         //MFS test
         //MFS 0001 Illegal Memory Address to Reserved Locations 
         test4 = new memory();
@@ -334,20 +333,20 @@ public class Computer {
         test4.address = 3;
         test4.load();
         RAM[1001] = test4;
-	    
+
         //MFS 0010 Illegal TRAP code
         test4 = new memory();
         test4.opc = 30;
-        test4.trapcode=15;
+        test4.trapcode = 15;
         test4.load();
         test4.trapcode = 17;
         RAM[1002] = test4;
         //MFS 0100 Illegal Operation Code 
         test4 = new memory();
         test4.opc = 30;
-        test4.trapcode=15;
+        test4.trapcode = 15;
         test4.load();
-        test4.opc  = 59;
+        test4.opc = 59;
         RAM[1003] = test4;
         //MFS 1000 Memory Address beyond 2048  
         RAM[30].mem = 2048;
@@ -360,7 +359,7 @@ public class Computer {
         test4.address = 30;
         test4.load();
         RAM[1004] = test4;
-        
+
 
         ir.setValue(RAM[6].MEM);
     }
@@ -1328,7 +1327,7 @@ public class Computer {
 
         ir.setValue(RAM[9].MEM);
     }
-    
+
     /**
      * Build 16-bit instruction array based on given input
      */
@@ -1484,8 +1483,8 @@ public class Computer {
     }
     
     */
-    
-    
+
+
     /**
      * Run the program and print register/memory information after each instruction
      */
