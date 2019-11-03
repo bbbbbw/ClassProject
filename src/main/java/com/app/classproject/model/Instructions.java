@@ -1074,7 +1074,7 @@ public class Instructions {
     	return Computer.SUCCESS_RET_CODE;
     }
     
-    public void TRAP() {
+    public int TRAP() {
     	// Calculate PC + 1
     	int[] pcVal = computer.pc.getValue();
     	int[] pcPlus1 = new int[16];
@@ -1093,6 +1093,8 @@ public class Instructions {
     	
     	// Execute routine whose address is in memory location 0 + trap code
     	computer.pc.setValue(computer.RAM[0].mem + computer.tcr.getBase10Value() * 10);
+    	
+    	return Computer.SUCCESS_RET_CODE;
     }
 
     // get value by ID from general register R0-R3
