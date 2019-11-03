@@ -53,10 +53,13 @@ public class Computer {
             RAM[i].ini();
         }
         
-        // Initialize memory address 0 for TRAP instruction. (Memory address 1900)
+        // Initialize memory address 0 for TRAP instruction. (Memory address 1800)
         RAM[0].MEM = new int[] {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0};
         
-        // TODO: Initialize 16 trap routines 
+        // TODO: Initialize 16 trap routines
+        // Print trap code
+//        RAM[1600].MEM = 
+        // Jump back to memory location 3
 
         status = 1;
 
