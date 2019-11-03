@@ -78,7 +78,6 @@ public class Instructions {
     public static final int CHAR_PRINTER = 30;
     public static final int OUTER_FILE = 31;
 
-
     public Computer computer;
     public memory instruction = new memory();
 
@@ -1186,7 +1185,7 @@ public class Instructions {
     }
 
     public int TRAP() {
-    	if(computer.tcr.getBase10Value() < 0 || computer.tcr.getBase10Value() > 15) {
+    	if (instruction.trapcode < 0 || instruction.trapcode > 15) {
     		computer.mfr.setErr(1, 2);
     	}
     	

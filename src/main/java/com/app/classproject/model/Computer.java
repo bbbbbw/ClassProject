@@ -334,9 +334,8 @@ public class Computer {
         //MFS 0010 Illegal TRAP code
         test4 = new memory();
         test4.opc = 30;
-        test4.trapcode = 15;
-        test4.load();
-        test4.trapcode = 17;
+        test4.MEM = new int[]{0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0}; // opc59
+        test4.trapcode = 16;
         RAM[1002] = test4;
 
         // MFS 0100 Illegal Operation Code

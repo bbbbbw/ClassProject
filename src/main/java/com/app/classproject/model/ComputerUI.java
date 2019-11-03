@@ -53,6 +53,12 @@ public class ComputerUI {
         // Instruction in binary to instruction in string
         memory instruction = computer.RAM[pc.getBase10Value()];
         switch (instruction.opc) {
+            case 0:
+                nextInstruction = "HALT";
+                break;
+            case 30:
+                nextInstruction = "TRAP";
+                break;
             //part 1
             case 1:
                 nextInstruction = "LDR " + Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
