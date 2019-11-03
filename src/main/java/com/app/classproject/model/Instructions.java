@@ -1201,7 +1201,7 @@ public class Instructions {
         return base10Value;
     }
 
-    public int checkEA(int value) {
+    public int checkReserved(int value) {
         if (value <= 6 && value > 0) {
             computer.mfr.setErr(1, 3);
             return 1;
