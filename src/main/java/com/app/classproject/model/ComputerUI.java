@@ -34,13 +34,13 @@ public class ComputerUI {
         printer = computer.printer;
 
         int[] temp = mfr.getValue();
-        if (temp[0] == 1) {
+        if (temp[3] == 1) {
             computerMessage = "Machine Fault 0: Illegal Memory Address to Reserved Locations";
-        } else if (temp[1] == 1) {
-            computerMessage = "Machine Fault 1: Illegal TRAP code";
         } else if (temp[2] == 1) {
+            computerMessage = "Machine Fault 1: Illegal TRAP code";
+        } else if (temp[1] == 1) {
             computerMessage = "Machine Fault 2: Illegal Operation Code";
-        } else if (temp[3] == 1) {
+        } else if (temp[0] == 1) {
             computerMessage = "Machine Fault 3: Illegal Memory Address beyond 2048 (memory installed)";
         } else {
             computerMessage = "/";
