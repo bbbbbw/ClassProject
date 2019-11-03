@@ -24,7 +24,6 @@ public class Computer {
 
     public int stopForInput; // Force the computer to stop and wait until the required input is ready.
 
-    public int printType; // 0: print number, 1: print character
     public ProjectReader reader; // A reader for computer to read outer files (test program 2)
 
 
@@ -56,7 +55,6 @@ public class Computer {
 
         stopForInput = 0;
 
-        printType = 0;
         reader = new ProjectReader();
     }
 	
@@ -633,8 +631,6 @@ public class Computer {
 
 
     public void loadTestProgramTwo() {
-        this.printType = 1;
-
         // Program starts at RAM[8]
         pc.setValue(9);
 
@@ -717,7 +713,7 @@ public class Computer {
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 1;
-        tempInstruction.did = 1;
+        tempInstruction.did = 30;
         tempInstruction.load();
         RAM[15] = tempInstruction;
 
@@ -853,7 +849,7 @@ public class Computer {
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 31;
+        tempInstruction.address = 30;
         tempInstruction.load();
         RAM[30] = tempInstruction;
 
@@ -887,9 +883,9 @@ public class Computer {
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JZopc;
         tempInstruction.gpr = 0;
-        tempInstruction.idr = 2;
+        tempInstruction.idr = 0;
         tempInstruction.iad = 0;
-        tempInstruction.address = 0;
+        tempInstruction.address = 3;
         tempInstruction.load();
         RAM[34] = tempInstruction;
 
@@ -1126,13 +1122,47 @@ public class Computer {
         RAM[60] = tempInstruction;
 
         tempInstruction = new memory();
-        tempInstruction.opc = Instructions.JZopc;
+        tempInstruction.opc = Instructions.LDRopc;
         tempInstruction.gpr = 1;
-        tempInstruction.idr = 1;
+        tempInstruction.idr = 0;
         tempInstruction.iad = 0;
-        tempInstruction.address = 19;
+        tempInstruction.address = 7;
         tempInstruction.load();
         RAM[61] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[62] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.SIRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[63] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.TRRopc;
+        tempInstruction.rx = 1;
+        tempInstruction.ry = 2;
+        tempInstruction.load();
+        RAM[64] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JCCopc;
+        tempInstruction.gpr = 3;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 23;
+        tempInstruction.load();
+        RAM[65] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JMAopc;
@@ -1141,7 +1171,7 @@ public class Computer {
         tempInstruction.iad = 1;
         tempInstruction.address = 8;
         tempInstruction.load();
-        RAM[62] = tempInstruction;
+        RAM[66] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDAopc;
@@ -1150,7 +1180,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[63] = tempInstruction;
+        RAM[67] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.AIRopc;
@@ -1159,7 +1189,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 1;
         tempInstruction.load();
-        RAM[64] = tempInstruction;
+        RAM[68] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -1168,7 +1198,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 10;
         tempInstruction.load();
-        RAM[65] = tempInstruction;
+        RAM[69] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDRopc;
@@ -1177,23 +1207,34 @@ public class Computer {
         tempInstruction.iad = 1;
         tempInstruction.address = 10;
         tempInstruction.load();
-        RAM[66] = tempInstruction;
+        RAM[70] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 1;
-        tempInstruction.did = 1;
+        tempInstruction.did = 30;
         tempInstruction.load();
-        RAM[67] = tempInstruction;
+        RAM[71] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JNEopc;
         tempInstruction.gpr = 1;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 20;
+        tempInstruction.address = 24;
         tempInstruction.load();
-        RAM[68] = tempInstruction;
+        RAM[72] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JMAopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[73] = tempInstruction;
+
+        // 74 is reserved as empty
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDRopc;
@@ -1202,7 +1243,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 12;
         tempInstruction.load();
-        RAM[69] = tempInstruction;
+        RAM[75] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.AIRopc;
@@ -1211,14 +1252,14 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 1;
         tempInstruction.load();
-        RAM[70] = tempInstruction;
+        RAM[76] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 2;
         tempInstruction.did = 1;
         tempInstruction.load();
-        RAM[71] = tempInstruction;
+        RAM[77] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDRopc;
@@ -1227,14 +1268,14 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 11;
         tempInstruction.load();
-        RAM[72] = tempInstruction;
+        RAM[78] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 2;
         tempInstruction.did = 1;
         tempInstruction.load();
-        RAM[73] = tempInstruction;
+        RAM[79] = tempInstruction;
 
         ir.setValue(RAM[9].MEM);
     }
