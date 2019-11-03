@@ -154,7 +154,6 @@ public class Instructions {
                 return TRAP();
             default:
                 computer.mfr.setErr(1, 1);
-                computer.pc.setValue(computer.pc.getBase10Value() + 1);
                 return Computer.SUCCESS_RET_CODE;
         }
     }
@@ -201,7 +200,11 @@ public class Instructions {
      */
     public int LDR() {
         int EA = getEffectiveAdr();
-
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         // Check cache
         int[] memVal = checkCache(EA);
 
@@ -239,6 +242,16 @@ public class Instructions {
      */
     public int STR() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
@@ -289,6 +302,12 @@ public class Instructions {
      */
     public int LDA() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+
         computer.mbr.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
@@ -317,7 +336,11 @@ public class Instructions {
      */
     public int LDX() {
         int EA = getEffectiveAdr();
-
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         // Check cache
         int[] memVal = checkCache(EA);
 
@@ -347,7 +370,16 @@ public class Instructions {
      */
     public int STX() {
         int EA = getEffectiveAdr();
-
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         computer.mar.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
@@ -390,6 +422,16 @@ public class Instructions {
 
     public int JZ() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         int tempR = getValueFromRById(instruction.gpr);
         if (tempR == 0) {
             computer.pc.setValue(EA);
@@ -406,6 +448,16 @@ public class Instructions {
 
     public int JNE() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         int tempR = getValueFromRById(instruction.gpr);
         if (tempR != 0) {
             computer.pc.setValue(EA);
@@ -421,6 +473,16 @@ public class Instructions {
 
     public int JCC() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         switch (this.instruction.gpr) {
             case 0:
                 if (computer.ccr[0].getBase10Value() == 1) {
@@ -464,6 +526,16 @@ public class Instructions {
 
     public int JMA() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         computer.pc.setValue(EA);
 
         return Computer.SUCCESS_RET_CODE;
@@ -477,6 +549,16 @@ public class Instructions {
 
     public int JSR() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         computer.gpr[3].setValue(computer.pc.getBase10Value() + 1);
         computer.pc.setValue(EA);
 
@@ -501,6 +583,16 @@ public class Instructions {
 
     public int SOB() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - 1);
@@ -546,6 +638,16 @@ public class Instructions {
 
     public int JGE() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         switch (instruction.gpr) {
             case 0:
                 if (computer.gpr[0].getBase10Value() >= 0) {
@@ -587,6 +689,11 @@ public class Instructions {
      */
     public int AMR() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
         int[] memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
@@ -643,6 +750,12 @@ public class Instructions {
      */
     public int SMR() {
         int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+
         int[] memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
@@ -698,9 +811,6 @@ public class Instructions {
      * IX and I are ignored in this instruction
      */
     public int AIR() {
-        int EA = getEffectiveAdr();
-        computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
@@ -730,9 +840,6 @@ public class Instructions {
      */
 
     public int SIR() {
-        int EA = getEffectiveAdr();
-        computer.mar.setValue(EA);
-        computer.mbr.setValue(computer.RAM[EA].MEM);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
         switch (instruction.gpr) {
@@ -1081,9 +1188,9 @@ public class Instructions {
     public int TRAP() {
         // Calculate PC + 1
         int[] pcVal = computer.pc.getValue();
-        int[] pcPlus1 = new int[16];
+        int[] pcPlus1 = new int[12];
 
-        for (int i = 15; i >= 0; i--) {
+        for (int i = 11; i >= 0; i--) {
             if (pcVal[i] == 0) {
                 pcPlus1[i] = 1;
                 break;
@@ -1202,7 +1309,7 @@ public class Instructions {
     }
 
     public int checkReserved(int value) {
-        if (value <= 6 && value > 0) {
+        if (value < 6 && value > 0) {
             computer.mfr.setErr(1, 3);
             return 1;
         } else {

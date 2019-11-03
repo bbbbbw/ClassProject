@@ -115,9 +115,9 @@ public class NewActionController {
     @RequestMapping(value = "/action/IPL")
     public String IPL(Model model) {
         JSONObject result = new JSONObject();
-//        computer.loadProgram();
+        computer.loadProgram();
 //        computer.loadTestProgramOne();
-        computer.loadTestProgramTwo();
+//        computer.loadTestProgramTwo();
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);

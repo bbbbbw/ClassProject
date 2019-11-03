@@ -326,7 +326,7 @@ public class Computer {
         //MFS test
         //MFS 0001 Illegal Memory Address to Reserved Locations 
         test4 = new memory();
-        test4.opc = Instructions.LDRopc;
+        test4.opc = Instructions.STRopc;
         test4.gpr = 0;
         test4.idr = 0;
         test4.iad = 0;
@@ -341,16 +341,17 @@ public class Computer {
         test4.load();
         test4.trapcode = 17;
         RAM[1002] = test4;
-        //MFS 0100 Illegal Operation Code 
+
+        // MFS 0100 Illegal Operation Code
         test4 = new memory();
-        test4.opc = 30;
-        test4.trapcode = 15;
-        test4.load();
+        test4.MEM = new int[]{1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1}; // opc59
         test4.opc = 59;
         RAM[1003] = test4;
-        //MFS 1000 Memory Address beyond 2048  
+
+        //MFS 1000 Memory Address beyond 2048
         RAM[30].mem = 2048;
         RAM[30].loadval();
+
         test4 = new memory();
         test4.opc = Instructions.LDRopc;
         test4.gpr = 0;
@@ -931,9 +932,9 @@ public class Computer {
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JZopc;
         tempInstruction.gpr = 0;
-        tempInstruction.idr = 0;
+        tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 3;
+        tempInstruction.address = 30;
         tempInstruction.load();
         RAM[34] = tempInstruction;
 
@@ -1492,18 +1493,18 @@ public class Computer {
         } else {
             // Calculate PC + 1
             int[] pcVal = this.pc.getValue();
-            int[] pcPlus1 = new int[16];
+            int[] pcP1 = new int[12];
 
-            for (int i = 15; i >= 0; i--) {
+            for (int i = 11; i >= 0; i--) {
                 if (pcVal[i] == 0) {
-                    pcPlus1[i] = 1;
+                    pcP1[i] = 1;
                     break;
                 } else {
-                    pcPlus1[i] = 0;
+                    pcP1[i] = 0;
                 }
             }
             // Store PC + 1 in memory location 4
-            this.RAM[4].MEM = pcPlus1;
+            this.RAM[4].MEM = pcP1;
 
             // Execute routine whose address is in memory location 4+ machine fault code
             this.pc.setValue(this.RAM[1].mem + mfr * 4);
