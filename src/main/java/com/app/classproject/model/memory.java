@@ -44,7 +44,7 @@ public class memory {
     public int[] COUNT = new int[4]; // 4 digits for number of count notation in binary array
     public int count;// number of the movement;
 
-    //opcode 36
+    //opcode 30
     public int trapcode;// trap code;
 
     // opcode 61-63
@@ -80,7 +80,7 @@ public class memory {
         System.out.println("mem" + Arrays.toString(MEM));
         System.out.println("RL" + Arrays.toString(RL));
         System.out.println("opc" + opc);
-        if (this.opc == 36) {
+        if (this.opc == 30) {
             System.out.println("trap code ");
             System.out.println("trap code " + trapcode);
         } else if (this.opc == 0) {
@@ -154,7 +154,7 @@ public class memory {
         this.mem = Integer.parseInt(tmp, 2);
             
         //different opcode cases
-        if (this.opc == 36) {
+        if (this.opc == 30) {
             System.out.println("trap code setup");
         } else if (this.opc == 0 && MEM[10] == 0 && MEM[11] == 0 && MEM[12] == 0 && MEM[13] == 0 && MEM[14] == 0 && MEM[15] == 0) {
             System.out.println("HALT");
@@ -291,7 +291,7 @@ public class memory {
         }
 
         // opcode check
-        if (this.opc == 36) {
+        if (this.opc == 30) {
             System.out.println("trap code load");
 
             String TRP = Integer.toBinaryString(this.trapcode);
