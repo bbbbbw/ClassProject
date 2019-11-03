@@ -1483,7 +1483,32 @@ public class Computer {
     }
     
     */
+    public void MFR (){
+        int mfr = this.mfr.getBase10Value();
 
+        if(mfr==0){
+            return;
+        }else {
+            // Calculate PC + 1
+            int[] pcVal = this.pc.getValue();
+            int[] pcPlus1 = new int[16];
+
+            for (int i = 15; i >= 0; i--) {
+                if (pcVal[i] == 0) {
+                    pcPlus1[i] = 1;
+                    break;
+                } else {
+                    pcPlus1[i] = 0;
+                }
+            }
+            // Store PC + 1 in memory location 4
+            this.RAM[4].MEM = pcPlus1;
+
+            // Execute routine whose address is in memory location 4+ machine fault code
+            this.pc.setValue(this.RAM[1].mem + mfr * 4);
+
+        }
+    }
 
     /**
      * Run the program and print register/memory information after each instruction
@@ -1511,6 +1536,7 @@ public class Computer {
         if (stopForInput == 1) {
             return;
         }
+         MFR ();
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
