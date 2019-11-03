@@ -13,7 +13,7 @@ public class Computer {
     public Register[] gpr = new Register[4];
     public Register[] idx = new Register[3]; // X0-X2
     public Register[] ccr = new Register[4];
-    public Register pc, ir, mar, mbr, mfr;
+    public Register pc, ir, mar, mbr, mfr, tcr;
 
     public String printer;
 
@@ -43,6 +43,8 @@ public class Computer {
         mar = new Register(Register.Type.MAR);
         mbr = new Register(Register.Type.MBR);
         mfr = new Register(Register.Type.MFR);
+        tcr = new Register(Register.Type.TCR);
+        
         printer = "";
 
         // Initialize memory
@@ -50,6 +52,11 @@ public class Computer {
             RAM[i] = new memory();
             RAM[i].ini();
         }
+        
+        // Initialize memory address 0 for TRAP instruction. (Memory address 1900)
+        RAM[0].MEM = new int[] {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+        
+        // TODO: Initialize 16 trap routines 
 
         status = 1;
 

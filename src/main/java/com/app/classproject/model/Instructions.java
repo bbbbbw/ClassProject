@@ -1074,7 +1074,7 @@ public class Instructions {
     	return Computer.SUCCESS_RET_CODE;
     }
     
-    public int TRAP() {
+    public void TRAP() {
     	// Calculate PC + 1
     	int[] pcVal = computer.pc.getValue();
     	int[] pcPlus1 = new int[16];
@@ -1092,14 +1092,7 @@ public class Instructions {
     	computer.RAM[2].MEM = pcPlus1;
     	
     	// Execute routine whose address is in memory location 0 + trap code
-    	computer.pc.setValue(computer.RAM[0].mem + instruction.trapcode);
-    	Instructions trapRoutine = new Instructions(computer.RAM[computer.pc.getBase10Value()].MEM, computer);
-    	int executionResult = trapRoutine.execute();
-    	
-    	// Return to the instruction stored in memory location 2
-    	computer.pc.setValue(computer.RAM[2].MEM);
-    	
-    	return executionResult;
+    	computer.pc.setValue(computer.RAM[0].mem + computer.tcr.getBase10Value() * 10);
     }
 
     // get value by ID from general register R0-R3
