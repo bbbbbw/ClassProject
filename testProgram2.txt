@@ -18,7 +18,7 @@ set address 600 = 1 // fixed
 13		LDX x1, 6, 0			// x1 = MEN[6]
 
 14		IN r1, 31				// read one character at a time
-15		OUT r1, 1				// Output character
+15		OUT r1, 30				// Output character
 16		STR r1, x1, 0			// store input into address (601 - )
 
 17		JNE r1, 00, 9			// if r1 != 0, pc jump to line 9
@@ -45,12 +45,12 @@ set address 600 = 1 // fixed
 
 
 /* Loop */
-30		LDX x1, 31, 0			// clear x1
+30		LDX x1, 30 0			// clear x1
 31		LDX x1, 8, 0			// x1 = MEN[8] = 44
 32		LDR r0, 0, 9, 1			// load r0 according to paragraph pointer
 33		LDR r1, 0, 10, 1		// load r1 according to word pointer
 
-34		JZ r0, x2, 0, 0			// jump out to stop if r0 == 0 (finish the paragraph and cannot find word)
+34		JZ r0, 0, 3, 0			// jump out to stop if r0 == 0 (finish the paragraph and cannot find word)
 
 35		TRR r0, r1				// Compare r0 and r1
 36		JCC cc3, x1, 17, 0		// if r0 == r1, jump to address 61
@@ -89,24 +89,31 @@ set address 600 = 1 // fixed
 60		JMA 0, 8, 1				// jump to 44
 
 // if r0 == r1
-// if r1 == 0 (find word)
-61		JZ r1, x1, 19			// jump out to print if find word
-// if r1 != 0 (compare next character)
-62		JMA 0, 8, 1				// jump to 44
+// if reach the end of the word
+61		LDR r1, 00, 7, 0		// r1 = word max position + 1
+62		LDR r2, 0, 10, 0		// r2 = current word pointer position
+63		SIR r1, 1				// r1 -= 1
+64		TRR r1, r2				// compare 2 position
+65		JCC cc3, x1, 23, 0		// jump out to print if find word
+// else, compare next character
+66		JMA 0, 8, 1				// jump to 44
 
 
 /* print sentence number, and the word number if find the word */
-63		LDA	r2, x3, 0, 0		// reset word pointer to start
+67		LDA	r2, x3, 0, 0		// reset word pointer to start
 		
 // loop to print word
-64		AIR r2, 1				
-65		STR r2, 0, 10, 0		// word pointer += 1
-66		LDR r1, 0, 10, 1		// load character to r1
-67		OUT r1, 1				// print r1
-68		JNE r1, x1, 20, 0		// If not finished the word, go back
+68		AIR r2, 1				
+69		STR r2, 0, 10, 0		// word pointer += 1
+70		LDR r1, 0, 10, 1		// load character to r1
+71		OUT r1, 30				// print character
+72		JNE r1, x1, 24, 0		// If not finished the word, go back
+73		JMA x1, 31, 0			// Jump to 75
 
-69		LDR	r2, 0, 12, 0
-70		AIR r2, 1
-71		OUT r2, 1				// print sentence number
-72		LDR	r2, 0, 11, 0
-73		OUT r2, 1				// print word number
+74 is reserved (empty)
+
+75		LDR	r2, 0, 12, 0
+76		AIR r2, 1
+77		OUT r2, 1				// print sentence number
+78		LDR	r2, 0, 11, 0
+79		OUT r2, 1				// print word number

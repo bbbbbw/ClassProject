@@ -1030,11 +1030,11 @@ public class Instructions {
      * Output Character to Device from Register
      */
    public int OUT() {
-        if (instruction.did == 1) {
-            int val = this.getValueFromRById(instruction.r);
-            if (computer.printType == 0) {
-                computer.printer += " " + Integer.toString(val);
-            } else if (computer.printType == 1 && val > 31) {
+       int val = this.getValueFromRById(instruction.r);
+        if (instruction.did == 1) { // integer printer
+            computer.printer += " " + Integer.toString(val);
+        } else if (instruction.did == 30) { // character printer
+            if (val > 31 && val < 127) {
                 StringBuffer temp = new StringBuffer();
                 temp.append((char)val);
                 computer.printer += temp.toString();
@@ -1043,6 +1043,7 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+
     /**
      * Check Device Status to Register,
      */
@@ -1067,6 +1068,7 @@ public class Instructions {
     	if (haltInstruction.substring(8,16).equals("00000000")) {
     		System.out.println("HALT!");
     		System.out.println("Stop the machine!");
+    		computer.status = 0;
     		return Computer.HLT_RET_CODE;
     	}
     	return Computer.SUCCESS_RET_CODE;

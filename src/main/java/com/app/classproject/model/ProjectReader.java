@@ -11,7 +11,7 @@ public class ProjectReader {
         try {
             DataInputStream in = new DataInputStream(new FileInputStream(fileName));
             BufferedReader br  = new BufferedReader(new InputStreamReader(in));
-            paragraph = " " + br.readLine();
+            paragraph = " " + br.readLine() + " ";
         } catch (IOException e) {
             paragraph = " ";
         }
