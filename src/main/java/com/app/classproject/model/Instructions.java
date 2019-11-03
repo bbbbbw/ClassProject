@@ -1089,6 +1089,35 @@ public class Instructions {
     	// Store PC + 1 in memory location 2
     	computer.RAM[2].MEM = pcPlus1;
     	
+    	// Get memory location 0
+    	int[] mem0Addr = computer.RAM[0].MEM;
+    	
+    	// Convert 4-bit trap code to 16-bit
+    	int[] trapCode = new int[16];
+    	int test = instruction.trapcode;
+    	for(int i = 0; i < instruction.TRAP.length; i++) {
+    		trapCode[trapCode.length - instruction.TRAP.length + i] = instruction.TRAP[i];
+    	}
+    	
+    	// Get memory location 0 + trap code
+    	int carry = 0;
+    	int[] trapRoutineAddr = new int[16];
+    	for(int i = 15; i >= 0; i--) {
+    		if(mem0Addr[i] + trapCode[i] + carry >= 2) {
+    			trapRoutineAddr[i] = 0;
+    			carry = 1;
+    		} else {
+    			trapRoutineAddr[i] = mem0Addr[i] + trapCode[i] + carry;
+    			break;
+    		}
+    	}
+    	
+    	
+    	// TODO: Execute routine whose address is in memory location 0 + trap code
+    	Instructions trapRoutine = new Instructions() 
+    	
+    	// TODO: Return to the instruction stored in memory location 2 
+    	
     	return -1;
     }
 
@@ -1172,5 +1201,22 @@ public class Instructions {
         }
         
         return memVal;
+    }
+    
+    /**
+     * Covert value from base 2 array to base 10 integer and return
+     */
+    public int getBase10Value(int[] base2Arr) {
+        int base10Value = 0;
+        int multiplier = 1;
+
+        for (int i = base2Arr.length - 1; i >= 0; i--) {
+            if (base2Arr[i] == 1) {
+                base10Value += multiplier;
+            }
+            multiplier *= 2;
+        }
+
+        return base10Value;
     }
 }
