@@ -56,10 +56,7 @@ public class Computer {
         // Initialize memory address 0 for TRAP instruction. (Memory address 1800)
         RAM[0].MEM = new int[] {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0};
         
-        // TODO: Initialize 16 trap routines
-        // Print trap code
-//        RAM[1600].MEM = 
-        // Jump back to memory location 3
+        initializeTrapCodeRoutines();
 
         status = 1;
 
@@ -1537,5 +1534,90 @@ public class Computer {
         } else if (executionResult == HLT_RET_CODE) {
             this.status = 0;
         }
+    }
+    
+    /**
+     * Initialize 16 trap code routines
+     */
+    public void initializeTrapCodeRoutines() {
+    	// Routine 1
+    	RAM[1800].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Load 0 into R0
+        RAM[1801].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 0
+        RAM[1802].MEM = new int[] {0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 2
+    	RAM[1810].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Load 1 into R0
+        RAM[1811].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 1
+        RAM[1812].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 3
+        RAM[1820].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0}; // Load 2 into R0
+        RAM[1821].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 2
+        RAM[1822].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 4
+        RAM[1830].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Load 3 into R0
+        RAM[1831].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 3
+        RAM[1832].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 5
+        RAM[1840].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}; // Load 4 into R0
+        RAM[1841].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 4
+        RAM[1842].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 6
+        RAM[1850].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1}; // Load 5 into R0
+        RAM[1851].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 5
+        RAM[1852].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 7
+        RAM[1860].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0}; // Load 6 into R0
+        RAM[1861].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 6
+        RAM[1862].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 8
+        RAM[1870].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1}; // Load 7 into R0
+        RAM[1871].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 7
+        RAM[1872].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 9
+        RAM[1880].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0}; // Load 8 into R0
+        RAM[1881].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 8
+        RAM[1882].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 10
+        RAM[1890].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1}; // Load 9 into R0
+        RAM[1891].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 9
+        RAM[1892].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 11
+        RAM[1900].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0}; // Load 10 into R0
+        RAM[1901].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 10
+        RAM[1902].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 12
+        RAM[1910].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1}; // Load 11 into R0
+        RAM[1911].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 11
+        RAM[1912].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 13
+        RAM[1920].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0}; // Load 12 into R0
+        RAM[1921].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 12
+        RAM[1922].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 14
+        RAM[1930].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1}; // Load 13 into R0
+        RAM[1931].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 13
+        RAM[1932].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 15
+        RAM[1940].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0}; // Load 14 into R0
+        RAM[1941].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 14
+        RAM[1942].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
+        
+        // Routine 16
+        RAM[1950].MEM = new int[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1}; // Load 15 into R0
+        RAM[1951].MEM = new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // Print 15
+        RAM[1952].MEM = new int[] {0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}; // Jump back to memory location 3
     }
 }
