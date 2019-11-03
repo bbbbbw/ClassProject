@@ -1079,6 +1079,10 @@ public class Instructions {
     }
 
     public int TRAP() {
+    	if(computer.tcr.getBase10Value() < 0 || computer.tcr.getBase10Value() > 15) {
+    		computer.mfr.setErr(1, 2);
+    	}
+    	
         // Calculate PC + 1
         int[] pcVal = computer.pc.getValue();
         int[] pcPlus1 = new int[16];
