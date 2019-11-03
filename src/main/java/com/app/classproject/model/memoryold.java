@@ -1,4 +1,3 @@
-//package mem;
 package com.app.classproject.model;
 
 import java.util.Arrays;
@@ -17,7 +16,7 @@ public class memory {
     public int[] MEM = new int[16]; // Memory in binary array
     public int mem; // decimal memory integer
 
-    public int[] OP = new int[6]; // 6 digits reserved location in binary array ex:011110
+    public int[] RL = new int[6]; // 6 digits reserved location in binary array ex:011110
     public int opc; // translate RL into opcode decimal number ex: 36
 
     // load and store instruction & logical instructions
@@ -42,12 +41,12 @@ public class memory {
     public int r;
     public int al;// Arithmetic Shift or logical;
     public int lr;// left or right?
-       public int[] COUNT = new int[4]; // 4 digits for number of count notation in binary array
+    public int[] COUNT = new int[4]; // 4 digits for number of count notation in binary array
     public int count;// number of the movement;
 
     //opcode 30
     public int trapcode;// trap code;
-    public int[] TRAP = new int[4]; // 4 digits for 16 trapcode in binary array
+
     // opcode 61-63
     // I/O operations
     public int[] DID = new int[5]; // 5 digits for devices ID in binary array
@@ -79,11 +78,10 @@ public class memory {
 
 
         System.out.println("mem" + Arrays.toString(MEM));
-        System.out.println("OP" + Arrays.toString(OP));
+        System.out.println("RL" + Arrays.toString(RL));
         System.out.println("opc" + opc);
         if (this.opc == 30) {
             System.out.println("trap code ");
-            System.out.println("TRAP" + Arrays.toString(TRAP));
             System.out.println("trap code " + trapcode);
         } else if (this.opc == 0) {
             System.out.println("halt ");
@@ -139,9 +137,9 @@ public class memory {
     public void setup() {
 
         // disassemble memory and read opcode
-        System.arraycopy(MEM, 0, memory.this.OP, 0, 6);
+        System.arraycopy(MEM, 0, memory.this.RL, 0, 6);
         StringBuilder builder = new StringBuilder();
-        for (int value : OP) {
+        for (int value : RL) {
             builder.append(value);
         }
         String tmp = builder.toString();
@@ -158,13 +156,6 @@ public class memory {
         //different opcode cases
         if (this.opc == 30) {
             System.out.println("trap code setup");
-            System.arraycopy(MEM, 12, memory.this.TRAP, 0, 4);
-            builder = new StringBuilder();
-            for (int value : TRAP) {
-                builder.append(value);
-            }
-            tmp = builder.toString();
-            this.trapcode = Integer.parseInt(tmp, 2);
         } else if (this.opc == 0 && MEM[10] == 0 && MEM[11] == 0 && MEM[12] == 0 && MEM[13] == 0 && MEM[14] == 0 && MEM[15] == 0) {
             System.out.println("HALT");
         } else if ((this.opc >= 1 && this.opc < 8) || (this.opc >= 10 && this.opc <= 17) || this.opc == 41
@@ -180,7 +171,11 @@ public class memory {
             }
             tmp = builder.toString();
             this.gpr = Integer.parseInt(tmp, 2);
+
+
             builder = new StringBuilder();
+
+
             for (int value : IX) {
                 builder.append(value);
             }
@@ -193,6 +188,8 @@ public class memory {
             }
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
+
+
 //			this.print();
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register setup");
@@ -453,33 +450,18 @@ public class memory {
 
         }
     }
-/*
-    public static void main(String args[]) {
-     memory tmp = new memory();
-      tmp.ini();
-    System.out.println(Arrays.toString(tmp.MEM));
-      int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
-      tmp.MEM = temp;
-      tmp.setup();
-      System.out.println(Arrays.toString(tmp.MEM));
-      tmp.load();
-      System.out.println(Arrays.toString(tmp.MEM));
-      System.out.println("test1");
-      System.out.println("***************");
-      System.out.println("***************");
-      System.out.println("***************");
-      memory test1 = new memory();
-      test1.opc=30;
-      test1.trapcode= 2;
-      temp=test1.load();
-      System.out.println(Arrays.toString(temp));
-      
-      System.out.println("***************");
-      test1.print();
 
-    }
-
-*/
+//    public static void main(String args[]) {
+//        memory tmp = new memory();
+//        tmp.ini();
+//        System.out.println(Arrays.toString(tmp.MEM));
+//        int temp[] = { 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0 };
+//        tmp.MEM=temp;
+//        tmp.setup();
+//        System.out.println(Arrays.toString(tmp.MEM));
+//        tmp.load();
+//        System.out.println(Arrays.toString(tmp.MEM));
+//
 //        System.out.println("test1");
 //        System.out.println("***************");
 //        System.out.println("***************");
@@ -553,4 +535,3 @@ public class memory {
 //        System.out.println(Arrays.toString(temp));
 //    }
 }
-

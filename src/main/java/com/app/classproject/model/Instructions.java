@@ -29,6 +29,7 @@ public class Instructions {
     public static final int[] AND_opc = {0, 1, 0, 1, 1, 1};
     public static final int[] ORR_opc = {0, 1, 1, 0, 0, 0};
     public static final int[] NOT_opc = {0, 1, 1, 0, 0, 1};
+    public static final int[] TRAP_opc = {0, 1, 1, 1, 1, 0};
     public static final int[] SRC_opc = {0, 1, 1, 1, 1, 1};
     public static final int[] RRC_opc = {1, 0, 0, 0, 0, 0};
     public static final int[] IN_opc = {1, 1, 1, 1, 0, 1};
@@ -67,6 +68,9 @@ public class Instructions {
     public static final int INopc = 61;
     public static final int OUTopc = 62;
     public static final int CHKopc = 63;
+    
+    // Part 3
+    public static final int TRAPopc = 30;
 
 	public static final int	KEYBOARD	= 0;
 	public static final int	PRINTER		= 1;
@@ -144,6 +148,8 @@ public class Instructions {
                 return IN();
             case 62:
                 return OUT();
+            case 30:
+            	return TRAP();
             default:
                 return Computer.ERROR_RET_CODE;
         }
@@ -1066,6 +1072,26 @@ public class Instructions {
     		return Computer.HLT_RET_CODE;
     	}
     	return Computer.SUCCESS_RET_CODE;
+    }
+    
+    public int TRAP() {
+    	// Calculate PC + 1
+    	int[] pcVal = computer.pc.getValue();
+    	int[] pcPlus1 = new int[16];
+    	
+    	for(int i = 15; i >= 0; i--) {
+    		if(pcVal[i] == 0) {
+    			pcPlus1[i] = 1;
+    			break;
+    		} else {
+    			pcPlus1[i] = 0;
+    		}
+    	}
+    	
+    	// Store PC + 1 in memory location 2
+    	computer.RAM[2].MEM = pcPlus1;
+    	
+    	return -1;
     }
 
     // get value by ID from general register R0-R3

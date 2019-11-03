@@ -312,6 +312,45 @@ public class Computer {
         test4.address = 29;
         test4.load();
         RAM[19] = test4;
+	    
+	            
+        //MFS test
+        //MFS 0001 Illegal Memory Address to Reserved Locations 
+        test4 = new memory();
+        test4.opc = Instructions.LDRopc;
+        test4.gpr = 0;
+        test4.idr = 0;
+        test4.iad = 0;
+        test4.address = 3;
+        test4.load();
+        RAM[1001] = test4;
+	    
+        //MFS 0010 Illegal TRAP code
+        test4 = new memory();
+        test4.opc = 30;
+        test4.trapcode=15;
+        test4.load();
+        test4.trapcode = 17;
+        RAM[1002] = test4;
+        //MFS 0100 Illegal Operation Code 
+        test4 = new memory();
+        test4.opc = 30;
+        test4.trapcode=15;
+        test4.load();
+        test4.opc  = 59;
+        RAM[1003] = test4;
+        //MFS 1000 Memory Address beyond 2048  
+        RAM[30].mem = 2048;
+        RAM[30].loadval();
+        test4 = new memory();
+        test4.opc = Instructions.LDRopc;
+        test4.gpr = 0;
+        test4.idr = 0;
+        test4.iad = 1;
+        test4.address = 30;
+        test4.load();
+        RAM[1004] = test4;
+        
 
         ir.setValue(RAM[6].MEM);
     }
