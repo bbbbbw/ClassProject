@@ -45,7 +45,13 @@ public class Register {
     public void setValue(int[] value) {
         System.arraycopy(value, 0, this.value, 0, this.value.length);
     }
-
+    
+    public void setErr(int val, int pos) {
+    	if(val >= 0 && val <= 1 && pos >=0 && pos < 4){
+    		this.value[pos]=val;
+    	}
+        
+    }
     /**
      * Input is base 10 integer
      */
