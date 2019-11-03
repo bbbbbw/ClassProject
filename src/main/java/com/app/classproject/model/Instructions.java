@@ -1091,36 +1091,14 @@ public class Instructions {
     	// Store PC + 1 in memory location 2
     	computer.RAM[2].MEM = pcPlus1;
     	
-    	// Get memory location 0
-    	int[] mem0Addr = computer.RAM[0].MEM;
+    	// Execute routine whose address is in memory location 0 + trap code
+    	Instructions trapRoutine = new Instructions(computer.RAM[computer.RAM[0].mem + instruction.trapcode].MEM, computer);
+    	int executionResult = trapRoutine.execute();
     	
-    	// Convert 4-bit trap code to 16-bit
-    	int[] trapCode = new int[16];
-    	int test = instruction.trapcode;
-    	for(int i = 0; i < instruction.TRAP.length; i++) {
-    		trapCode[trapCode.length - instruction.TRAP.length + i] = instruction.TRAP[i];
-    	}
+    	// Return to the instruction stored in memory location 2
+    	computer.pc.setValue(computer.RAM[2].MEM);
     	
-    	// Get memory location 0 + trap code
-    	int carry = 0;
-    	int[] trapRoutineAddr = new int[16];
-    	for(int i = 15; i >= 0; i--) {
-    		if(mem0Addr[i] + trapCode[i] + carry >= 2) {
-    			trapRoutineAddr[i] = 0;
-    			carry = 1;
-    		} else {
-    			trapRoutineAddr[i] = mem0Addr[i] + trapCode[i] + carry;
-    			break;
-    		}
-    	}
-    	
-    	
-    	// TODO: Execute routine whose address is in memory location 0 + trap code
-    	Instructions trapRoutine = new Instructions() 
-    	
-    	// TODO: Return to the instruction stored in memory location 2 
-    	
-    	return -1;
+    	return executionResult;
     }
 
     // get value by ID from general register R0-R3
