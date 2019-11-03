@@ -1092,7 +1092,8 @@ public class Instructions {
     	computer.RAM[2].MEM = pcPlus1;
     	
     	// Execute routine whose address is in memory location 0 + trap code
-    	Instructions trapRoutine = new Instructions(computer.RAM[computer.RAM[0].mem + instruction.trapcode].MEM, computer);
+    	computer.pc.setValue(computer.RAM[0].mem + instruction.trapcode);
+    	Instructions trapRoutine = new Instructions(computer.RAM[computer.pc.getBase10Value()].MEM, computer);
     	int executionResult = trapRoutine.execute();
     	
     	// Return to the instruction stored in memory location 2
