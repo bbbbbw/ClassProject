@@ -9,7 +9,8 @@ public class Register {
         IR, // Instruction register
         MAR, // Memory address register
         MBR, // Memory buffer register
-        MFR // Machine fault register
+        MFR, // Machine fault register
+        TCR // Trap code register
     }
 
     private Type type;
@@ -21,7 +22,7 @@ public class Register {
         int size = -1; // Unit is bits
         if (type == Register.Type.CCR) {
             size = 1;
-        } else if (type == Register.Type.MFR) {
+        } else if (type == Register.Type.MFR || type == Register.Type.TCR) {
             size = 4;
         } else if (type == Register.Type.PC) {
             size = 12;

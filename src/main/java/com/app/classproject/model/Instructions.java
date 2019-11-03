@@ -1074,7 +1074,7 @@ public class Instructions {
     	return Computer.SUCCESS_RET_CODE;
     }
     
-    public int TRAP() {
+    public void TRAP() {
     	// Calculate PC + 1
     	int[] pcVal = computer.pc.getValue();
     	int[] pcPlus1 = new int[16];
@@ -1091,7 +1091,8 @@ public class Instructions {
     	// Store PC + 1 in memory location 2
     	computer.RAM[2].MEM = pcPlus1;
     	
-    	return -1;
+    	// Execute routine whose address is in memory location 0 + trap code
+    	computer.pc.setValue(computer.RAM[0].mem + computer.tcr.getBase10Value() * 10);
     }
 
     // get value by ID from general register R0-R3
@@ -1174,5 +1175,22 @@ public class Instructions {
         }
         
         return memVal;
+    }
+    
+    /**
+     * Covert value from base 2 array to base 10 integer and return
+     */
+    public int getBase10Value(int[] base2Arr) {
+        int base10Value = 0;
+        int multiplier = 1;
+
+        for (int i = base2Arr.length - 1; i >= 0; i--) {
+            if (base2Arr[i] == 1) {
+                base10Value += multiplier;
+            }
+            multiplier *= 2;
+        }
+
+        return base10Value;
     }
 }
