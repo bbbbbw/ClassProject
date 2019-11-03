@@ -1073,7 +1073,22 @@ public class Instructions {
     }
     
     public int TRAP() {
-    	// TODO: Implement
+    	// Calculate PC + 1
+    	int[] pcVal = computer.pc.getValue();
+    	int[] pcPlus1 = new int[16];
+    	
+    	for(int i = 15; i >= 0; i--) {
+    		if(pcVal[i] == 0) {
+    			pcPlus1[i] = 1;
+    			break;
+    		} else {
+    			pcPlus1[i] = 0;
+    		}
+    	}
+    	
+    	// Store PC + 1 in memory location 2
+    	computer.RAM[2].MEM = pcPlus1;
+    	
     	return -1;
     }
 
