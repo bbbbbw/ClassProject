@@ -83,11 +83,11 @@
         }
 
         #printer {
-            padding: 1rem 2rem;
+            padding: 1rem 1.3rem;
             border-radius: .5rem;
             background-color: #eeeeee;
             color: black;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
         }
 
@@ -146,6 +146,8 @@
             $("#MFR").text(computer.mfr.value.toString().replace(/,/g, ''));
             $("#instructionArea").text("> " + computer.nextInstruction);
             $("#printer").text(computer.printer.toString().replace(/,/g, ''));
+
+            $("#computerMessage").text(computer.computerMessage);
 
             if (computer.status == 1) {
                 $("#statusNormal").show();
@@ -346,6 +348,16 @@
         function submitMemory() {
             var formData = new FormData($("#memoryForm")[0]);
             console.log(formData.get("address"), formData.get("value"));
+            if (parseInt(formData.get("address")) < 0 || parseInt(formData.get("address")) > 2047) {
+                $("#memoryModal .alert").show();
+                $("#memoryModal .alert .errorMessage").text("Address should be integers between 0 and 2047");
+                return;
+            }
+            if (parseInt(formData.get("value")) < 0 || parseInt(formData.get("value")) > 65535) {
+                $("#memoryModal .alert").show();
+                $("#memoryModal .alert .errorMessage").text("Value should be integers between 0 and 65535");
+                return;
+            }
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/submitMemory",
@@ -567,11 +579,11 @@
                         <span id="statusError">Error</span>
                     </div>
                     <div>
-                        <h6 class="mb-3">Error Message</h6>
-                        <div id="computerMessage">
-                            /
-                        </div>
+                    <h6 class="mb-3">Machine Fault Message</h6>
+                    <div id="computerMessage">
+                        /
                     </div>
+                </div>
                 </div>
             </div>
             <div class="mb-5">
@@ -656,14 +668,14 @@
                                 Address:
                             </div>
                             <div class="col-9 mb-3">
-                                <input type="text" class="form-control" id="memoryAddress" name="address"
+                                <input type="number" class="form-control" id="memoryAddress" name="address"
                                        placeholder="Memory Address">
                             </div>
                             <div class="col-3 col-form-label mb-3">
                                 Value:
                             </div>
                             <div class="col-9 mb-3">
-                                <input type="text" class="form-control" id="memoryValue" name="value"
+                                <input type="number" class="form-control" id="memoryValue" name="value"
                                        placeholder="Memory Value">
                             </div>
                         </div>

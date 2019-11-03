@@ -11,7 +11,6 @@ public class Cache {
 	
 	public Cache() {
 		this.cacheLine = new LinkedList<CacheLine>();
-		
 	}
 	
 	public LinkedList<CacheLine> getCacheLine(){
