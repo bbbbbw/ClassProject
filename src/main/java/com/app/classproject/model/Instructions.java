@@ -1195,4 +1195,35 @@ public class Instructions {
 
         return base10Value;
     }
+	
+      public void checkEA(int value){
+    	if( value  <= 6 && value >0 ) {
+    		
+        	computer.mfr.setErr(1, 3);
+        	
+        }else{
+        	computer.mfr.setValue(0);
+        }
+    }
+    
+      public void checkOpc(int opc){
+    	if(( opc >= 1 &&  opc  < 8) || ( opc >= 10 &&  opc <= 17) ||  opc == 41
+    		||  opc == 42 || ( opc >= 20 && opc <= 25) || ( opc >= 31 && opc <= 32) 
+    	    || ( opc >= 61 && opc <= 63) ||opc == 30 || opc == 0 ){
+    		
+    		     computer.mfr.setValue(0);
+    		    	
+    		            }else{
+    		     computer.mfr.setErr(1, 1);
+        }
+    }
+    
+       public void checkBeyond(int value){
+    	if(value > 2047 || value < 0){
+    		computer.mfr.setErr(1, 0);
+    	}else{
+    		computer.mfr.setValue(0);
+    	}
+    }
+   
 }
