@@ -2,6 +2,9 @@ package com.app.classproject.model;
 
 import java.util.LinkedList;
 
+/**
+ * Fully associative, unified cache. 16 cache lines and FIFO policy
+ */
 public class Cache {
 	private int numCacheLines = 16;
 	private LinkedList<CacheLine> cacheLine;
@@ -15,6 +18,10 @@ public class Cache {
 		return cacheLine;
 	}
 
+	/**
+	 * @param key Address
+	 * @param value Data stored at address
+	 */
 	public void addToCache(int key, int[] value) {
 		for (int i = 0; i < cacheLine.size(); i++) {
 			if (cacheLine.get(i).key == key) {
@@ -77,6 +84,9 @@ public class Cache {
         return base10Value;
     }
 	
+    /**
+     * Each cache line stores 1 key-value pair
+     */
 	public class CacheLine {
 		private int key; // Address
 		private int[] value; // Data stored at address
