@@ -1359,6 +1359,7 @@ public class Computer {
         return instruction;
     }
 */
+
     /**
      * Specify instructions and load into memory
      */
@@ -1483,12 +1484,12 @@ public class Computer {
     }
     
     */
-    public void MFR (){
+    public void MFR() {
         int mfr = this.mfr.getBase10Value();
 
-        if(mfr==0){
+        if (mfr == 0) {
             return;
-        }else {
+        } else {
             // Calculate PC + 1
             int[] pcVal = this.pc.getValue();
             int[] pcPlus1 = new int[16];
@@ -1517,6 +1518,7 @@ public class Computer {
         if (stopForInput == 1) {
             return;
         }
+        MFR();
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
@@ -1536,7 +1538,7 @@ public class Computer {
         if (stopForInput == 1) {
             return;
         }
-         MFR ();
+        MFR();
         Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
