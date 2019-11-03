@@ -160,20 +160,19 @@ public class NewActionController {
             int temp = Integer.parseInt(input);
             if (temp > 65535 || temp < 0) {
                 result.put("status", -1);
-                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or a valid character");
+                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or one valid character");
             } else {
                 computer.continueIn(temp);
                 result.put("status", 0);
             }
         } catch (NumberFormatException e) {
             // Input is a string
-            if (input != null && input.length() > 1) {
+            if (input == null || input.matches("\\s*")) {
+                computer.continueIn(0);
+            } else if (input.length() > 1) {
                 result.put("status", -1);
-                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or a valid character");
+                result.put("errorMessage", "Please input a valid number (0 ~ 65535) or one valid character");
             } else {
-                if (input == null || input == "") {
-                    computer.continueIn(0);
-                }
                 computer.continueIn((int) input.charAt(0));
                 result.put("status", 0);
             }

@@ -16,12 +16,18 @@ public class Cache {
 	}
 
 	public void addToCache(int key, int[] value) {
-		if(cacheLine.size() >= numCacheLines) {
+		for (int i = 0; i < cacheLine.size(); i++) {
+			if (cacheLine.get(i).key == key) {
+				CacheLine cl = cacheLine.get(i);
+				cl.setValue(value);
+				cacheLine.set(i, cl);
+				return;
+			}
+		}
+		if (cacheLine.size() >= numCacheLines) {
 			cacheLine.removeLast(); // FIFO
 		}
-		else {
-			cacheLine.addFirst(new CacheLine(key, value));
-		}
+		cacheLine.addFirst(new CacheLine(key, value));
 	}
 	
 	/**

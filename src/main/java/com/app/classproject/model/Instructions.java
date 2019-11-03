@@ -1,5 +1,6 @@
 package com.app.classproject.model;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Instructions {
@@ -66,12 +67,6 @@ public class Instructions {
     public static final int INopc = 61;
     public static final int OUTopc = 62;
     public static final int CHKopc = 63;
-
-
-    public static final int OVERFLOW = 0;
-    public static final int UNDERFLOW = 1;
-    public static final int DIVZERO = 2;
-    public static final int EQUALORNOT = 3;
 
 	public static final int	KEYBOARD	= 0;
 	public static final int	PRINTER		= 1;
@@ -205,7 +200,7 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
-        System.out.println("\nRAM[" + EA + "] = " + memVal + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
+        System.out.println("\nRAM[" + EA + "] = " + Arrays.toString(memVal) + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
         System.out.println("Loading RAM[" + EA + "] into gpr[" + instruction.gpr + "]");
 
         switch (instruction.gpr) {
@@ -778,7 +773,7 @@ public class Instructions {
                 this.setValueToRById(next, Integer.parseInt(temp1.substring(16), 2));
             } else {
                 System.out.println("OVERFLOW");
-                computer.ccr[0].setValue(OVERFLOW);
+                computer.ccr[0].setValue(1);
             }
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
@@ -814,7 +809,7 @@ public class Instructions {
                 this.setValueToRById(next, Integer.parseInt(remainder, 2));
             } else {
                 System.out.println("DIVZERO");
-                computer.ccr[2].setValue(DIVZERO);
+                computer.ccr[2].setValue(1);
             }
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
@@ -828,9 +823,9 @@ public class Instructions {
         int temp1 = getValueFromRById(instruction.rx);
         int temp2 = getValueFromRById(instruction.ry);
         if (temp1 == temp2) {
-            computer.ccr[4].setValue(EQUALORNOT);
+            computer.ccr[3].setValue(1);
         } else {
-            computer.ccr[4].setValue(0);
+            computer.ccr[3].setValue(0);
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;

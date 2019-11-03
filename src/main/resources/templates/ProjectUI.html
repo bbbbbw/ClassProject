@@ -193,11 +193,11 @@
         function keyboardIn() {
             var formData = new FormData($("#keyboardForm")[0]);
             console.log(formData.get("keyboard"));
-            // if (formData.get("keyboard") == null || formData.get("keyboard") == "") {
-            //     $("#keyboardModal .alert").show();
-            //     $("#keyboardModal .alert .errorMessage").text("Cannot be empty");
-            //     return;
-            // }
+            if (formData.get("keyboard") == null || formData.get("keyboard") == "") {
+                $("#keyboardModal .alert").show();
+                $("#keyboardModal .alert .errorMessage").text("It cannot be empty (But you can use space).");
+                return;
+            }
             $.ajax({
                 type: 'post',
                 url: "http://localhost:8080/action/input",

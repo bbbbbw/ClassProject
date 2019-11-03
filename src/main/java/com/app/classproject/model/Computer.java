@@ -636,11 +636,11 @@ public class Computer {
         this.printType = 1;
 
         // Program starts at RAM[8]
-        pc.setValue(8);
+        pc.setValue(9);
 
         // Set register values
-        gpr[2].setValue(1);
-        gpr[3].setValue(1);
+        gpr[2].setValue(600);
+        gpr[3].setValue(500);
         idx[1].setValue(600);
         idx[2].setValue(500);
 
@@ -649,6 +649,8 @@ public class Computer {
         RAM[6].loadval();
         RAM[7].mem = 500;
         RAM[7].loadval();
+        RAM[8].mem = 44;
+        RAM[8].loadval();
         RAM[500].mem = 1;
         RAM[500].loadval();
         RAM[600].mem = 1;
@@ -667,7 +669,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 6;
         tempInstruction.load();
-        RAM[8] = tempInstruction;
+        RAM[9] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.AMRopc;
@@ -676,7 +678,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[9] = tempInstruction;
+        RAM[10] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -684,15 +686,6 @@ public class Computer {
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
         tempInstruction.address = 6;
-        tempInstruction.load();
-        RAM[10] = tempInstruction;
-
-        tempInstruction = new memory();
-        tempInstruction.opc = Instructions.LDXopc;
-        tempInstruction.gpr = 0;
-        tempInstruction.idr = 1;
-        tempInstruction.iad = 0;
-        tempInstruction.address = 1;
         tempInstruction.load();
         RAM[11] = tempInstruction;
 
@@ -701,23 +694,32 @@ public class Computer {
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 6;
+        tempInstruction.address = 1;
         tempInstruction.load();
         RAM[12] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 6;
+        tempInstruction.load();
+        RAM[13] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.INopc;
         tempInstruction.r = 1;
         tempInstruction.did = 31;
         tempInstruction.load();
-        RAM[13] = tempInstruction;
+        RAM[14] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.OUTopc;
         tempInstruction.r = 1;
         tempInstruction.did = 1;
         tempInstruction.load();
-        RAM[14] = tempInstruction;
+        RAM[15] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -726,19 +728,19 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[15] = tempInstruction;
+        RAM[16] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JNEopc;
         tempInstruction.gpr = 1;
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
-        tempInstruction.address = 8;
+        tempInstruction.address = 9;
         tempInstruction.load();
-        RAM[16] = tempInstruction;
+        RAM[17] = tempInstruction;
 
         /*
-        Require a word (split by character, end with empty input) from user
+        Require a word split by characters from user, every time one character is accepted and stored until receiving an input with only space
          */
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.LDRopc;
@@ -747,7 +749,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 7;
         tempInstruction.load();
-        RAM[17] = tempInstruction;
+        RAM[18] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.AMRopc;
@@ -756,7 +758,7 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[18] = tempInstruction;
+        RAM[19] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -764,15 +766,6 @@ public class Computer {
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
         tempInstruction.address = 7;
-        tempInstruction.load();
-        RAM[19] = tempInstruction;
-
-        tempInstruction = new memory();
-        tempInstruction.opc = Instructions.LDXopc;
-        tempInstruction.gpr = 0;
-        tempInstruction.idr = 1;
-        tempInstruction.iad = 0;
-        tempInstruction.address = 1;
         tempInstruction.load();
         RAM[20] = tempInstruction;
 
@@ -781,16 +774,25 @@ public class Computer {
         tempInstruction.gpr = 0;
         tempInstruction.idr = 1;
         tempInstruction.iad = 0;
-        tempInstruction.address = 7;
+        tempInstruction.address = 1;
         tempInstruction.load();
         RAM[21] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 7;
+        tempInstruction.load();
+        RAM[22] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.INopc;
         tempInstruction.r = 1;
         tempInstruction.did = 0;
         tempInstruction.load();
-        RAM[22] = tempInstruction;
+        RAM[23] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.STRopc;
@@ -799,18 +801,442 @@ public class Computer {
         tempInstruction.iad = 0;
         tempInstruction.address = 0;
         tempInstruction.load();
-        RAM[23] = tempInstruction;
+        RAM[24] = tempInstruction;
 
         tempInstruction = new memory();
         tempInstruction.opc = Instructions.JNEopc;
         tempInstruction.gpr = 1;
         tempInstruction.idr = 0;
         tempInstruction.iad = 0;
+        tempInstruction.address = 18;
+        tempInstruction.load();
+        RAM[25] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 9;
+        tempInstruction.load();
+        RAM[26] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 3;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[27] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[28] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 12;
+        tempInstruction.load();
+        RAM[29] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[30] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDXopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 8;
+        tempInstruction.load();
+        RAM[31] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 9;
+        tempInstruction.load();
+        RAM[32] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[33] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JZopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 2;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 0;
+        tempInstruction.load();
+        RAM[34] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.TRRopc;
+        tempInstruction.rx = 0;
+        tempInstruction.ry = 1;
+        tempInstruction.load();
+        RAM[35] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JCCopc;
+        tempInstruction.gpr = 3;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
         tempInstruction.address = 17;
         tempInstruction.load();
-        RAM[24] = tempInstruction;
+        RAM[36] = tempInstruction;
 
-        ir.setValue(RAM[8].MEM);
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDAopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 3;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 0;
+        tempInstruction.load();
+        RAM[37] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[38] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.SIRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 31;
+        tempInstruction.load();
+        RAM[39] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.SIRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[40] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JZopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 7;
+        tempInstruction.load();
+        RAM[41] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.SIRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 14;
+        tempInstruction.load();
+        RAM[42] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JZopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[43] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 9;
+        tempInstruction.load();
+        RAM[44] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[45] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 9;
+        tempInstruction.load();
+        RAM[46] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[47] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[48] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[49] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JMAopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 30;
+        tempInstruction.load();
+        RAM[50] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[51] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[52] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[53] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JMAopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 8;
+        tempInstruction.load();
+        RAM[54] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 12;
+        tempInstruction.load();
+        RAM[55] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[56] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 12;
+        tempInstruction.load();
+        RAM[57] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 3;
+        tempInstruction.load();
+        RAM[58] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[59] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JMAopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 8;
+        tempInstruction.load();
+        RAM[60] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JZopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 19;
+        tempInstruction.load();
+        RAM[61] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JMAopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 8;
+        tempInstruction.load();
+        RAM[62] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDAopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 3;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 0;
+        tempInstruction.load();
+        RAM[63] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[64] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.STRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[65] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 1;
+        tempInstruction.address = 10;
+        tempInstruction.load();
+        RAM[66] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.r = 1;
+        tempInstruction.did = 1;
+        tempInstruction.load();
+        RAM[67] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.JNEopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 1;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 20;
+        tempInstruction.load();
+        RAM[68] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 12;
+        tempInstruction.load();
+        RAM[69] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.AIRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 1;
+        tempInstruction.load();
+        RAM[70] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.r = 2;
+        tempInstruction.did = 1;
+        tempInstruction.load();
+        RAM[71] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 11;
+        tempInstruction.load();
+        RAM[72] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.OUTopc;
+        tempInstruction.r = 2;
+        tempInstruction.did = 1;
+        tempInstruction.load();
+        RAM[73] = tempInstruction;
+
+        ir.setValue(RAM[9].MEM);
     }
     
     /**
