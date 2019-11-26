@@ -4,6 +4,7 @@ public class ComputerUI {
     public Register[] gpr = new Register[4];
     public Register[] idx = new Register[3]; // X0-X2
     public Register[] ccr = new Register[4];
+    public Register[] fr  = new Register[2];
     public Register pc, ir, mar, mbr, mfr;
     public String printer;
 
@@ -25,6 +26,9 @@ public class ComputerUI {
         }
         for (int i = 0; i < ccr.length; i++) {
             ccr[i] = computer.ccr[i];
+        }
+        for (int i = 0; i < fr.length; i++) {
+            fr[i] = computer.fr[i];
         }
         pc = computer.pc;
         ir = computer.ir;
