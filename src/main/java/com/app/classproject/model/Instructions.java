@@ -1210,7 +1210,167 @@ public class Instructions {
 
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
+    
+        //Floating Add Memory To Register
+        public int FADD(){
+    	int EA = getEffectiveAdr();
+    	if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+    	int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+        
+        int MAX_VALUE = 2^6;
+    	int MIN_VALUE = -2^6 -1;
+    	
+    	int valueFR = 0;
+    	int valueEA = 0;
+    	if(instruction.iad == 0){
+    		
+    		switch(instruction.fr){
+    		case 0:
+    				valueFR = computer.fr[0].getBase10Value();
+    				valueEA = computer.mbr.getBase10Value();
+    				//c(fr) -> c(fr) + c(EA)
+    				int result = valueFR + valueEA;
+    				if(result > MAX_VALUE && result < MIN_VALUE){
+    				computer.ccr[0].setValue(1);
+    				}else{
+    						computer.fr[0].setValue(result);
+    			}
+    				break;
+    		case 1:
+    				valueFR = computer.fr[1].getBase10Value();
+    				valueEA = computer.mbr.getBase10Value();
+    				//c(fr) -> c(fr) + c(EA)
+    				int result1 = valueFR + valueEA;
+    				if(result1 > MAX_VALUE && result1 < MIN_VALUE){
+    				computer.ccr[0].setValue(1);
+    				}else{
+    						computer.fr[1].setValue(result1);
+    			}
+    				break;
+    				default:
+    				return Computer.ERROR_RET_CODE;
+    		}
+    	}else{
+    		switch(instruction.fr){
+    		case 0:
+    				valueFR = computer.fr[0].getBase10Value();
+    				valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+    				//c(fr) -> c(fr) + c((EA))
+    				int result = valueFR + valueEA;
+    				if(result > MAX_VALUE && result < MIN_VALUE){
+    				computer.ccr[0].setValue(1);
+    				}else{
+    						computer.fr[0].setValue(result);
+    				}
+    				break;
+    		case 1:
+    				valueFR = computer.fr[1].getBase10Value();
+    				valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+        			//c(fr) -> c(fr) + c(c(EA))
+    				int result1 = valueFR + valueEA;
+    				if(result1 > MAX_VALUE && result1 < MIN_VALUE){
+    				computer.ccr[0].setValue(1);
+    				}else{
+    						computer.fr[1].setValue(result1);
+    			}
+    				break;
+    				default:
+    					return Computer.ERROR_RET_CODE;
+    		}
+    	}
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+    	return Computer.SUCCESS_RET_CODE;
+    }
+    
+        // Floating Subtract Memory From Register
+        public int FSUB(){
+    	int EA = getEffectiveAdr();
+    	if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+    	int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+        
+        int MAX_VALUE = 2^6;
+    	int MIN_VALUE = -2^6 -1;
+    	
+    	int valueFR = 0;
+    	int valueEA = 0;
+    	if(instruction.iad == 0){
+    		
+    		switch(instruction.fr){
+    		case 0:
+    				valueFR = computer.fr[0].getBase10Value();
+    				valueEA = computer.mbr.getBase10Value();
+    				//c(fr) -> c(fr) - c(EA)
+    				int result = valueFR - valueEA;
+    				if(result > MAX_VALUE && result < MIN_VALUE){
+    				computer.ccr[0].setValue(0);
+    				}else{
+    						computer.fr[0].setValue(result);
+    			}
+    				break;
+    		case 1:
+    				valueFR = computer.fr[1].getBase10Value();
+    				valueEA = computer.mbr.getBase10Value();
+    				//c(fr) -> c(fr) - c(EA)
+    				int result1 = valueFR - valueEA;
+    				if(result1 > MAX_VALUE && result1 < MIN_VALUE){
+    				computer.ccr[0].setValue(0);
+    				}else{
+    						computer.fr[1].setValue(result1);
+    			}
+    				break;
+    				default:
+    					return Computer.ERROR_RET_CODE;
+    		}
+    	}else{
+    		switch(instruction.fr){
+    		case 0:
+    				valueFR = computer.fr[0].getBase10Value();
+    				valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+    				//c(fr) -> c(fr) - c((EA))
+    				int result = valueFR - valueEA;
+    				if(result > MAX_VALUE && result < MIN_VALUE){
+    				computer.ccr[0].setValue(0);
+    				}else{
+    						computer.fr[0].setValue(result);
+    				}
+    				break;
+    		case 1:
+    				valueFR = computer.fr[1].getBase10Value();
+    				valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+        			//c(fr) -> c(fr) - c(c(EA))
+    				int result1 = valueFR - valueEA;
+    				if(result1 > MAX_VALUE && result1 < MIN_VALUE){
+    				computer.ccr[0].setValue(0);
+    				}else{
+    						computer.fr[1].setValue(result1);
+    			}
+    				break;
+    				default:
+    					return Computer.ERROR_RET_CODE;
+    		}
+    	}
+    	
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+    	return Computer.SUCCESS_RET_CODE;
+    }
+    
+    
+    
+    
+    
     // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
         int temp = 0;
