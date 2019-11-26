@@ -13,6 +13,7 @@ public class Computer {
     public Register[] gpr = new Register[4];
     public Register[] idx = new Register[3]; // X0-X2
     public Register[] ccr = new Register[4];
+    public Register[] fr  = new Register[2];
     public Register pc, ir, mar, mbr, mfr, tcr;
 
     public String printer;
@@ -37,6 +38,9 @@ public class Computer {
         }
         for (int i = 0; i < ccr.length; i++) {
             ccr[i] = new Register(Register.Type.CCR);
+        }
+        for (int i = 0; i < fr.length; i++) {
+            fr[i] = new Register(Register.Type.FR);
         }
         pc = new Register(Register.Type.PC);
         ir = new Register(Register.Type.IR);
