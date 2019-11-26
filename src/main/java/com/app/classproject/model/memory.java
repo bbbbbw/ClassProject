@@ -53,7 +53,8 @@ public class memory {
     public int[] DID = new int[5]; // 5 digits for devices ID in binary array
     public int did;// Device ID;
 
-
+    public int fr;  
+    public int F;
 
 
     /*
