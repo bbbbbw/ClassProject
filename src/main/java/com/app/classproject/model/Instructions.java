@@ -1368,8 +1368,29 @@ public class Instructions {
     }
     
     
-    
-    
+     /*public int CNVRT(){
+    	int EA = getEffectiveAdr();
+    	if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+    	instruction.F = this.getValueFromRById(instruction.gpr);
+    	int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+    	
+        if(instruction.F == 0){
+        	this.setValueToRById(instruction.gpr, Math.round(computer.mbr.getBase10Value()));
+        }
+    	if(instruction.F == 1){
+    		computer.fr[0].setValue(computer.mbr.getValue());
+    		System.out.print((float)computer.fr[0].getBase10Value());
+    	}
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+    	return Computer.SUCCESS_RET_CODE;
+    }
+    */
     
     // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
