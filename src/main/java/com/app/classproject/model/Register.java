@@ -10,7 +10,8 @@ public class Register {
         MAR, // Memory address register
         MBR, // Memory buffer register
         MFR, // Machine fault register
-        TCR // Trap code register
+        TCR, // Trap code register
+        FR   //Floating point register
     }
 
     private Type type;
@@ -19,6 +20,7 @@ public class Register {
     public Register(Register.Type type) {
         this.type = type;
 
+        
         int size = -1; // Unit is bits
         if (type == Register.Type.CCR) {
             size = 1;
@@ -26,7 +28,8 @@ public class Register {
             size = 4;
         } else if (type == Register.Type.PC) {
             size = 12;
-        } else if (type == Register.Type.GPR || type == Register.Type.IR || type == Register.Type.MAR || type == Register.Type.MBR || type == Register.Type.IDX) {
+        } else if (type == Register.Type.GPR || type == Register.Type.IR || type == Register.Type.MAR || type == Register.Type.MBR 
+                   || type == Register.Type.IDX || type == Register.Type.FR) {
             size = 16;
         } else {
             System.out.println("Unknown register type: " + type);
