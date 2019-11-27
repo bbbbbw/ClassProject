@@ -1392,6 +1392,115 @@ public class Instructions {
     }
     */
     
+    //Load Floating Register From Memory, fr = 0..1
+        public int LDFR(){
+    	int EA = getEffectiveAdr();
+    	if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+    	
+    	String exp = "0000000";
+    	String man = "00000000";
+    	int[] memVal = checkCache(EA);
+
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+    	
+    	int expI = computer.mbr.getBase10Value();
+    	computer.mar.setValue(EA+1);
+    	computer.mbr.setValue(computer.mar.getValue());
+    	
+    	int manI = computer.mbr.getBase10Value();
+    	
+    	String temp = Integer.toString(expI);
+    	exp = exp.substring(0,7-temp.length()) + temp;
+    	String temp1 = Integer.toString(manI);
+    	man = temp1 + man.substring(temp1.length());
+        
+        String frs = exp + man;
+        this.setFRByNum(instruction.fr, Integer.parseInt(frs,2));
+    	
+        
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+    	return Computer.SUCCESS_RET_CODE;
+    }
+    
+ 
+    // Store Floating Register To Memory, fr = 0..1
+	public int STFR(){
+		int EA = getEffectiveAdr();
+		if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+		
+		switch(instruction.fr){
+		
+		case 0:
+			 	int cfr = computer.fr[0].getBase10Value();
+			 	
+			 	String buffer = "0000000000000000"; 
+			 	String frs = Integer.toBinaryString(cfr);
+				if(frs.length() < 16)
+				frs = buffer.substring(0, 16-frs.length())+frs;
+				
+				int man = Integer.parseInt(frs.substring(8,16), 2);
+				int exp = Integer.parseInt(frs.substring(0,8), 2);
+				
+				computer.mar.setValue(EA);
+				computer.mbr.setValue(exp);
+				computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+				
+				computer.mar.setValue(EA + 1);
+				computer.mbr.setValue(man);
+				computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+				
+				computer.pc.setValue(computer.pc.getBase10Value() + 1);
+				break;
+		case 1:
+				int cfr1 = computer.fr[1].getBase10Value();
+		 	
+				String buffer1 = "0000000000000000"; 
+				String frs1 = Integer.toBinaryString(cfr1);
+		 		if(frs1.length() < 16)
+		 			frs = buffer1.substring(0, 16-frs1.length())+frs1;
+			
+		 		int man1 = Integer.parseInt(frs1.substring(8,16), 2);
+		 		int exp1 = Integer.parseInt(frs1.substring(0,8), 2);
+			
+		 		computer.mar.setValue(EA);
+		 		computer.mbr.setValue(exp1);
+		 		computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+			
+		 		computer.mar.setValue(EA + 1);
+		 		computer.mbr.setValue(man1);
+		 		computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+			
+		 		computer.pc.setValue(computer.pc.getBase10Value() + 1);
+		 		break;
+				default:
+				return Computer.ERROR_RET_CODE;	
+		}
+		return Computer.SUCCESS_RET_CODE;
+		
+    }
+	
+    
+    //set value by NUM to floating register fr0-fr1
+	public void setFRByNum(int num, int fr){
+		if(num == 0){
+			computer.fr[0].setValue(fr);
+		}
+		if(num == 1){
+			computer.fr[1].setValue(fr);
+		}
+	}
+    
+  
     // get value by ID from general register R0-R3
     public int getValueFromRById(int id) {
         int temp = 0;
