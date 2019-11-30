@@ -1329,6 +1329,11 @@ public class Computer {
         ir.setValue(RAM[9].MEM);
     }
 
+
+    public void loadPartFourDemo() {
+
+    }
+
     /**
      * Build 16-bit instruction array based on given input
      */

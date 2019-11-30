@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.app.classproject.model.Computer;
 import com.app.classproject.model.ComputerUI;
 import com.app.classproject.model.Instructions;
-import com.app.classproject.model.ProjectReader;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 /**
  * Receive requests submitted by the front-end, execute the action, and return the result
@@ -17,6 +14,11 @@ import java.io.IOException;
 @RestController
 public class NewActionController {
     Computer computer = new Computer();
+    private int TEST_PROGRAM_ONE = 1;
+    private int TEST_PROGRAM_TWO = 2;
+    private int PART_FOUR_DEMO = 3;
+    private int[] programList = {2, 1, 3};
+    private int currentProgramIndex = 0;
 
     @RequestMapping(value = "/action/initialize")
     public String initialize(Model model) {
@@ -115,9 +117,13 @@ public class NewActionController {
     @RequestMapping(value = "/action/IPL")
     public String IPL(Model model) {
         JSONObject result = new JSONObject();
-//        computer.loadProgram();
-//        computer.loadTestProgramOne();
-        computer.loadTestProgramTwo();
+        if (programList[currentProgramIndex] == TEST_PROGRAM_ONE) {
+            computer.loadTestProgramOne();
+        } else if (programList[currentProgramIndex] == TEST_PROGRAM_TWO) {
+            computer.loadTestProgramTwo();
+        } else if (programList[currentProgramIndex] == PART_FOUR_DEMO) {
+            computer.loadPartFourDemo();
+        }
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);
@@ -132,21 +138,29 @@ public class NewActionController {
         JSONObject result = new JSONObject();
         computer.runProgram();
         ComputerUI computerUI = new ComputerUI(computer);
+        if (computerUI.status == 0) {
+            if (nextProgram()) {
+                return run(model);
+            }
+        }
         result.put("status", 0);
         result.put("computer", computerUI);
         return result.toString();
     }
 
-    @RequestMapping(value = "/action/halt")
-    public String halt(Model model) {
-        return "Halt";
-    }
+//    @RequestMapping(value = "/action/halt")
+//    public String halt(Model model) {
+//        return "Halt";
+//    }
 
     @RequestMapping(value = "/action/singleStep")
     public String singleStep(Model model) {
         JSONObject result = new JSONObject();
         computer.singleStep();
         ComputerUI computerUI = new ComputerUI(computer);
+        if (computerUI.status == 0) {
+            nextProgram();
+        }
         result.put("status", 0);
         result.put("computer", computerUI);
         return result.toString();
@@ -169,6 +183,7 @@ public class NewActionController {
             // Input is a string
             if (input == null || input.matches("\\s*")) {
                 computer.continueIn(0);
+                result.put("status", 0);
             } else if (input.length() > 1) {
                 result.put("status", -1);
                 result.put("errorMessage", "Please input a valid number (0 ~ 65535) or one valid character");
@@ -186,6 +201,7 @@ public class NewActionController {
     public String reStart(Model model) {
         JSONObject result = new JSONObject();
         computer = new Computer();
+        this.currentProgramIndex = 0;
         ComputerUI computerUI = new ComputerUI(computer);
         result.put("status", 0);
         result.put("computer", computerUI);
@@ -205,5 +221,24 @@ public class NewActionController {
         result.put("status", executionResult);
         result.put("computer", computerUI);
         return result.toString();
+    }
+
+    // load and execute next program
+    private boolean nextProgram() {
+        if (currentProgramIndex < programList.length - 1) {
+            String pastPrinter = computer.printer + "\n\nA new program starts.\n\n";
+            computer = new Computer();
+            computer.printer = pastPrinter;
+            currentProgramIndex += 1;
+            if (programList[currentProgramIndex] == TEST_PROGRAM_ONE) {
+                computer.loadTestProgramOne();
+            } else if (programList[currentProgramIndex] == TEST_PROGRAM_TWO) {
+                computer.loadTestProgramTwo();
+            } else if (programList[currentProgramIndex] == PART_FOUR_DEMO) {
+                computer.loadPartFourDemo();
+            }
+            return true;
+        }
+        return false;
     }
 }
