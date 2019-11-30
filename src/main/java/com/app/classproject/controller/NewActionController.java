@@ -17,7 +17,7 @@ public class NewActionController {
     private int TEST_PROGRAM_ONE = 1;
     private int TEST_PROGRAM_TWO = 2;
     private int PART_FOUR_DEMO = 3;
-    private int[] programList = {2, 1, 3};
+    private int[] programList = {1, 2, 3};
     private int currentProgramIndex = 0;
 
     @RequestMapping(value = "/action/initialize")
