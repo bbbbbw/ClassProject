@@ -80,6 +80,11 @@ public class Instructions {
 
     public Computer computer;
     public memory instruction = new memory();
+    public int EA, tempR, temp1, temp2;
+    public int tempArr[];
+    public int temp1Arr[];
+    public int temp2Arr[];
+    public int[] memVal;
 
     public Instructions(int[] instruction, Computer computer) {
         this.computer = computer;
@@ -96,59 +101,84 @@ public class Instructions {
             case 0:
                 return HALT();
             case 1:
-                return LDR();
+            	LDRStage2();
+                return LDRStage3();
             case 2:
-                return STR();
+            	STRStage2();
+                return STRStage3();
             case 3:
-                return LDA();
+            	LDAStage2();
+                return LDAStage3();
             case 41:
-                return LDX();
+            	LDXStage2();
+                return LDXStage3();
             case 42:
-                return STX();
+            	STXStage2();
+                return STXStage3();
             case 10:
-                return JZ();
+            	JZStage2();
+                return JZStage3();
             case 11:
-                return JNE();
+            	JNEStage2();
+                return JNEStage3();
             case 12:
-                return JCC();
+            	JCCStage2();
+                return JCCStage3();
             case 13:
-                return JMA();
+            	JMAStage2();
+                return JMAStage3();
             case 14:
-                return JSR();
+            	JSRStage2();
+                return JSRStage3();
             case 15:
                 return RFS();
             case 16:
-                return SOB();
+            	SOBStage2();
+                return SOBStage3();
             case 17:
-                return JGE();
+            	JGEStage2();
+                return JGEStage3();
             case 4:
-                return AMR();
+            	AMRStage2();
+                return AMRStage3();
             case 5:
-                return SMR();
+            	SMRStage2();
+                return SMRStage3();
             case 6:
-                return AIR();
+            	AIRStage2();
+                return AIRStage3();
             case 7:
-                return SIR();
+            	SIRStage2();
+                return SIRStage3();
             case 20:
-                return MLT();
+            	MLTStage2();
+                return MLTStage3();
             case 21:
-                return DVD();
+            	DVDStage2();
+                return DVDStage3();
             case 22:
-                return TRR();
+            	TRRStage2();
+                return TRRStage3();
             case 23:
-                return AND();
+            	ANDStage2();
+                return ANDStage3();
             case 24:
-                return ORR();
+            	ORRStage2();
+                return ORRStage3();
             case 25:
-                return NOT();
+            	NOTStage2();
+                return NOTStage3();
             case 31:
-                return SRC();
+            	SRCStage2();
+                return SRCStage3();
             case 32:
-                return RRC();
+            	RRCStage2();
+                return RRCStage3();
             case 61:
                 return IN();
             case 62:
-                return OUT();
+            	OUTStage2();
+                return OUTStage3();
             case 30:
                 return TRAP();
             default:
@@ -193,19 +223,20 @@ public class Instructions {
             }
         }
     }
-
+    
     /**
-     * Load register from memory
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int LDR() {
-        int EA = getEffectiveAdr();
+    public int LDRStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         // Check cache
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
@@ -214,7 +245,14 @@ public class Instructions {
 
         System.out.println("\nRAM[" + EA + "] = " + computer.RAM[EA].mem + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
         System.out.println("Loading RAM[" + EA + "] into gpr[" + instruction.gpr + "]\n");
+        
+        return 1;
+    }
 
+    /**
+     * Load register from memory
+     */
+    public int LDRStage3() {
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(memVal);
@@ -235,28 +273,36 @@ public class Instructions {
         System.out.println("RAM[" + EA + "] = " + Arrays.toString(memVal) + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value() + "\n");
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Store register to memory
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int STR() {
-        int EA = getEffectiveAdr();
+    public int STRStage2() {
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
         System.out.println("\nRAM[" + EA + "] = " + computer.RAM[EA].mem + ", gpr[" + instruction.gpr + "] = " + computer.gpr[instruction.gpr].getBase10Value());
         System.out.println("Storing gpr[" + instruction.gpr + "] into RAM[" + EA + "]");
+        
+        return 1;
+    }
 
+    /**
+     * Store register to memory
+     */
+    public int STRStage3() {
         switch (instruction.gpr) {
             case 0:
                 computer.mbr.setValue(computer.gpr[0].getValue());
@@ -295,22 +341,30 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
 
     }
-
+    
     /**
-     * Load Register with Address
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int LDA() {
-        int EA = getEffectiveAdr();
+    public int LDAStage2() {
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
 
         computer.mbr.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
 
+    /**
+     * Load Register with Address
+     */
+    public int LDAStage3() {
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(EA);
@@ -329,25 +383,33 @@ public class Instructions {
                 return Computer.ERROR_RET_CODE;
         }
     }
-
+    
     /**
-     * Load Index Register from Memory
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int LDX() {
-        int EA = getEffectiveAdr();
+    public int LDXStage2() {
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         // Check cache
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
 
+    /**
+     * Load Index Register from Memory
+     */
+    public int LDXStage3() {
         switch (instruction.idr) {
             case 1:
                 computer.idx[0].setValue(memVal);
@@ -363,26 +425,34 @@ public class Instructions {
                 return Computer.ERROR_RET_CODE;
         }
     }
-
+    
     /**
-     * Store Index Register to Memory
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int STX() {
-        int EA = getEffectiveAdr();
+    public int STXStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         computer.mar.setValue(EA);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
 
+    /**
+     * Store Index Register to Memory
+     */
+    public int STXStage3() {
         switch (instruction.idr) {
             case 1:
                 computer.mbr.setValue(computer.idx[0].getValue());
@@ -416,22 +486,30 @@ public class Instructions {
      */
 
     /**
-     * Jump if Zero
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-
-    public int JZ() {
-        int EA = getEffectiveAdr();
+    public int JZStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
-        int tempR = getValueFromRById(instruction.gpr);
+        tempR = getValueFromRById(instruction.gpr);
+        
+        return 1;
+    }
+    
+    /**
+     * Jump if Zero
+     */
+    public int JZStage3() {
         if (tempR == 0) {
             computer.pc.setValue(EA);
         } else {
@@ -440,24 +518,31 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
     }
 
-
     /**
-     * Jump if not Equal
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-
-    public int JNE() {
-        int EA = getEffectiveAdr();
+    public int JNEStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
-        int tempR = getValueFromRById(instruction.gpr);
+        tempR = getValueFromRById(instruction.gpr);
+        
+        return 1;
+    }
+    
+    /**
+     * Jump if not Equal
+     */
+    public int JNEStage3() {
         if (tempR != 0) {
             computer.pc.setValue(EA);
         } else {
@@ -465,23 +550,31 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Jump If Condition Code cc replaces r for this instruction
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-
-    public int JCC() {
-        int EA = getEffectiveAdr();
+    public int JCCStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
+        
+        return 1;
+    }
+
+    /**
+     * Jump If Condition Code cc replaces r for this instruction
+     */
+    public int JCCStage3() {
         switch (this.instruction.gpr) {
             case 0:
                 if (computer.ccr[0].getBase10Value() == 1) {
@@ -517,27 +610,55 @@ public class Instructions {
         }
 
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int JMAStage2() {
+    	EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return -1;
+        }
+        if (this.checkReserved(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return -1;
+        }
+        
+        return 1;
+    }
 
     /**
      * Unconditional Jump To Address
      * r is ignored in this instruction
      */
+    public int JMAStage3() {
+        computer.pc.setValue(EA);
 
-    public int JMA() {
-        int EA = getEffectiveAdr();
+        return Computer.SUCCESS_RET_CODE;
+    }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int JSRStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
-        computer.pc.setValue(EA);
-
-        return Computer.SUCCESS_RET_CODE;
+        
+        return 1;
     }
 
     /**
@@ -545,19 +666,7 @@ public class Instructions {
      * R0 should contain pointer to arguments
      * Argument list should end with –1 (all 1s) value
      */
-
-    public int JSR() {
-        int EA = getEffectiveAdr();
-        if (this.checkBeyond(EA) == 1) {
-            computer.pc.setValue(computer.pc.getBase10Value() + 1);
-            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
-        }
-        if (this.checkReserved(EA) == 1) {
-            computer.pc.setValue(computer.pc.getBase10Value() + 1);
-            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
-        }
+    public int JSRStage3() {
         computer.gpr[3].setValue(computer.pc.getBase10Value() + 1);
         computer.pc.setValue(EA);
 
@@ -569,29 +678,36 @@ public class Instructions {
      * as Immed portion (optional) stored in the instruction’s address field.
      * IX, I fields are ignored.
      */
-
     public int RFS() {
         computer.gpr[0].setValue(instruction.address);
         computer.pc.setValue(computer.gpr[3].getValue());
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Subtract One and Branch
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-
-    public int SOB() {
-        int EA = getEffectiveAdr();
+    public int SOBStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
+        
+        return 1;
+    }
+
+    /**
+     * Subtract One and Branch
+     */
+    public int SOBStage3() {
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - 1);
@@ -630,23 +746,31 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Jump Greater Than or Equal To
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-
-    public int JGE() {
-        int EA = getEffectiveAdr();
+    public int JGEStage2() {
+    	EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
         if (this.checkReserved(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
+        
+        return 1;
+    }
+
+    /**
+     * Jump Greater Than or Equal To
+     */
+    public int JGEStage3() {
         switch (instruction.gpr) {
             case 0:
                 if (computer.gpr[0].getBase10Value() >= 0) {
@@ -682,24 +806,32 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Add Memory To Register
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int AMR() {
-        int EA = getEffectiveAdr();
+    public int AMRStage2() {
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
 
+    /**
+     * Add Memory To Register
+     */
+    public int AMRStage3() {
         switch (instruction.gpr) {
             case 0:
                 if (computer.gpr[0].getBase10Value() + computer.mbr.getBase10Value() > 65535) {
@@ -743,24 +875,33 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
-
+    
     /**
-     * Subtract Memory From Register
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
-    public int SMR() {
-        int EA = getEffectiveAdr();
+    public int SMRStage2() {
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-            return Computer.SUCCESS_RET_CODE;
+            return -1;
         }
 
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
+
+    /**
+     * Subtract Memory From Register
+     */
+    public int SMRStage3() {
         switch (instruction.gpr) {
             case 0:
                 if (computer.gpr[0].getBase10Value() - computer.mbr.getBase10Value() < 0) {
@@ -804,16 +945,24 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int AIRStage2() {
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
 
     /**
      * Add Immediate to Register
      * IX and I are ignored in this instruction
      */
-    public int AIR() {
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
-        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
-
-        switch (instruction.gpr) {
+    public int AIRStage3() {
+    	switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(computer.gpr[0].getBase10Value() + instruction.address);
                 break;
@@ -833,14 +982,21 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
     }
 
-
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int SIRStage2() {
+    	computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+        
+        return 1;
+    }
+    
     /**
      * Subtract Immediate from Register
      */
-
-    public int SIR() {
-        computer.pc.setValue(computer.pc.getBase10Value() + 1);
-        computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+    public int SIRStage3() {
         switch (instruction.gpr) {
             case 0:
                 computer.gpr[0].setValue(computer.gpr[0].getBase10Value() - instruction.address);
@@ -860,15 +1016,24 @@ public class Instructions {
         }
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int MLTStage2() {
+    	if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
+            System.out.println("Error !");
+            return -2;
+        }
+    	
+    	return 1;
+    }
 
     /**
      * Multiply Register by Register
      */
-    public int MLT() {
-        if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
-            System.out.println("Error !");
-            return Computer.ERROR_RET_CODE;
-        }
+    public int MLTStage3() {
         if (instruction.rx == 0 || instruction.rx == 2 && instruction.ry == 0 || instruction.ry == 2) {
             int data1 = this.getValueFromRById(instruction.rx);
             int data2 = this.getValueFromRById(instruction.ry);
@@ -893,22 +1058,30 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int DVDStage2() {
+    	if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
+            System.out.println("Error !");
+            return -2;
+        }
+    	
+    	return 1;
+    }
 
     /**
      * Divide Register by Register
      */
-    public int DVD() {
-        if (instruction.rx != 0 && instruction.rx != 2 || instruction.ry != 0 && instruction.ry != 2) {
-            System.out.println("Error !");
-            return Computer.ERROR_RET_CODE;
-        }
-
-        if (instruction.rx == 0 || instruction.rx == 2 && instruction.ry == 0 || instruction.ry == 2) {
+    public int DVDStage3() {
+    	if (instruction.rx == 0 || instruction.rx == 2 && instruction.ry == 0 || instruction.ry == 2) {
             int data1 = this.getValueFromRById(instruction.rx);
             int data2 = this.getValueFromRById(instruction.ry);
             if (data2 != 0) {
-                int temp1 = data1 / data2;
-                int temp2 = data1 % data2;
+                temp1 = data1 / data2;
+                temp2 = data1 % data2;
                 int next = 0;
 
                 if (instruction.rx == 0) {
@@ -929,13 +1102,22 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int TRRStage2() {
+    	temp1 = getValueFromRById(instruction.rx);
+        temp2 = getValueFromRById(instruction.ry);
+        
+        return 1;
+    }
 
     /**
      * Test the Equality of Register and Register
      */
-    public int TRR() {
-        int temp1 = getValueFromRById(instruction.rx);
-        int temp2 = getValueFromRById(instruction.ry);
+    public int TRRStage3() {
         if (temp1 == temp2) {
             computer.ccr[3].setValue(1);
         } else {
@@ -949,21 +1131,29 @@ public class Instructions {
      * Logical And of Register and Register
      */
     public int ANDd() {
-        int temp1 = getValueFromRById(instruction.rx);
-        int temp2 = getValueFromRById(instruction.ry);
+        temp1 = getValueFromRById(instruction.rx);
+        temp2 = getValueFromRById(instruction.ry);
 
         setValueToRById(instruction.rx, temp1 & temp2);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int ANDStage2() {
+    	temp1Arr = computer.gpr[instruction.rx].getValue();
+        temp2Arr = computer.gpr[instruction.ry].getValue();
+        
+        return 1;
+    }
 
-    public int AND() {
-        int temp1[] = computer.gpr[instruction.rx].getValue();
-        int temp2[] = computer.gpr[instruction.ry].getValue();
-
+    public int ANDStage3() {
         for (int i = 0; i < 16; i++) {
-            if (temp2[i] == 0) {
-                temp1[i] = 0;
+            if (temp2Arr[i] == 0) {
+                temp1Arr[i] = 0;
             }
         }
         computer.gpr[instruction.rx].setValue(temp1);
@@ -975,21 +1165,29 @@ public class Instructions {
      * Logical Or of Register and Register
      */
     public int ORRr() {
-        int temp1 = getValueFromRById(instruction.rx);
-        int temp2 = getValueFromRById(instruction.ry);
+        temp1 = getValueFromRById(instruction.rx);
+        temp2 = getValueFromRById(instruction.ry);
 
         setValueToRById(instruction.rx, temp1 | temp2);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
-    public int ORR() {
-        int temp1[] = computer.gpr[instruction.rx].getValue();
-        int temp2[] = computer.gpr[instruction.ry].getValue();
-
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int ORRStage2() {
+    	temp1Arr = computer.gpr[instruction.rx].getValue();
+        temp2Arr = computer.gpr[instruction.ry].getValue();
+        
+        return 1;
+    }
+    
+    public int ORRStage3() {
         for (int i = 0; i < 16; i++) {
-            if (temp2[i] == 1) {
-                temp1[i] = 1;
+            if (temp2Arr[i] == 1) {
+                temp1Arr[i] = 1;
             }
         }
         computer.gpr[instruction.rx].setValue(temp1);
@@ -1001,35 +1199,50 @@ public class Instructions {
      * Logical Not of Register To Register
      */
     public int NOTt() {
-        int temp1 = getValueFromRById(instruction.rx);
+        temp1 = getValueFromRById(instruction.rx);
         setValueToRById(instruction.rx, ~temp1);
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
 
-    public int NOT() {
-        int temp[] = computer.gpr[instruction.rx].getValue();
-
-        for (int i = 0; i < 16; i++) {
-            if (temp[i] == 1) {
-                temp[i] = 0;
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int NOTStage2() {
+    	tempArr = computer.gpr[instruction.rx].getValue();
+    	
+    	return 1;
+    }
+    
+    public int NOTStage3() {
+    	for (int i = 0; i < 16; i++) {
+            if (tempArr[i] == 1) {
+                tempArr[i] = 0;
             } else {
-                temp[i] = 1;
+                tempArr[i] = 1;
             }
         }
-        computer.gpr[instruction.rx].setValue(temp);
-        computer.pc.setValue(temp);
+        computer.gpr[instruction.rx].setValue(tempArr);
+        computer.pc.setValue(tempArr);
         return Computer.SUCCESS_RET_CODE;
+    }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int SRCStage2() {
+    	tempR = getValueFromRById(instruction.gpr);
+    	
+    	return 1;
     }
 
     /**
      * Shift Register by Count
      */
-
-    public int SRC() {
-        int tempR = getValueFromRById(instruction.gpr);
-
-        if (instruction.al == 0) {
+    public int SRCStage3() {
+    	if (instruction.al == 0) {
             if (instruction.lr == 0) {
                 tempR = (tempR >> instruction.count);
             }
@@ -1061,12 +1274,20 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
     }
 
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int RRCStage2() {
+    	tempR = getValueFromRById(instruction.gpr);
+    	
+    	return 1;
+    }
 
     /**
      * Rotate Register by Count
      */
-    public int RRC() {
-        int tempR = getValueFromRById(instruction.gpr);
+    public int RRCStage3() {
         String binaryR = this.InttoBinary16(tempR);
         char temp[] = new char[16];
 
@@ -1136,18 +1357,27 @@ public class Instructions {
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
+    
+    /**
+     * Stage 2 of RISC pipeline.
+     * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
+     */
+    public int OUTStage2() {
+    	tempR = this.getValueFromRById(instruction.r);
+    	
+    	return 1;
+    }
 
     /**
      * Output Character to Device from Register
      */
-    public int OUT() {
-        int val = this.getValueFromRById(instruction.r);
+    public int OUTStage3() {
         if (instruction.did == 1) { // integer printer
-            computer.printer += " " + Integer.toString(val);
+            computer.printer += " " + Integer.toString(tempR);
         } else if (instruction.did == 30) { // character printer
-            if (val > 31 && val < 127) {
+            if (tempR > 31 && tempR < 127) {
                 StringBuffer temp = new StringBuffer();
-                temp.append((char) val);
+                temp.append((char) tempR);
                 computer.printer += temp.toString();
             }
         }
@@ -1214,13 +1444,13 @@ public class Instructions {
 
     //Floating Add Memory To Register
     public int FADD() {
-        int EA = getEffectiveAdr();
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
             return Computer.SUCCESS_RET_CODE;
         }
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
 
@@ -1290,13 +1520,13 @@ public class Instructions {
 
     // Floating Subtract Memory From Register
     public int FSUB() {
-        int EA = getEffectiveAdr();
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
             return Computer.SUCCESS_RET_CODE;
         }
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
 
@@ -1368,14 +1598,14 @@ public class Instructions {
     
     
      /*public int CNVRT(){
-    	int EA = getEffectiveAdr();
+    	EA = getEffectiveAdr();
     	if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
             return Computer.SUCCESS_RET_CODE;
         }
     	instruction.F = this.getValueFromRById(instruction.gpr);
-    	int[] memVal = checkCache(EA);
+    	memVal = checkCache(EA);
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
     	
@@ -1393,7 +1623,7 @@ public class Instructions {
 
     //Load Floating Register From Memory, fr = 0..1
     public int LDFR() {
-        int EA = getEffectiveAdr();
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
@@ -1402,7 +1632,7 @@ public class Instructions {
 
         String exp = "0000000";
         String man = "00000000";
-        int[] memVal = checkCache(EA);
+        memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
@@ -1430,7 +1660,7 @@ public class Instructions {
 
     // Store Floating Register To Memory, fr = 0..1
     public int STFR() {
-        int EA = getEffectiveAdr();
+        EA = getEffectiveAdr();
         if (this.checkBeyond(EA) == 1) {
             computer.pc.setValue(computer.pc.getBase10Value() + 1);
             computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
@@ -1571,7 +1801,7 @@ public class Instructions {
      * @return Value stored at EA
      */
     public int[] checkCache(int EA) {
-        int[] memVal = computer.cache.checkCache(EA);
+        memVal = computer.cache.checkCache(EA);
         if (memVal == null) {
             // Address not found in cache
             memVal = computer.RAM[EA].MEM;
