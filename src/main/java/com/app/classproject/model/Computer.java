@@ -20,6 +20,7 @@ public class Computer {
 
     public memory[] RAM = new memory[2048];
     public Cache cache = new Cache();
+    public Pipeline pipeline = new Pipeline();
 
     public int status; // 1: working, 0: halt, -1: error
 
@@ -1525,7 +1526,7 @@ public class Computer {
             return;
         }
         MFR();
-        Instructions curInstruction = new Instructions(RAM[pc.getBase10Value()].MEM, this);
+        Instructions curInstruction = pipeline.instructionFetch(RAM, pc, this);
         int executionResult = curInstruction.execute();
         if (executionResult == SUCCESS_RET_CODE) {
             this.status = 1;
