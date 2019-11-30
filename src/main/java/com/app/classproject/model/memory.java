@@ -52,6 +52,13 @@ public class memory {
     // I/O operations
     public int[] DID = new int[5]; // 5 digits for devices ID in binary array
     public int did;// Device ID;
+    
+     //floating point
+    public int sign;
+    public int[] EXP= new int[7];
+    public int exp;
+    public int[] MAN= new int[8];
+    public int man;
 
     public int fr;  
     public int F;
@@ -68,7 +75,89 @@ public class memory {
             MEM[i] = 0;
         }
     }
+    
+    
+    public void setvec() {
+    	System.out.println("set floating point BtoD");
+        System.arraycopy(MEM, 1, memory.this.EXP, 0, 7);
+        System.arraycopy(MEM, 8, memory.this.MAN, 0, 8);
+        // make array into string and calculate value
+        StringBuilder builder = new StringBuilder();
+    	String tmp = builder.toString();
+    	this.sign = MEM[0];
+        for (int value : EXP) {
+            builder.append(value);
+        }
+        tmp = builder.toString();
+        this.exp = Integer.parseInt(tmp, 2);
+        builder = new StringBuilder();
+        for (int value : MAN) {
+            builder.append(value);
+        }
+        tmp = builder.toString();
+        this.man = Integer.parseInt(tmp, 2);
+       
+    }
+    
+    
+    
+    public int[] loadvec() {
+        System.out.println("floating point load DtoB");
+        if(sign>1||exp>127||man>255) {
+        	System.out.println("error decimal");
+        	return null;
+        }
+        //sign
+        String SIGN = Integer.toBinaryString(this.sign);
+        while (SIGN.length() < 1) {
+        	SIGN = "0" + SIGN;
+        }
+        if (SIGN.length() > 1) {
+            System.out.println("error SIGN! floating point load");
+            sign=0;
+        }
+        //exponent
+        String EXP = Integer.toBinaryString(this.exp);
+       
+        while (EXP.length() < 7) {
+            EXP = "0" + EXP;
+        }
+        if (EXP.length() > 7) {
+            System.out.println("error EXP! floating point load");
+            exp=0;
+            
+        }
+        //mantissa
+        String MAN = Integer.toBinaryString(this.man);
+       
+        while (MAN.length() < 8) {
+        	MAN = "0" + MAN;
+        }
+        if (MAN.length() > 8) {
+            System.out.println("error MAN! floating point load");
+            man=0;
+        }
+        String temp = SIGN + EXP + MAN;
 
+        for (int i = 0; i < temp.length(); i++) {
+            this.MEM[i] = (int) temp.charAt(i) - 48;
+        }
+        this.setvec();
+        return this.MEM;
+        }
+    
+    
+    
+    public void privec() {
+    	System.out.println("***************");
+    	System.out.println("MEM " + Arrays.toString(MEM));
+    	System.out.println("sign " + sign);
+    	System.out.println("EXP " + Arrays.toString(EXP));
+    	System.out.println("exp " + exp);
+    	System.out.println("MAN " + Arrays.toString(MAN));
+    	System.out.println("man " + man);
+    	System.out.println("***************");
+    }
 
     /*
      * this method prints the data hold in the current memory class
@@ -477,6 +566,32 @@ public class memory {
       
       System.out.println("***************");
       test1.print();
+      
+       memory tmp1 = new memory();
+      tmp1.ini();
+      int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
+      tmp1.MEM = temp;
+      tmp1.privec();
+      tmp1.setvec();
+      tmp1.privec();
+      System.out.println("***************");
+      memory test1 = new memory();
+      test1.sign=1;
+      test1.exp= 2;   
+      test1.man=12;
+   	  temp=test1.loadvec();
+   	  System.out.println(Arrays.toString(temp));
+   	  test1.privec();
+      
+   	System.out.println("***************");
+    memory test2 = new memory();
+    test2.sign=1;
+    test2.exp=12;   
+    test2.man=112;
+ 	temp=test2.loadvec();
+ 	System.out.println(Arrays.toString(temp));
+ 	test2.privec();
+      
 
     }
 
