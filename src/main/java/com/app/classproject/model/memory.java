@@ -48,6 +48,7 @@ public class memory {
     //opcode 30
     public int trapcode;// trap code;
     public int[] TRAP = new int[4]; // 4 digits for 16 trapcode in binary array
+
     // opcode 61-63
     // I/O operations
     public int[] DID = new int[5]; // 5 digits for devices ID in binary array
@@ -60,8 +61,13 @@ public class memory {
     public int[] MAN= new int[8];
     public int man;
 
-    public int fr;  
-    public int F;
+     
+    
+    //opc 33-37 51 52
+    //floating point operations
+    public int[] FR = new int[2]; // 3 digits general purpose registers in binary array
+    public int fr; 
+    
 
 
     /*
@@ -166,7 +172,7 @@ public class memory {
      * Third, it will prints the corresponding parameters.
      */
     public void print() {
-
+    	System.out.println("***************************************************************************");
 
         System.out.println("mem" + Arrays.toString(MEM));
         System.out.println("OP" + Arrays.toString(OP));
@@ -188,7 +194,16 @@ public class memory {
             System.out.println("idr" + idr);
             System.out.println("gpr" + gpr);
             System.out.println("address" + address);
-
+        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+        	 System.out.println("Floating point Instructions ");
+             System.out.println("FR" + Arrays.toString(FR));
+             System.out.println("iad" + iad);
+             System.out.println("IX" + Arrays.toString(IX));
+             System.out.println("ADDR" + Arrays.toString(ADDR));
+             System.out.println("---------------------------------------------------------");
+             System.out.println("fr" + fr);
+             System.out.println("idr" + idr);
+             System.out.println("address" + address);
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register ");
             System.out.println("RX" + Arrays.toString(RX));
@@ -217,7 +232,7 @@ public class memory {
             System.out.println("Illegal Operation Code ");
         }
 
-
+        System.out.println("***************************************************************************");
     }
 
     /*
@@ -284,8 +299,33 @@ public class memory {
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
 //			this.print();
+        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+//			System.out.println("Floating point Instructions");
+             System.arraycopy(MEM, 6, memory.this.FR, 0, 2);
+            System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
+            System.arraycopy(MEM, 11, memory.this.ADDR, 0, 5);
+            // make array into string and calculate value
+            builder = new StringBuilder();
+            for (int value : FR) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.fr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            for (int value : IX) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.idr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            this.iad = MEM[10];
+            for (int value : ADDR) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.address = Integer.parseInt(tmp, 2);
         } else if ((this.opc >= 20 && this.opc <= 25)) {
-            System.out.println("register to register setup");
+ //           System.out.println("register to register setup");
             System.arraycopy(MEM, 6, memory.this.RX, 0, 2);
             System.arraycopy(MEM, 8, memory.this.RY, 0, 2);
             builder = new StringBuilder();
@@ -448,6 +488,48 @@ public class memory {
             }
             this.setup();
             return this.MEM;
+        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+            System.out.println("floating point load");
+            if(fr>1) {
+            	System.out.println("floating point register error");
+            	return null;
+            }
+            String FR = Integer.toBinaryString(this.fr);
+            while (FR.length() < 2) {
+                FR = "0" + FR;
+            }
+            if (FR.length() > 2) {
+                System.out.println("error FR! load");
+            }
+            String IX = Integer.toBinaryString(this.idr);
+            while (IX.length() < 2) {
+                IX = "0" + IX;
+            }
+            if (IX.length() > 2) {
+                System.out.println("error idr! load");
+            }
+
+            String IAD = Integer.toBinaryString(this.iad);
+            while (IAD.length() < 1) {
+                IAD = "0" + IAD;
+            }
+            if (IAD.length() > 1) {
+                System.out.println("error iad! load");
+            }
+            String ADDRE = Integer.toBinaryString(this.address);
+            while (ADDRE.length() < 5) {
+                ADDRE = "0" + ADDRE;
+            }
+            if (ADDRE.length() > 5) {
+                System.out.println("error address! load");
+            }
+            String temp = OPC + FR + IX + IAD + ADDRE;
+
+            for (int i = 0; i < temp.length(); i++) {
+                this.MEM[i] = (int) temp.charAt(i) - 48;
+            }
+            this.setup();
+            return this.MEM;
 
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register load");
@@ -545,28 +627,7 @@ public class memory {
     }
 /*
     public static void main(String args[]) {
-     memory tmp = new memory();
-      tmp.ini();
-    System.out.println(Arrays.toString(tmp.MEM));
-      int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
-      tmp.MEM = temp;
-      tmp.setup();
-      System.out.println(Arrays.toString(tmp.MEM));
-      tmp.load();
-      System.out.println(Arrays.toString(tmp.MEM));
-      System.out.println("test1");
-      System.out.println("***************");
-      System.out.println("***************");
-      System.out.println("***************");
-      memory test1 = new memory();
-      test1.opc=30;
-      test1.trapcode= 2;
-      temp=test1.load();
-      System.out.println(Arrays.toString(temp));
-      
-      System.out.println("***************");
-      test1.print();
-      
+  
        memory tmp1 = new memory();
       tmp1.ini();
       int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
@@ -591,11 +652,45 @@ public class memory {
  	temp=test2.loadvec();
  	System.out.println(Arrays.toString(temp));
  	test2.privec();
+ 	
+ 	System.out.println("+++++++++++++++++");
+    memory test3 = new memory();
+    test3.opc=51;
+    test3.fr=3;
+    test3.iad=1;   
+    test3.idr=2;
+    test3.address=31;
+    temp=test3.load();
+  	System.out.println(Arrays.toString(temp));
+ 	test3.print();
       
 
     }
-
 */
+  /* memory tmp = new memory();
+      tmp.ini();
+    System.out.println(Arrays.toString(tmp.MEM));
+      int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
+      tmp.MEM = temp;
+      tmp.setup();
+      System.out.println(Arrays.toString(tmp.MEM));
+      tmp.load();
+      System.out.println(Arrays.toString(tmp.MEM));
+      System.out.println("test1");
+      System.out.println("***************");
+      System.out.println("***************");
+      System.out.println("***************");
+      memory test1 = new memory();
+      test1.opc=30;
+      test1.trapcode= 2;
+      temp=test1.load();
+      System.out.println(Arrays.toString(temp));
+      
+      System.out.println("***************");
+      test1.print();
+      */
+
+
 //        System.out.println("test1");
 //        System.out.println("***************");
 //        System.out.println("***************");
