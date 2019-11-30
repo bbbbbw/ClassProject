@@ -61,7 +61,7 @@ public class memory {
     public int[] MAN= new int[8];
     public int man;
 
-     
+    public double fval;
     
     //opc 33-37 51 52
     //floating point operations
@@ -75,7 +75,7 @@ public class memory {
      *
      */
 
-
+    
     public void ini() {
         for (int i = 0; i < MEM.length; i++) {
             MEM[i] = 0;
@@ -102,6 +102,7 @@ public class memory {
         }
         tmp = builder.toString();
         this.man = Integer.parseInt(tmp, 2);
+        this.calflo();
        
     }
     
@@ -149,6 +150,7 @@ public class memory {
             this.MEM[i] = (int) temp.charAt(i) - 48;
         }
         this.setvec();
+   
         return this.MEM;
         }
     
@@ -162,9 +164,76 @@ public class memory {
     	System.out.println("exp " + exp);
     	System.out.println("MAN " + Arrays.toString(MAN));
     	System.out.println("man " + man);
+    	System.out.println("fval  " + fval);
+    	
     	System.out.println("***************");
+    	
     }
+    //calculate floating number from exponent and mantissa
+    public double calflo() {
+    	this.fval = (double)(1 - 2 * this.sign) * Math.pow(2, this.exp - 63) * (1.0 + (double)this.man / 256);
+    	  return this.fval;
+    	  
+    }
+  //calculate exponent and mantissa from floating number
+    public void calem() {
+    	this.sign=0;
+    	if(this.fval<0) {
+    		this.sign=1;
+    	}
+		
+		int ing = (int) (Math.abs(this.fval));
+		
+		double fac = (Math.abs(this.fval)) - ing;
+		
+		String MAN = Integer.toBinaryString(ing);
+		System.out.println("MAN "+ MAN);
+			
+		int len= MAN.length()-1;
+		int bias =63;
+		int exp = len +bias;
+		
+		while ((MAN.length()<18)&&(fac!=0)) {
+			fac *=2;
+			//System.out.println("fac "+fac);
+			int x = (int)fac;
+			//System.out.println("x "+x);
+			fac -= x;
+			//System.out.println("fac "+fac);
+			MAN = MAN + x;
+			//System.out.println("MAN "+MAN);
+			if(ing==0) {
+				exp--;
+			}
+			
+		}
+		
+		while(MAN.charAt(0)!='1') {
+			MAN=MAN.substring(1);
+		}
+		MAN=MAN.substring(1);
+		
+		while (MAN.length() <8) {
+            MAN = MAN+  "0" ;
+        }
+		//System.out.println("exp "+exp);
+		String EXP = Integer.toBinaryString(exp);
+		while (EXP.length() < 7) {
+            EXP ="0"+ EXP;
+        }
+		//System.out.println("EXP "+EXP);
+		//System.out.println("MAN "+MAN);
+		//System.out.println(EXP+MAN);
+		  String temp = this.sign + EXP + MAN;
 
+          for (int i = 0; i < temp.length(); i++) {
+              this.MEM[i] = (int) temp.charAt(i) - 48;
+          }
+         this.setvec();
+		//this.setvec();
+		//this.privec();
+    	
+    }
     /*
      * this method prints the data hold in the current memory class
      * First, it will prints the word in binary array.
@@ -625,9 +694,8 @@ public class memory {
 
         }
     }
-/*
+
     public static void main(String args[]) {
-  
        memory tmp1 = new memory();
       tmp1.ini();
       int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
@@ -635,7 +703,7 @@ public class memory {
       tmp1.privec();
       tmp1.setvec();
       tmp1.privec();
-      System.out.println("***************");
+      System.out.println("1***************");
       memory test1 = new memory();
       test1.sign=1;
       test1.exp= 2;   
@@ -644,29 +712,29 @@ public class memory {
    	  System.out.println(Arrays.toString(temp));
    	  test1.privec();
       
-   	System.out.println("***************");
+   	System.out.println("2***************");
     memory test2 = new memory();
     test2.sign=1;
     test2.exp=12;   
     test2.man=112;
  	temp=test2.loadvec();
- 	System.out.println(Arrays.toString(temp));
  	test2.privec();
  	
- 	System.out.println("+++++++++++++++++");
+ 	//test2.getflo();
+ 
+ 	
+ 	System.out.println("3+++++++++++++++++");
     memory test3 = new memory();
-    test3.opc=51;
-    test3.fr=3;
-    test3.iad=1;   
-    test3.idr=2;
-    test3.address=31;
-    temp=test3.load();
-  	System.out.println(Arrays.toString(temp));
- 	test3.print();
+    test3.fval=-3.25;
+    test3.calem();
+    
+    test3.privec();
+    //test3.setflo();
+   
       
 
     }
-*/
+
   /* memory tmp = new memory();
       tmp.ini();
     System.out.println(Arrays.toString(tmp.MEM));
