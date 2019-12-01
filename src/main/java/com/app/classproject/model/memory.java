@@ -368,7 +368,7 @@ public class memory {
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
 //			this.print();
-        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+        } else if ((this.opc >= 33 && this.opc <37) || (this.opc >= 50 && this.opc <= 51)) {
 //			System.out.println("Floating point Instructions");
              System.arraycopy(MEM, 6, memory.this.FR, 0, 2);
             System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
@@ -393,6 +393,31 @@ public class memory {
             }
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
+        } else if ((this.opc == 37)) {
+        	System.out.println("Floating point Instructions");
+            System.arraycopy(MEM, 6, memory.this.R, 0, 2);
+           System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
+           System.arraycopy(MEM, 11, memory.this.ADDR, 0, 5);
+           // make array into string and calculate value
+           builder = new StringBuilder();
+           for (int value : R) {
+               builder.append(value);
+           }
+           tmp = builder.toString();
+           this.gpr = Integer.parseInt(tmp, 2);
+           builder = new StringBuilder();
+           for (int value : IX) {
+               builder.append(value);
+           }
+           tmp = builder.toString();
+           this.idr = Integer.parseInt(tmp, 2);
+           builder = new StringBuilder();
+           this.iad = MEM[10];
+           for (int value : ADDR) {
+               builder.append(value);
+           }
+           tmp = builder.toString();
+           this.address = Integer.parseInt(tmp, 2);
         } else if ((this.opc >= 20 && this.opc <= 25)) {
  //           System.out.println("register to register setup");
             System.arraycopy(MEM, 6, memory.this.RX, 0, 2);
@@ -557,7 +582,46 @@ public class memory {
             }
             this.setup();
             return this.MEM;
-        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+        } else if (this.opc == 37) {
+        	 System.out.println("floating point opc37 load");
+             String R = Integer.toBinaryString(this.gpr);
+             while (R.length() < 2) {
+                 R = "0" + R;
+             }
+             if (R.length() > 2) {
+                 System.out.println("error R! load");
+             }
+             String IX = Integer.toBinaryString(this.idr);
+             while (IX.length() < 2) {
+                 IX = "0" + IX;
+             }
+             if (IX.length() > 2) {
+                 System.out.println("error idr! load");
+             }
+
+             String IAD = Integer.toBinaryString(this.iad);
+             while (IAD.length() < 1) {
+                 IAD = "0" + IAD;
+             }
+             if (IAD.length() > 1) {
+                 System.out.println("error iad! load");
+             }
+             String ADDRE = Integer.toBinaryString(this.address);
+             while (ADDRE.length() < 5) {
+                 ADDRE = "0" + ADDRE;
+             }
+             if (ADDRE.length() > 5) {
+                 System.out.println("error address! load");
+             }
+             String temp = OPC + R + IX + IAD + ADDRE;
+
+             for (int i = 0; i < temp.length(); i++) {
+                 this.MEM[i] = (int) temp.charAt(i) - 48;
+             }
+             this.setup();
+             return this.MEM;
+            
+        } else if ((this.opc >= 33 && this.opc <37) || (this.opc >= 50 && this.opc <= 51)) {
             System.out.println("floating point load");
             if(fr>1) {
             	System.out.println("floating point register error");
