@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Instructions {
+    //binary
     public static final int[] HLT_opc = {0, 0, 0, 0, 0, 0};
     public static final int[] LDR_opc = {0, 0, 0, 0, 0, 1};
     public static final int[] STR_opc = {0, 0, 0, 0, 1, 0};
@@ -35,7 +36,16 @@ public class Instructions {
     public static final int[] IN_opc = {1, 1, 1, 1, 0, 1};
     public static final int[] OUT_opc = {1, 1, 1, 1, 1, 0};
     public static final int[] CHK_opc = {1, 1, 1, 1, 1, 1};
+    //part 4 
+    public static final int[] FADD_opc = {1, 0, 0, 0, 0, 1};
+    public static final int[] FSUB_opc = {1, 0, 0, 0, 1, 0};
+    public static final int[] VADD_opc = {1, 0, 0, 0, 1, 1};
+    public static final int[] VSUB_opc = {1, 0, 0, 1, 0, 0};
+    public static final int[] CNVRT_opc = {1, 0, 0, 1, 0, 1};
+    public static final int[] LDFR_opc = {1, 1, 0, 0, 1, 0};
+    public static final int[] STFR_opc = {1, 1, 0, 0, 1, 1};
 
+    //decmial
     // part 1
     public static final int HLTopc = 0;
     public static final int LDRopc = 1;
@@ -77,6 +87,15 @@ public class Instructions {
     public static final int CARD_READER = 2;
     public static final int CHAR_PRINTER = 30;
     public static final int OUTER_FILE = 31;
+    //part 4
+    public static final int FAADopc = 33;
+    public static final int FSUBopc = 34;
+    public static final int VAADopc = 35;
+    public static final int VSUBopc = 36;
+    public static final int CNVRTopc = 37;
+    public static final int LDFRopc = 50;
+    public static final int STFRopc = 51;
+    //general
 
     public Computer computer;
     public memory instruction = new memory();
@@ -172,8 +191,21 @@ public class Instructions {
             	SRCStage2();
                 return SRCStage3();
             case 32:
-            	RRCStage2();
-                return RRCStage3();
+                return RRC();
+            case 33:
+                return FADD();
+            case 34:
+                return FSUB();
+            case 35:
+                return VADD();
+            case 36:
+                return VSUB();
+            case 37:
+                return CNVRT();
+            case 50:
+                return LDFR(); 
+            case 51:
+                return STFR();
             case 61:
                 return IN();
             case 62:
