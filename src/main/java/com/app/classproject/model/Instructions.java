@@ -258,7 +258,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int LDRStage2() {
@@ -308,7 +308,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int STRStage2() {
@@ -376,7 +376,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int LDAStage2() {
@@ -418,7 +418,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int LDXStage2() {
@@ -460,7 +460,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int STXStage2() {
@@ -519,7 +519,7 @@ public class Instructions {
      */
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JZStage2() {
@@ -552,7 +552,7 @@ public class Instructions {
     }
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JNEStage2() {
@@ -585,7 +585,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JCCStage2() {
@@ -645,7 +645,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JMAStage2() {
@@ -675,7 +675,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JSRStage2() {
@@ -718,7 +718,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int SOBStage2() {
@@ -781,7 +781,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int JGEStage2() {
@@ -841,7 +841,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int AMRStage2() {
@@ -910,7 +910,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int SMRStage2() {
@@ -980,7 +980,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int AIRStage2() {
@@ -1016,7 +1016,7 @@ public class Instructions {
     }
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int SIRStage2() {
@@ -1051,7 +1051,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int MLTStage2() {
@@ -1093,7 +1093,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int DVDStage2() {
@@ -1137,7 +1137,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int TRRStage2() {
@@ -1173,7 +1173,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int ANDStage2() {
@@ -1207,7 +1207,7 @@ public class Instructions {
     }
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int ORRStage2() {
@@ -1239,7 +1239,7 @@ public class Instructions {
     }
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int NOTStage2() {
@@ -1262,7 +1262,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int SRCStage2() {
@@ -1308,7 +1308,7 @@ public class Instructions {
     }
 
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int RRCStage2() {
@@ -1392,7 +1392,7 @@ public class Instructions {
     }
     
     /**
-     * Stage 2 of RISC pipeline.
+     * Stage 2 of pipeline.
      * @return 1 if further stages should be executed. -1 if no further stages should be executed, no error. -2 if no further stages should be executed, with error
      */
     public int OUTStage2() {

@@ -1,7 +1,10 @@
 package com.app.classproject.model;
 
 /**
- * RISC 5-stage instruction pipeline
+ * Simple 3-stage pipeline
+ * Stage 1- Fetch instruction
+ * Stage 2- Decode instruction and load register values
+ * Stage 3- Execute instruction, memory access, and write back.
  */
 public class Pipeline {
 	Computer computer;
@@ -16,16 +19,13 @@ public class Pipeline {
 		
 		public InterfaceRegister(Instructions instruction) {
 			this.instruction = instruction;
+			this.instruction.computer = new Computer();
 		}
 	}
-	
-	
 	
 	// Interface registers to hold intermediate output between 2 stages
 	InterfaceRegister interfaceRegister1 = null;
 	InterfaceRegister interfaceRegister2 = null;
-	InterfaceRegister interfaceRegister3 = null;
-	InterfaceRegister interfaceRegister4 = null;
 	
 	public Pipeline(Computer computer) {
 		this.computer = computer;
@@ -35,14 +35,6 @@ public class Pipeline {
 	 * Move all instructions through pipeline
 	 */
 	public int incrementClock() {
-		if(interfaceRegister4 != null) {
-			writeBack();
-			interfaceRegister4 = null;
-		}
-		if(interfaceRegister3 != null) {
-			memoryAccess();
-			interfaceRegister3 = null;
-		}
 		if(interfaceRegister2 != null) {
 			int retCode = instructionExecute();
 			if(retCode != Computer.SUCCESS_RET_CODE) {
@@ -160,7 +152,7 @@ public class Pipeline {
 	}
 	
 	/**
-	 * Stage 3. Perform ALU operations
+	 * Stage 3. Perform ALU operations, memory access, and write back
 	 */
 	public int instructionExecute() {
 		int retCode;
@@ -258,19 +250,5 @@ public class Pipeline {
 	    }
 	    
 	    return retCode;
-	}
-	
-	/**
-	 * Stage 4. Memory operands are read and written from/to the memory present in the instruction
-	 */
-	public void memoryAccess() {
-		
-	}
-	
-	/**
-	 * Stage 5. Computed/fetched value is written back to the register present in the instructions
-	 */
-	public void writeBack() {
-		
 	}
 }
