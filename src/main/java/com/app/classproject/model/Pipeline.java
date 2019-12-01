@@ -1,18 +1,31 @@
 package com.app.classproject.model;
 
-import com.app.classproject.controller.NewActionController;
-
 /**
  * RISC 5-stage instruction pipeline
  */
 public class Pipeline {
 	Computer computer;
 	
+	/**
+	 * Holds immediate output between 2 stages
+	 */
+	public class InterfaceRegister {
+		public Instructions instruction;
+		public int EA, tempR, temp1, temp2;
+		public int tempArr[], temp1Arr[], temp2Arr[], memVal[];
+		
+		public InterfaceRegister(Instructions instruction) {
+			this.instruction = instruction;
+		}
+	}
+	
+	
+	
 	// Interface registers to hold intermediate output between 2 stages
-	Instructions interfaceRegister1 = null;
-	Instructions interfaceRegister2 = null;
-	Instructions interfaceRegister3 = null;
-	Instructions interfaceRegister4 = null;
+	InterfaceRegister interfaceRegister1 = null;
+	InterfaceRegister interfaceRegister2 = null;
+	InterfaceRegister interfaceRegister3 = null;
+	InterfaceRegister interfaceRegister4 = null;
 	
 	public Pipeline(Computer computer) {
 		this.computer = computer;
@@ -53,7 +66,7 @@ public class Pipeline {
 	 * Stage 1. Read instructions from address in memory whose value is present in PC 
 	 */
 	public void instructionFetch() {
-		interfaceRegister1 = new Instructions(computer.RAM[computer.pc.getBase10Value()].MEM, computer);;
+		interfaceRegister1 = new InterfaceRegister(new Instructions(computer.RAM[computer.pc.getBase10Value()].MEM, computer));
 	}
 	
 	/**
@@ -62,81 +75,81 @@ public class Pipeline {
 	public int instructionDecode() {
 		int retCode = 1;
 		
-	    switch (interfaceRegister1.instruction.opc) {
+	    switch (interfaceRegister1.instruction.instruction.opc) {
 	    case 1:
-	        retCode = interfaceRegister1.LDRStage2();
+	        retCode = interfaceRegister1.instruction.LDRStage2();
 	        break;
 	    case 2:
-	    	retCode = interfaceRegister1.STRStage2();
+	    	retCode = interfaceRegister1.instruction.STRStage2();
 	    	break;
 	    case 3:
-	    	retCode = interfaceRegister1.LDAStage2();
+	    	retCode = interfaceRegister1.instruction.LDAStage2();
 	    	break;
 	    case 41:
-	    	retCode = interfaceRegister1.LDXStage2();
+	    	retCode = interfaceRegister1.instruction.LDXStage2();
 	    	break;
 	    case 42:
-	    	retCode = interfaceRegister1.STXStage2();
+	    	retCode = interfaceRegister1.instruction.STXStage2();
 	    	break;
 	    case 10:
-	    	retCode = interfaceRegister1.JZStage2();
+	    	retCode = interfaceRegister1.instruction.JZStage2();
 	    	break;
 	    case 11:
-	    	retCode = interfaceRegister1.JNEStage2();
+	    	retCode = interfaceRegister1.instruction.JNEStage2();
 	    	break;
 	    case 12:
-	    	retCode = interfaceRegister1.JCCStage2();
+	    	retCode = interfaceRegister1.instruction.JCCStage2();
 	    	break;
 	    case 13:
-	    	retCode = interfaceRegister1.JMAStage2();
+	    	retCode = interfaceRegister1.instruction.JMAStage2();
 	    	break;
 	    case 14:
-	    	retCode = interfaceRegister1.JSRStage2();
+	    	retCode = interfaceRegister1.instruction.JSRStage2();
 	    	break;
 	    case 16:
-	    	retCode = interfaceRegister1.SOBStage2();
+	    	retCode = interfaceRegister1.instruction.SOBStage2();
 	    	break;
 	    case 17:
-	    	retCode = interfaceRegister1.JGEStage2();
+	    	retCode = interfaceRegister1.instruction.JGEStage2();
 	    	break;
 	    case 4:
-	    	retCode = interfaceRegister1.AMRStage2();
+	    	retCode = interfaceRegister1.instruction.AMRStage2();
 	    	break;
 	    case 5:
-	    	retCode = interfaceRegister1.SMRStage2();
+	    	retCode = interfaceRegister1.instruction.SMRStage2();
 	    	break;
 	    case 6:
-	    	retCode = interfaceRegister1.AIRStage2();
+	    	retCode = interfaceRegister1.instruction.AIRStage2();
 	    	break;
 	    case 7:
-	    	retCode = interfaceRegister1.SIRStage2();
+	    	retCode = interfaceRegister1.instruction.SIRStage2();
 	    	break;
 	    case 20:
-	    	retCode = interfaceRegister1.MLTStage2();
+	    	retCode = interfaceRegister1.instruction.MLTStage2();
 	    	break;
 	    case 21:
-	    	retCode = interfaceRegister1.DVDStage2();
+	    	retCode = interfaceRegister1.instruction.DVDStage2();
 	    	break;
 	    case 22:
-	    	retCode = interfaceRegister1.TRRStage2();
+	    	retCode = interfaceRegister1.instruction.TRRStage2();
 	    	break;
 	    case 23:
-	    	retCode = interfaceRegister1.ANDStage2();
+	    	retCode = interfaceRegister1.instruction.ANDStage2();
 	    	break;
 	    case 24:
-	    	retCode = interfaceRegister1.ORRStage2();
+	    	retCode = interfaceRegister1.instruction.ORRStage2();
 	    	break;
 	    case 25:
-	    	retCode = interfaceRegister1.NOTStage2();
+	    	retCode = interfaceRegister1.instruction.NOTStage2();
 	    	break;
 	    case 31:
-	    	retCode = interfaceRegister1.SRCStage2();
+	    	retCode = interfaceRegister1.instruction.SRCStage2();
 	    	break;
 	    case 32:
-	    	retCode = interfaceRegister1.RRCStage2();
+	    	retCode = interfaceRegister1.instruction.RRCStage2();
 	    	break;
 	    case 62:
-	    	retCode = interfaceRegister1.OUTStage2();
+	    	retCode = interfaceRegister1.instruction.OUTStage2();
 	        break;
 	    }
 	    
@@ -151,96 +164,96 @@ public class Pipeline {
 	 */
 	public int instructionExecute() {
 		int retCode;
-	    switch (interfaceRegister2.instruction.opc) {
+	    switch (interfaceRegister2.instruction.instruction.opc) {
 	        case 0:
-	            retCode = interfaceRegister2.HALT();
+	            retCode = interfaceRegister2.instruction.HALT();
 	            break;
 	        case 1:
-	        	retCode = interfaceRegister2.LDRStage3();
+	        	retCode = interfaceRegister2.instruction.LDRStage3();
 	        	break;
 	        case 2:
-	        	retCode = interfaceRegister2.STRStage3();
+	        	retCode = interfaceRegister2.instruction.STRStage3();
 	        	break;
 	        case 3:
-	        	retCode = interfaceRegister2.LDAStage3();
+	        	retCode = interfaceRegister2.instruction.LDAStage3();
 	        	break;
 	        case 41:
-	        	retCode = interfaceRegister2.LDXStage3();
+	        	retCode = interfaceRegister2.instruction.LDXStage3();
 	        	break;
 	        case 42:
-	        	retCode = interfaceRegister2.STXStage3();
+	        	retCode = interfaceRegister2.instruction.STXStage3();
 	        	break;
 	        case 10:
-	        	retCode = interfaceRegister2.JZStage3();
+	        	retCode = interfaceRegister2.instruction.JZStage3();
 	        	break;
 	        case 11:
-	        	retCode = interfaceRegister2.JNEStage3();
+	        	retCode = interfaceRegister2.instruction.JNEStage3();
 	        	break;
 	        case 12:
-	        	retCode = interfaceRegister2.JCCStage3();
+	        	retCode = interfaceRegister2.instruction.JCCStage3();
 	        	break;
 	        case 13:
-	        	retCode = interfaceRegister2.JMAStage3();
+	        	retCode = interfaceRegister2.instruction.JMAStage3();
 	        	break;
 	        case 14:
-	        	retCode = interfaceRegister2.JSRStage3();
+	        	retCode = interfaceRegister2.instruction.JSRStage3();
 	        	break;
 	        case 15:
-	        	retCode = interfaceRegister2.RFS();
+	        	retCode = interfaceRegister2.instruction.RFS();
 	        	break;
 	        case 16:
-	        	retCode = interfaceRegister2.SOBStage3();
+	        	retCode = interfaceRegister2.instruction.SOBStage3();
 	        	break;
 	        case 17:
-	        	retCode = interfaceRegister2.JGEStage3();
+	        	retCode = interfaceRegister2.instruction.JGEStage3();
 	        	break;
 	        case 4:
-	        	retCode = interfaceRegister2.AMRStage3();
+	        	retCode = interfaceRegister2.instruction.AMRStage3();
 	        	break;
 	        case 5:
-	        	retCode = interfaceRegister2.SMRStage3();
+	        	retCode = interfaceRegister2.instruction.SMRStage3();
 	        	break;
 	        case 6:
-	        	retCode = interfaceRegister2.AIRStage3();
+	        	retCode = interfaceRegister2.instruction.AIRStage3();
 	        	break;
 	        case 7:
-	        	retCode = interfaceRegister2.SIRStage3();
+	        	retCode = interfaceRegister2.instruction.SIRStage3();
 	        	break;
 	        case 20:
-	        	retCode = interfaceRegister2.MLTStage3();
+	        	retCode = interfaceRegister2.instruction.MLTStage3();
 	        	break;
 	        case 21:
-	        	retCode = interfaceRegister2.DVDStage3();
+	        	retCode = interfaceRegister2.instruction.DVDStage3();
 	        	break;
 	        case 22:
-	        	retCode = interfaceRegister2.TRRStage3();
+	        	retCode = interfaceRegister2.instruction.TRRStage3();
 	        	break;
 	        case 23:
-	        	retCode = interfaceRegister2.ANDStage3();
+	        	retCode = interfaceRegister2.instruction.ANDStage3();
 	        	break;
 	        case 24:
-	        	retCode = interfaceRegister2.ORRStage3();
+	        	retCode = interfaceRegister2.instruction.ORRStage3();
 	        	break;
 	        case 25:
-	        	retCode = interfaceRegister2.NOTStage3();
+	        	retCode = interfaceRegister2.instruction.NOTStage3();
 	        	break;
 	        case 31:
-	        	retCode = interfaceRegister2.SRCStage3();
+	        	retCode = interfaceRegister2.instruction.SRCStage3();
 	        	break;
 	        case 32:
-	        	retCode = interfaceRegister2.RRCStage3();
+	        	retCode = interfaceRegister2.instruction.RRCStage3();
 	        	break;
 	        case 61:
-	        	retCode = interfaceRegister2.IN();
+	        	retCode = interfaceRegister2.instruction.IN();
 	        	break;
 	        case 62:
-	        	retCode = interfaceRegister2.OUTStage3();
+	        	retCode = interfaceRegister2.instruction.OUTStage3();
 	        	break;
 	        case 30:
-	        	retCode = interfaceRegister2.TRAP();
+	        	retCode = interfaceRegister2.instruction.TRAP();
 	        	break;
 	        default:
-	            interfaceRegister2.computer.mfr.setErr(1, 1);
+	            interfaceRegister2.instruction.computer.mfr.setErr(1, 1);
 	            retCode = Computer.SUCCESS_RET_CODE;
 	    }
 	    

@@ -191,7 +191,8 @@ public class Instructions {
             	SRCStage2();
                 return SRCStage3();
             case 32:
-                return RRC();
+            	RRCStage2();
+                return RRCStage3();
             case 33:
                 return FADD();
             case 34:
