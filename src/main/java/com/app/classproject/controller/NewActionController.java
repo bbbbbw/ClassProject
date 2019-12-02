@@ -17,7 +17,8 @@ public class NewActionController {
     private int TEST_PROGRAM_ONE = 1;
     private int TEST_PROGRAM_TWO = 2;
     private int PART_FOUR_DEMO = 3;
-    private int[] programList = {1, 2, 3};
+    private int[] programList = {3, 1, 2, 4};
+//    private int[] programList = {3};
     private int currentProgramIndex = 0;
 
     @RequestMapping(value = "/action/initialize")
@@ -65,6 +66,15 @@ public class NewActionController {
                 break;
             case "PC":
                 computer.pc.setValue(intValue);
+                break;
+            case "MAR":
+                computer.mar.setValue(intValue);
+                break;
+            case "MBR":
+                computer.mbr.setValue(intValue);
+                break;
+            case "IR":
+                computer.ir.setValue(intValue);
                 break;
             default:
                 result.put("status", -1);
@@ -225,7 +235,7 @@ public class NewActionController {
 
     // load and execute next program
     private boolean nextProgram() {
-        if (currentProgramIndex < programList.length - 1) {
+        if (currentProgramIndex <= programList.length - 1) {
             String pastPrinter = computer.printer + "\n\nA new program starts.\n\n";
             computer = new Computer();
             computer.printer = pastPrinter;
@@ -236,6 +246,8 @@ public class NewActionController {
                 computer.loadTestProgramTwo();
             } else if (programList[currentProgramIndex] == PART_FOUR_DEMO) {
                 computer.loadPartFourDemo();
+            } else {
+                return false;
             }
             return true;
         }

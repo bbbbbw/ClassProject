@@ -1,5 +1,7 @@
 package com.app.classproject.model;
 
+import javafx.util.Pair;
+
 public class Register {
     enum Type {
         GPR, // General purpose register
@@ -93,5 +95,76 @@ public class Register {
         }
 
         return base10Value;
+    }
+
+    public double calflo() {
+        if (this.type == Type.FR) {
+            int sign, exp, man;
+            sign = value[0];
+            StringBuilder builder = new StringBuilder();
+            for (int i = 1; i < 8; i++) {
+                builder.append(value[i]);
+            }
+            exp = Integer.parseInt(builder.toString(), 2);
+            builder = new StringBuilder();
+            for (int i = 8; i < 16; i++) {
+                builder.append(value[i]);
+            }
+            man = Integer.parseInt(builder.toString(), 2);
+            return (double) (1 - 2 * sign) * Math.pow(2, exp - 63) * (1.0 + (double) man / 256);
+        } else {
+            return 0;
+        }
+    }
+
+    public void calem(double fval) {
+        int sign = 0;
+        if (fval < 0) {
+            sign = 1;
+        }
+
+        int ing = (int) (Math.abs(fval));
+        double fac = (Math.abs(fval)) - ing;
+
+        String MAN = Integer.toBinaryString(ing);
+        System.out.println("MAN " + MAN);
+
+        int len = MAN.length() - 1;
+        int bias = 63;
+        int exp = len + bias;
+
+        while ((MAN.length() < 18) && (fac != 0)) {
+            fac *= 2;
+            int x = (int) fac;
+            fac -= x;
+            MAN = MAN + x;
+            if (ing == 0) {
+                exp--;
+            }
+        }
+
+        while (MAN.charAt(0) != '1') {
+            MAN = MAN.substring(1);
+        }
+        MAN = MAN.substring(1);
+
+        while (MAN.length() < 8) {
+            MAN = MAN + "0";
+        }
+        if (MAN.length() > 8) {
+            MAN = MAN.substring(0, 8);
+        }
+        String EXP = Integer.toBinaryString(exp);
+        while (EXP.length() < 7) {
+            EXP = "0" + EXP;
+        }
+        if (EXP.length() > 7) {
+            EXP = EXP.substring(0, 7);
+        }
+        String temp = Integer.toString(sign) + EXP + MAN;
+
+        for (int i = 0; i < temp.length(); i++) {
+            this.value[i] = (int) temp.charAt(i) - 48;
+        }
     }
 }

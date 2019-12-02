@@ -4,7 +4,7 @@ public class ComputerUI {
     public Register[] gpr = new Register[4];
     public Register[] idx = new Register[3]; // X0-X2
     public Register[] ccr = new Register[4];
-    public Register[] fr  = new Register[2];
+    public Register[] fr = new Register[2];
     public Register pc, ir, mar, mbr, mfr;
     public String printer;
 
@@ -147,7 +147,29 @@ public class ComputerUI {
                 nextInstruction = "OUT " + Integer.toString(instruction.r) + ", " + Integer.toString(instruction.did);
                 break;
             case 63:
-                nextInstruction = "CHK " + Integer.toString(instruction.r) + ", " + Integer.toString(instruction.did);
+                nextInstruction = "CHK " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            // part 4
+            case 33:
+                nextInstruction = "FADD  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 34:
+                nextInstruction = "FSUB  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 35:
+                nextInstruction = "VADD  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 36:
+                nextInstruction = "VSUB  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 37:
+                nextInstruction = "CNVRT  " + Integer.toString(instruction.gpr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 50:
+                nextInstruction = "LDFR  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
+                break;
+            case 51:
+                nextInstruction = "STFR  " + Integer.toString(instruction.fr) + ", " + Integer.toString(instruction.idr) + ", " + Integer.toString(instruction.address) + ", " + Integer.toString(instruction.iad);
                 break;
             default:
                 nextInstruction = "N/A";

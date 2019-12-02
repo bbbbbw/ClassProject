@@ -681,7 +681,7 @@ public class Computer {
 
 
     public void loadTestProgramTwo() {
-        // Program starts at RAM[8]
+        // Program starts at RAM[9]
         pc.setValue(9);
 
         // Set register values
@@ -1332,7 +1332,136 @@ public class Computer {
 
 
     public void loadPartFourDemo() {
+        // Program starts at RAM[9]
+        pc.setValue(9);
 
+        // Set register values
+        fr[0].calem(3.125);
+        fr[1].setValue(2);
+        gpr[3].setValue(1);
+
+        // Set memory values
+        RAM[6].fval = 1.4375;
+        RAM[6].calem();
+        RAM[7].fval = 184.43;
+        RAM[7].calem();
+        RAM[8].fval = -10.66;
+        RAM[8].calem();
+        RAM[24].fval = 12.5;
+        RAM[24].calem();
+        RAM[25].fval = 22.2;
+        RAM[25].calem();
+        RAM[26].fval = -12.0;
+        RAM[26].calem();
+        RAM[27].fval = -63.5;
+        RAM[27].calem();
+        RAM[28].mem = 44;
+        RAM[28].loadval();
+
+        // Load instructions
+        memory tempInstruction;
+
+        // floating point add/subtract
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.FADDopc;
+        tempInstruction.fr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 6;
+        tempInstruction.load();
+        RAM[9] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.FSUBopc;
+        tempInstruction.fr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 8;
+        tempInstruction.load();
+        RAM[10] = tempInstruction;
+
+        // vector add/subtract
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.VADDopc;
+        tempInstruction.fr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 24;
+        tempInstruction.load();
+        RAM[11] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 24;
+        tempInstruction.load();
+        RAM[12] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 25;
+        tempInstruction.load();
+        RAM[13] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.VSUBopc;
+        tempInstruction.fr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 25;
+        tempInstruction.load();
+        RAM[14] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 0;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 25;
+        tempInstruction.load();
+        RAM[15] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 1;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 26;
+        tempInstruction.load();
+        RAM[16] = tempInstruction;
+
+        // floating point conversion
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.CNVRTopc;
+        tempInstruction.gpr = 2;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 7;
+        tempInstruction.load();
+        RAM[17] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.LDRopc;
+        tempInstruction.gpr = 3;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 30;
+        tempInstruction.load();
+        RAM[18] = tempInstruction;
+
+        tempInstruction = new memory();
+        tempInstruction.opc = Instructions.CNVRTopc;
+        tempInstruction.gpr = 3;
+        tempInstruction.idr = 0;
+        tempInstruction.iad = 0;
+        tempInstruction.address = 28;
+        tempInstruction.load();
+        RAM[19] = tempInstruction;
     }
 
     /**

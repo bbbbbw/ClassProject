@@ -218,6 +218,8 @@
                         $("#keyboardModal .alert .errorMessage").text(result.errorMessage);
                     } else {
                         initializePage(result.computer);
+                        $("#keyboardModal .alert").hide();
+                        $("#keyboardModal .alert .errorMessage").text("");
                         $('#keyboardModal').modal("hide");
                         $("#keyboard").val("");
                     }
@@ -638,11 +640,11 @@
                                     <option>X2</option>
                                     <option>X3</option>
                                     <option>PC</option>
-                                    <!--
-                                    <option>CC</option>
                                     <option>IR</option>
                                     <option>MAR</option>
                                     <option>MBR</option>
+                                    <!--
+                                    <option>CC</option>
                                     <option>MFR</option>
                                     -->
                                 </select>
