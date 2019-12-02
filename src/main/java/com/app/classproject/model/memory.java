@@ -48,20 +48,26 @@ public class memory {
     //opcode 30
     public int trapcode;// trap code;
     public int[] TRAP = new int[4]; // 4 digits for 16 trapcode in binary array
+
     // opcode 61-63
     // I/O operations
     public int[] DID = new int[5]; // 5 digits for devices ID in binary array
     public int did;// Device ID;
-    
-     //floating point
+
+    //floating point
     public int sign;
     public int[] EXP= new int[7];
     public int exp;
     public int[] MAN= new int[8];
     public int man;
 
-    public int fr;  
-    public int F;
+    public double fval;
+
+    //opc 33-37 51 52
+    //floating point operations
+    public int[] FR = new int[2]; // 3 digits general purpose registers in binary array
+    public int fr;
+
 
 
     /*
@@ -75,16 +81,16 @@ public class memory {
             MEM[i] = 0;
         }
     }
-    
-    
+
+
     public void setvec() {
-    	System.out.println("set floating point BtoD");
+        System.out.println("set floating point BtoD");
         System.arraycopy(MEM, 1, memory.this.EXP, 0, 7);
         System.arraycopy(MEM, 8, memory.this.MAN, 0, 8);
         // make array into string and calculate value
         StringBuilder builder = new StringBuilder();
-    	String tmp = builder.toString();
-    	this.sign = MEM[0];
+        String tmp = builder.toString();
+        this.sign = MEM[0];
         for (int value : EXP) {
             builder.append(value);
         }
@@ -96,21 +102,22 @@ public class memory {
         }
         tmp = builder.toString();
         this.man = Integer.parseInt(tmp, 2);
-       
+        this.calflo();
+
     }
-    
-    
-    
+
+
+
     public int[] loadvec() {
         System.out.println("floating point load DtoB");
         if(sign>1||exp>127||man>255) {
-        	System.out.println("error decimal");
-        	return null;
+            System.out.println("error decimal");
+            return null;
         }
         //sign
         String SIGN = Integer.toBinaryString(this.sign);
         while (SIGN.length() < 1) {
-        	SIGN = "0" + SIGN;
+            SIGN = "0" + SIGN;
         }
         if (SIGN.length() > 1) {
             System.out.println("error SIGN! floating point load");
@@ -118,20 +125,20 @@ public class memory {
         }
         //exponent
         String EXP = Integer.toBinaryString(this.exp);
-       
+
         while (EXP.length() < 7) {
             EXP = "0" + EXP;
         }
         if (EXP.length() > 7) {
             System.out.println("error EXP! floating point load");
             exp=0;
-            
+
         }
         //mantissa
         String MAN = Integer.toBinaryString(this.man);
-       
+
         while (MAN.length() < 8) {
-        	MAN = "0" + MAN;
+            MAN = "0" + MAN;
         }
         if (MAN.length() > 8) {
             System.out.println("error MAN! floating point load");
@@ -143,22 +150,96 @@ public class memory {
             this.MEM[i] = (int) temp.charAt(i) - 48;
         }
         this.setvec();
+
         return this.MEM;
-        }
-    
-    
-    
-    public void privec() {
-    	System.out.println("***************");
-    	System.out.println("MEM " + Arrays.toString(MEM));
-    	System.out.println("sign " + sign);
-    	System.out.println("EXP " + Arrays.toString(EXP));
-    	System.out.println("exp " + exp);
-    	System.out.println("MAN " + Arrays.toString(MAN));
-    	System.out.println("man " + man);
-    	System.out.println("***************");
     }
 
+
+
+    public void privec() {
+        System.out.println("***************");
+        System.out.println("MEM " + Arrays.toString(MEM));
+        System.out.println("sign " + sign);
+        System.out.println("EXP " + Arrays.toString(EXP));
+        System.out.println("exp " + exp);
+        System.out.println("MAN " + Arrays.toString(MAN));
+        System.out.println("man " + man);
+        System.out.println("fval  " + fval);
+
+        System.out.println("***************");
+
+    }
+    //calculate floating number from exponent and mantissa
+    public double calflo() {
+        this.fval = (double)(1 - 2 * this.sign) * Math.pow(2, this.exp - 63) * (1.0 + (double)this.man / 256);
+        return this.fval;
+
+    }
+    //calculate exponent and mantissa from floating number
+    public void calem() {
+        this.sign=0;
+        if(this.fval<0) {
+            this.sign=1;
+        }
+
+        int ing = (int) (Math.abs(this.fval));
+
+        double fac = (Math.abs(this.fval)) - ing;
+
+        String MAN = Integer.toBinaryString(ing);
+        System.out.println("MAN "+ MAN);
+
+        int len= MAN.length()-1;
+        int bias =63;
+        int exp = len +bias;
+
+        while ((MAN.length()<18)&&(fac!=0)) {
+            fac *=2;
+            //System.out.println("fac "+fac);
+            int x = (int)fac;
+            //System.out.println("x "+x);
+            fac -= x;
+            //System.out.println("fac "+fac);
+            MAN = MAN + x;
+            //System.out.println("MAN "+MAN);
+            if(ing==0) {
+                exp--;
+            }
+
+        }
+
+        while(MAN.charAt(0)!='1') {
+            MAN=MAN.substring(1);
+        }
+        MAN=MAN.substring(1);
+
+        while (MAN.length() <8) {
+            MAN = MAN+  "0" ;
+        }
+        if (MAN.length() > 8) {
+            MAN = MAN.substring(0, 8);
+        }
+        //System.out.println("exp "+exp);
+        String EXP = Integer.toBinaryString(exp);
+        while (EXP.length() < 7) {
+            EXP ="0"+ EXP;
+        }
+        if (EXP.length() > 7) {
+            EXP = EXP.substring(0, 7);
+        }
+        //System.out.println("EXP "+EXP);
+        //System.out.println("MAN "+MAN);
+        //System.out.println(EXP+MAN);
+        String temp = this.sign + EXP + MAN;
+
+        for (int i = 0; i < temp.length(); i++) {
+            this.MEM[i] = (int) temp.charAt(i) - 48;
+        }
+        this.setvec();
+        //this.setvec();
+        //this.privec();
+
+    }
     /*
      * this method prints the data hold in the current memory class
      * First, it will prints the word in binary array.
@@ -166,7 +247,7 @@ public class memory {
      * Third, it will prints the corresponding parameters.
      */
     public void print() {
-
+        System.out.println("***************************************************************************");
 
         System.out.println("mem" + Arrays.toString(MEM));
         System.out.println("OP" + Arrays.toString(OP));
@@ -188,7 +269,16 @@ public class memory {
             System.out.println("idr" + idr);
             System.out.println("gpr" + gpr);
             System.out.println("address" + address);
-
+        } else if ((this.opc >= 33 && this.opc <= 37) || (this.opc >= 50 && this.opc <= 51)) {
+            System.out.println("Floating point Instructions ");
+            System.out.println("FR" + Arrays.toString(FR));
+            System.out.println("iad" + iad);
+            System.out.println("IX" + Arrays.toString(IX));
+            System.out.println("ADDR" + Arrays.toString(ADDR));
+            System.out.println("---------------------------------------------------------");
+            System.out.println("fr" + fr);
+            System.out.println("idr" + idr);
+            System.out.println("address" + address);
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register ");
             System.out.println("RX" + Arrays.toString(RX));
@@ -217,7 +307,7 @@ public class memory {
             System.out.println("Illegal Operation Code ");
         }
 
-
+        System.out.println("***************************************************************************");
     }
 
     /*
@@ -284,8 +374,58 @@ public class memory {
             tmp = builder.toString();
             this.address = Integer.parseInt(tmp, 2);
 //			this.print();
+        } else if ((this.opc >= 33 && this.opc <=36) || (this.opc >= 50 && this.opc <= 51)) {
+//			System.out.println("Floating point Instructions");
+            System.arraycopy(MEM, 6, memory.this.FR, 0, 2);
+            System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
+            System.arraycopy(MEM, 11, memory.this.ADDR, 0, 5);
+            // make array into string and calculate value
+            builder = new StringBuilder();
+            for (int value : FR) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.fr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            for (int value : IX) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.idr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            this.iad = MEM[10];
+            for (int value : ADDR) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.address = Integer.parseInt(tmp, 2);
+        } else if ((this.opc == 37)) {
+            System.out.println("Floating point  opc 37 Instructions");
+            System.arraycopy(MEM, 6, memory.this.R, 0, 2);
+            System.arraycopy(MEM, 8, memory.this.IX, 0, 2);
+            System.arraycopy(MEM, 11, memory.this.ADDR, 0, 5);
+            // make array into string and calculate value
+            builder = new StringBuilder();
+            for (int value : R) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.gpr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            for (int value : IX) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.idr = Integer.parseInt(tmp, 2);
+            builder = new StringBuilder();
+            this.iad = MEM[10];
+            for (int value : ADDR) {
+                builder.append(value);
+            }
+            tmp = builder.toString();
+            this.address = Integer.parseInt(tmp, 2);
         } else if ((this.opc >= 20 && this.opc <= 25)) {
-            System.out.println("register to register setup");
+            //           System.out.println("register to register setup");
             System.arraycopy(MEM, 6, memory.this.RX, 0, 2);
             System.arraycopy(MEM, 8, memory.this.RY, 0, 2);
             builder = new StringBuilder();
@@ -448,6 +588,87 @@ public class memory {
             }
             this.setup();
             return this.MEM;
+        } else if (this.opc == 37) {
+            System.out.println("floating point opc37 load");
+            String R = Integer.toBinaryString(this.gpr);
+            while (R.length() < 2) {
+                R = "0" + R;
+            }
+            if (R.length() > 2) {
+                System.out.println("error R! load");
+            }
+            String IX = Integer.toBinaryString(this.idr);
+            while (IX.length() < 2) {
+                IX = "0" + IX;
+            }
+            if (IX.length() > 2) {
+                System.out.println("error idr! load");
+            }
+
+            String IAD = Integer.toBinaryString(this.iad);
+            while (IAD.length() < 1) {
+                IAD = "0" + IAD;
+            }
+            if (IAD.length() > 1) {
+                System.out.println("error iad! load");
+            }
+            String ADDRE = Integer.toBinaryString(this.address);
+            while (ADDRE.length() < 5) {
+                ADDRE = "0" + ADDRE;
+            }
+            if (ADDRE.length() > 5) {
+                System.out.println("error address! load");
+            }
+            String temp = OPC + R + IX + IAD + ADDRE;
+
+            for (int i = 0; i < temp.length(); i++) {
+                this.MEM[i] = (int) temp.charAt(i) - 48;
+            }
+            this.setup();
+            return this.MEM;
+
+        } else if ((this.opc >= 33 && this.opc <=36) || (this.opc >= 50 && this.opc <= 51)) {
+            System.out.println("floating point load");
+            if(fr>1) {
+                System.out.println("floating point register error");
+                return null;
+            }
+            String FR = Integer.toBinaryString(this.fr);
+            while (FR.length() < 2) {
+                FR = "0" + FR;
+            }
+            if (FR.length() > 2) {
+                System.out.println("error FR! load");
+            }
+            String IX = Integer.toBinaryString(this.idr);
+            while (IX.length() < 2) {
+                IX = "0" + IX;
+            }
+            if (IX.length() > 2) {
+                System.out.println("error idr! load");
+            }
+
+            String IAD = Integer.toBinaryString(this.iad);
+            while (IAD.length() < 1) {
+                IAD = "0" + IAD;
+            }
+            if (IAD.length() > 1) {
+                System.out.println("error iad! load");
+            }
+            String ADDRE = Integer.toBinaryString(this.address);
+            while (ADDRE.length() < 5) {
+                ADDRE = "0" + ADDRE;
+            }
+            if (ADDRE.length() > 5) {
+                System.out.println("error address! load");
+            }
+            String temp = OPC + FR + IX + IAD + ADDRE;
+
+            for (int i = 0; i < temp.length(); i++) {
+                this.MEM[i] = (int) temp.charAt(i) - 48;
+            }
+            this.setup();
+            return this.MEM;
 
         } else if ((this.opc >= 20 && this.opc <= 25)) {
             System.out.println("register to register load");
@@ -543,9 +764,48 @@ public class memory {
 
         }
     }
-/*
-    public static void main(String args[]) {
-     memory tmp = new memory();
+
+    /* public static void main(String args[]) {
+        memory tmp1 = new memory();
+        tmp1.ini();
+        int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
+        tmp1.MEM = temp;
+        tmp1.privec();
+        tmp1.setvec();
+        tmp1.privec();
+        System.out.println("1***************");
+        memory test1 = new memory();
+        test1.sign=1;
+        test1.exp= 2;
+        test1.man=12;
+        temp=test1.loadvec();
+        System.out.println(Arrays.toString(temp));
+        test1.privec();
+
+        System.out.println("2***************");
+        memory test2 = new memory();
+        test2.sign=1;
+        test2.exp=12;
+        test2.man=112;
+        temp=test2.loadvec();
+        test2.privec();
+
+        //test2.getflo();
+
+
+        System.out.println("3+++++++++++++++++");
+        memory test3 = new memory();
+        test3.fval=-3.25;
+        test3.calem();
+
+        test3.privec();
+        //test3.setflo();
+
+
+
+    }*/
+
+  /* memory tmp = new memory();
       tmp.ini();
     System.out.println(Arrays.toString(tmp.MEM));
       int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
@@ -563,39 +823,12 @@ public class memory {
       test1.trapcode= 2;
       temp=test1.load();
       System.out.println(Arrays.toString(temp));
-      
+
       System.out.println("***************");
       test1.print();
-      
-       memory tmp1 = new memory();
-      tmp1.ini();
-      int temp[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0};
-      tmp1.MEM = temp;
-      tmp1.privec();
-      tmp1.setvec();
-      tmp1.privec();
-      System.out.println("***************");
-      memory test1 = new memory();
-      test1.sign=1;
-      test1.exp= 2;   
-      test1.man=12;
-   	  temp=test1.loadvec();
-   	  System.out.println(Arrays.toString(temp));
-   	  test1.privec();
-      
-   	System.out.println("***************");
-    memory test2 = new memory();
-    test2.sign=1;
-    test2.exp=12;   
-    test2.man=112;
- 	temp=test2.loadvec();
- 	System.out.println(Arrays.toString(temp));
- 	test2.privec();
-      
+      */
 
-    }
 
-*/
 //        System.out.println("test1");
 //        System.out.println("***************");
 //        System.out.println("***************");
@@ -669,4 +902,3 @@ public class memory {
 //        System.out.println(Arrays.toString(temp));
 //    }
 }
-

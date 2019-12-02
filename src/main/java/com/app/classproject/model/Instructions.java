@@ -1,5 +1,7 @@
 package com.app.classproject.model;
 
+import javafx.util.Pair;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -78,6 +80,16 @@ public class Instructions {
     public static final int CHAR_PRINTER = 30;
     public static final int OUTER_FILE = 31;
 
+    // Part 4
+    public static final int FADDopc = 33;
+    public static final int FSUBopc = 34;
+    public static final int VADDopc = 35;
+    public static final int VSUBopc = 36;
+    public static final int CNVRTopc = 37;
+    public static final int LDFRopc = 50;
+    public static final int STFRopc = 51;
+
+
     public Computer computer;
     public memory instruction = new memory();
 
@@ -151,6 +163,21 @@ public class Instructions {
                 return OUT();
             case 30:
                 return TRAP();
+
+            case 33:
+                return FADD();
+            case 34:
+                return FSUB();
+            case 35:
+                return VADD();
+            case 36:
+                return VSUB();
+            case 37:
+                return CNVRT();
+            case 50:
+                return LDFR();
+            case 51:
+                return STFR();
             default:
                 computer.mfr.setErr(1, 1);
                 return Computer.SUCCESS_RET_CODE;
@@ -1224,66 +1251,93 @@ public class Instructions {
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
 
-        int MAX_VALUE = 2 ^ 6;
-        int MIN_VALUE = -2 ^ 6 - 1;
-
-        int valueFR = 0;
-        int valueEA = 0;
-        if (instruction.iad == 0) {
-            switch (instruction.fr) {
-                case 0:
-                    valueFR = computer.fr[0].getBase10Value();
-                    valueEA = computer.mbr.getBase10Value();
-                    //c(fr) -> c(fr) + c(EA)
-                    int result = valueFR + valueEA;
-                    if (result > MAX_VALUE && result < MIN_VALUE) {
-                        computer.ccr[0].setValue(1);
-                    } else {
-                        computer.fr[0].setValue(result);
-                    }
-                    break;
-                case 1:
-                    valueFR = computer.fr[1].getBase10Value();
-                    valueEA = computer.mbr.getBase10Value();
-                    //c(fr) -> c(fr) + c(EA)
-                    int result1 = valueFR + valueEA;
-                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
-                        computer.ccr[0].setValue(1);
-                    } else {
-                        computer.fr[1].setValue(result1);
-                    }
-                    break;
-                default:
-                    return Computer.ERROR_RET_CODE;
-            }
-        } else {
-            switch (instruction.fr) {
-                case 0:
-                    valueFR = computer.fr[0].getBase10Value();
-                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
-                    //c(fr) -> c(fr) + c((EA))
-                    int result = valueFR + valueEA;
-                    if (result > MAX_VALUE && result < MIN_VALUE) {
-                        computer.ccr[0].setValue(1);
-                    } else {
-                        computer.fr[0].setValue(result);
-                    }
-                    break;
-                case 1:
-                    valueFR = computer.fr[1].getBase10Value();
-                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
-                    //c(fr) -> c(fr) + c(c(EA))
-                    int result1 = valueFR + valueEA;
-                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
-                        computer.ccr[0].setValue(1);
-                    } else {
-                        computer.fr[1].setValue(result1);
-                    }
-                    break;
-                default:
-                    return Computer.ERROR_RET_CODE;
-            }
+        double valueFR = 0;
+        double valueEA = 0;
+        switch (instruction.fr) {
+            case 0:
+                valueFR = computer.fr[0].calflo();
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) + c(EA)
+                double result = valueFR + valueEA;
+                if (result >= Math.pow(2, 65)) {
+                    computer.ccr[0].setValue(1);
+                } else {
+                    computer.fr[0].calem(result);
+                }
+                break;
+            case 1:
+                valueFR = computer.fr[1].calflo();
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) + c(EA)
+                double result1 = valueFR + valueEA;
+                if (result1 >= Math.pow(2, 65)) {
+                    computer.ccr[0].setValue(1);
+                } else {
+                    computer.fr[1].calem(result1);
+                }
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
         }
+
+//        int MAX_VALUE = 2 ^ 6;
+//        int MIN_VALUE = -2 ^ 6 - 1;
+
+//        if (instruction.iad == 0) {
+//            switch (instruction.fr) {
+//                case 0:
+//                    valueFR = computer.fr[0].getBase10Value();
+//                    valueEA = computer.mbr.getBase10Value();
+//                    //c(fr) -> c(fr) + c(EA)
+//                    int result = valueFR + valueEA;
+//                    if (result > MAX_VALUE && result < MIN_VALUE) {
+//                        computer.ccr[0].setValue(1);
+//                    } else {
+//                        computer.fr[0].setValue(result);
+//                    }
+//                    break;
+//                case 1:
+//                    valueFR = computer.fr[1].getBase10Value();
+//                    valueEA = computer.mbr.getBase10Value();
+//                    //c(fr) -> c(fr) + c(EA)
+//                    int result1 = valueFR + valueEA;
+//                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
+//                        computer.ccr[0].setValue(1);
+//                    } else {
+//                        computer.fr[1].setValue(result1);
+//                    }
+//                    break;
+//                default:
+//                    return Computer.ERROR_RET_CODE;
+//            }
+//        } else {
+//            switch (instruction.fr) {
+//                case 0:
+//                    valueFR = computer.fr[0].getBase10Value();
+//                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+//                    //c(fr) -> c(fr) + c((EA))
+//                    int result = valueFR + valueEA;
+//                    if (result > MAX_VALUE && result < MIN_VALUE) {
+//                        computer.ccr[0].setValue(1);
+//                    } else {
+//                        computer.fr[0].setValue(result);
+//                    }
+//                    break;
+//                case 1:
+//                    valueFR = computer.fr[1].getBase10Value();
+//                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+//                    //c(fr) -> c(fr) + c(c(EA))
+//                    int result1 = valueFR + valueEA;
+//                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
+//                        computer.ccr[0].setValue(1);
+//                    } else {
+//                        computer.fr[1].setValue(result1);
+//                    }
+//                    break;
+//                default:
+//                    return Computer.ERROR_RET_CODE;
+//            }
+//        }
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
@@ -1300,72 +1354,105 @@ public class Instructions {
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
 
-        int MAX_VALUE = 2 ^ 6;
-        int MIN_VALUE = -2 ^ 6 - 1;
+        double valueFR = 0;
+        double valueEA = 0;
 
-        int valueFR = 0;
-        int valueEA = 0;
-        if (instruction.iad == 0) {
-
-            switch (instruction.fr) {
-                case 0:
-                    valueFR = computer.fr[0].getBase10Value();
-                    valueEA = computer.mbr.getBase10Value();
-                    //c(fr) -> c(fr) - c(EA)
-                    int result = valueFR - valueEA;
-                    if (result > MAX_VALUE && result < MIN_VALUE) {
-                        computer.ccr[0].setValue(0);
-                    } else {
-                        computer.fr[0].setValue(result);
-                    }
-                    break;
-                case 1:
-                    valueFR = computer.fr[1].getBase10Value();
-                    valueEA = computer.mbr.getBase10Value();
-                    //c(fr) -> c(fr) - c(EA)
-                    int result1 = valueFR - valueEA;
-                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
-                        computer.ccr[0].setValue(0);
-                    } else {
-                        computer.fr[1].setValue(result1);
-                    }
-                    break;
-                default:
-                    return Computer.ERROR_RET_CODE;
-            }
-        } else {
-            switch (instruction.fr) {
-                case 0:
-                    valueFR = computer.fr[0].getBase10Value();
-                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
-                    //c(fr) -> c(fr) - c((EA))
-                    int result = valueFR - valueEA;
-                    if (result > MAX_VALUE && result < MIN_VALUE) {
-                        computer.ccr[0].setValue(0);
-                    } else {
-                        computer.fr[0].setValue(result);
-                    }
-                    break;
-                case 1:
-                    valueFR = computer.fr[1].getBase10Value();
-                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
-                    //c(fr) -> c(fr) - c(c(EA))
-                    int result1 = valueFR - valueEA;
-                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
-                        computer.ccr[0].setValue(0);
-                    } else {
-                        computer.fr[1].setValue(result1);
-                    }
-                    break;
-                default:
-                    return Computer.ERROR_RET_CODE;
-            }
+        switch (instruction.fr) {
+            case 0:
+                valueFR = computer.fr[0].calflo();
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) - c(EA)
+                double result = valueFR - valueEA;
+                if (result <= Math.pow(2, 65)) {
+                    computer.ccr[1].setValue(1);
+                } else {
+                    computer.fr[0].calem(result);
+                }
+                break;
+            case 1:
+                valueFR = computer.fr[1].calflo();
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) - c(EA)
+                double result1 = valueFR - valueEA;
+                if (result1 <= Math.pow(2, 65)) {
+                    computer.ccr[1].setValue(1);
+                } else {
+                    computer.fr[1].calem(result1);
+                }
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
         }
+
+
+//        int MAX_VALUE = 2 ^ 6;
+//        int MIN_VALUE = -2 ^ 6 - 1;
+//
+//        int valueFR = 0;
+//        int valueEA = 0;
+//        if (instruction.iad == 0) {
+//
+//            switch (instruction.fr) {
+//                case 0:
+//                    valueFR = computer.fr[0].getBase10Value();
+//                    valueEA = computer.mbr.getBase10Value();
+//                    //c(fr) -> c(fr) - c(EA)
+//                    int result = valueFR - valueEA;
+//                    if (result > MAX_VALUE && result < MIN_VALUE) {
+//                        computer.ccr[0].setValue(0);
+//                    } else {
+//                        computer.fr[0].setValue(result);
+//                    }
+//                    break;
+//                case 1:
+//                    valueFR = computer.fr[1].getBase10Value();
+//                    valueEA = computer.mbr.getBase10Value();
+//                    //c(fr) -> c(fr) - c(EA)
+//                    int result1 = valueFR - valueEA;
+//                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
+//                        computer.ccr[0].setValue(0);
+//                    } else {
+//                        computer.fr[1].setValue(result1);
+//                    }
+//                    break;
+//                default:
+//                    return Computer.ERROR_RET_CODE;
+//            }
+//        } else {
+//            switch (instruction.fr) {
+//                case 0:
+//                    valueFR = computer.fr[0].getBase10Value();
+//                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+//                    //c(fr) -> c(fr) - c((EA))
+//                    int result = valueFR - valueEA;
+//                    if (result > MAX_VALUE && result < MIN_VALUE) {
+//                        computer.ccr[0].setValue(0);
+//                    } else {
+//                        computer.fr[0].setValue(result);
+//                    }
+//                    break;
+//                case 1:
+//                    valueFR = computer.fr[1].getBase10Value();
+//                    valueEA = computer.RAM[computer.mbr.getBase10Value()].mem;
+//                    //c(fr) -> c(fr) - c(c(EA))
+//                    int result1 = valueFR - valueEA;
+//                    if (result1 > MAX_VALUE && result1 < MIN_VALUE) {
+//                        computer.ccr[0].setValue(0);
+//                    } else {
+//                        computer.fr[1].setValue(result1);
+//                    }
+//                    break;
+//                default:
+//                    return Computer.ERROR_RET_CODE;
+//            }
+//        }
 
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
     }
-    
+
+
+
     
      /*public int CNVRT(){
     	int EA = getEffectiveAdr();
@@ -1400,28 +1487,44 @@ public class Instructions {
             return Computer.SUCCESS_RET_CODE;
         }
 
-        String exp = "0000000";
-        String man = "00000000";
+//        String exp = "0000000";
+//        String man = "00000000";
         int[] memVal = checkCache(EA);
 
         computer.mar.setValue(EA);
         computer.mbr.setValue(memVal);
         computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
 
-        int expI = computer.mbr.getBase10Value();
-        computer.mar.setValue(EA + 1);
-        computer.mbr.setValue(computer.mar.getValue());
 
-        int manI = computer.mbr.getBase10Value();
+        double valueEA = 0;
+        switch (instruction.fr) {
+            case 0:
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) + c(EA)
+                computer.fr[0].calem(valueEA);
+                break;
+            case 1:
+                valueEA = computer.mbr.calflo();
+                //c(fr) -> c(fr) + c(EA)
+                computer.fr[1].calem(valueEA);
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
+        }
 
-        String temp = Integer.toString(expI);
-        exp = exp.substring(0, 7 - temp.length()) + temp;
-        String temp1 = Integer.toString(manI);
-        man = temp1 + man.substring(temp1.length());
-
-        String frs = exp + man;
-        this.setFRByNum(instruction.fr, Integer.parseInt(frs, 2));
-
+//        int expI = computer.mbr.getBase10Value();
+//        computer.mar.setValue(EA + 1);
+//        computer.mbr.setValue(computer.mar.getValue());
+//
+//        int manI = computer.mbr.getBase10Value();
+//
+//        String temp = Integer.toString(expI);
+//        exp = exp.substring(0, 7 - temp.length()) + temp;
+//        String temp1 = Integer.toString(manI);
+//        man = temp1 + man.substring(temp1.length());
+//
+//        String frs = exp + man;
+//        this.setFRByNum(instruction.fr, Integer.parseInt(frs, 2));
 
         computer.pc.setValue(computer.pc.getBase10Value() + 1);
         return Computer.SUCCESS_RET_CODE;
@@ -1437,47 +1540,57 @@ public class Instructions {
             return Computer.SUCCESS_RET_CODE;
         }
 
+        double valueFR = 0;
         switch (instruction.fr) {
-
             case 0:
-                int cfr = computer.fr[0].getBase10Value();
+                computer.mbr.setValue(computer.fr[0].getValue());
+                System.arraycopy(computer.fr[0].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                computer.cache.addToCache(EA, computer.gpr[0].getValue());
+                computer.RAM[EA].setup();
 
-                String buffer = "0000000000000000";
-                String frs = Integer.toBinaryString(cfr);
-                if (frs.length() < 16)
-                    frs = buffer.substring(0, 16 - frs.length()) + frs;
+//                int cfr = computer.fr[0].getBase10Value();
+//
+//                String buffer = "0000000000000000";
+//                String frs = Integer.toBinaryString(cfr);
+//                if (frs.length() < 16)
+//                    frs = buffer.substring(0, 16 - frs.length()) + frs;
+//
+//                int man = Integer.parseInt(frs.substring(8, 16), 2);
+//                int exp = Integer.parseInt(frs.substring(0, 8), 2);
 
-                int man = Integer.parseInt(frs.substring(8, 16), 2);
-                int exp = Integer.parseInt(frs.substring(0, 8), 2);
+//                computer.mar.setValue(EA);
+//                computer.mbr.calem(valueFR);
+//                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
 
-                computer.mar.setValue(EA);
-                computer.mbr.setValue(exp);
-                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
-
-                computer.mar.setValue(EA + 1);
-                computer.mbr.setValue(man);
-                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+//                computer.mar.setValue(EA + 1);
+//                computer.mbr.setValue(man);
+//                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
 
                 computer.pc.setValue(computer.pc.getBase10Value() + 1);
                 break;
             case 1:
-                int cfr1 = computer.fr[1].getBase10Value();
+                computer.mbr.setValue(computer.fr[1].getValue());
+                System.arraycopy(computer.fr[1].getValue(), 0, computer.RAM[EA].MEM, 0, 16);
+                computer.cache.addToCache(EA, computer.gpr[0].getValue());
+                computer.RAM[EA].setup();
 
-                String buffer1 = "0000000000000000";
-                String frs1 = Integer.toBinaryString(cfr1);
-                if (frs1.length() < 16)
-                    frs = buffer1.substring(0, 16 - frs1.length()) + frs1;
+//                int cfr1 = computer.fr[1].getBase10Value();
+//
+//                String buffer1 = "0000000000000000";
+//                String frs1 = Integer.toBinaryString(cfr1);
+//                if (frs1.length() < 16)
+//                    frs = buffer1.substring(0, 16 - frs1.length()) + frs1;
+//
+//                int man1 = Integer.parseInt(frs1.substring(8, 16), 2);
+//                int exp1 = Integer.parseInt(frs1.substring(0, 8), 2);
+//
+//                computer.mar.setValue(EA);
+//                computer.mbr.setValue(exp1);
+//                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
 
-                int man1 = Integer.parseInt(frs1.substring(8, 16), 2);
-                int exp1 = Integer.parseInt(frs1.substring(0, 8), 2);
-
-                computer.mar.setValue(EA);
-                computer.mbr.setValue(exp1);
-                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
-
-                computer.mar.setValue(EA + 1);
-                computer.mbr.setValue(man1);
-                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
+//                computer.mar.setValue(EA + 1);
+//                computer.mbr.setValue(man1);
+//                computer.cache.addToCache(computer.mar.getBase10Value(), computer.mbr.getValue());
 
                 computer.pc.setValue(computer.pc.getBase10Value() + 1);
                 break;
@@ -1487,6 +1600,238 @@ public class Instructions {
         return Computer.SUCCESS_RET_CODE;
 
     }
+
+    public int VADD(){
+        int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+
+//        int EA_V1 = EA;
+//        int EA_V2 = EA + 1;
+        switch(instruction.fr){
+            case 0:
+                int vectorLength = computer.fr[0].getBase10Value();
+                double[] v1 = new double[vectorLength];
+                double[] v2 = new double[vectorLength];
+
+                for (int i = 0; i < vectorLength; i++) {
+                    v1[i] = computer.RAM[EA+i].calflo();
+                    v2[i] = computer.RAM[EA+1+i].calflo();
+                }
+
+                for (int i = 0; i < vectorLength; i++) {
+                    computer.RAM[EA+i].fval = v1[i] + v2[i];
+                    computer.RAM[EA+i].calem();
+                }
+
+//                for(instruction.iad = 0; instruction.iad < vectorLength; instruction.iad++){
+//                    // store EA in MAR
+//                    computer.mar.setValue(EA_V1 + instruction.iad);
+//                    // store what we fetched from memory into MBR
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v1 = computer.mbr.getBase10Value();
+//                    // we get the first vector from EA_V1
+//                    computer.mar.setValue(EA_V2 + instruction.iad);
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v2 = computer.mbr.getBase10Value();
+//                    // we get the second vector from EA+1
+//                    int result = v1 + v2;
+//                    // check if overflow
+//
+//                    int MAX_VALUE = 2^6;
+//                    int MIN_VALUE = -2^6 - 1;
+//                    if(result > MAX_VALUE && result < MIN_VALUE){
+//                        computer.ccr[0].setValue(1);
+//                    }else{
+//                        computer.mbr.setValue(result);
+//                        computer.mar.setValue(EA_V1 + instruction.iad);
+//                        computer.cache.addToCache(computer.mar.getBase10Value(), computer.mar.getValue());
+//                    }
+//                }
+                break;
+            case 1:
+                int vectorLength1 = computer.fr[1].getBase10Value();
+                double[] v11 = new double[vectorLength1];
+                double[] v21 = new double[vectorLength1];
+
+                for (int i = 0; i < vectorLength1; i++) {
+                    v11[i] = computer.RAM[EA+i].calflo();
+                    v21[i] = computer.RAM[EA+1+i].calflo();
+                }
+
+                for (int i = 0; i < vectorLength1; i++) {
+                    computer.RAM[EA+i].fval = v11[i] + v21[i];
+                    computer.RAM[EA+i].calem();
+                }
+//                for(instruction.iad = 0; instruction.iad < vectorLength1; instruction.iad++){
+//                    // store EA in MAR
+//                    computer.mar.setValue(EA_V1 + instruction.iad);
+//                    // store what we fetched from memory into MBR
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v1 = computer.mbr.getBase10Value();
+//                    // we get the first vector from EA_V1
+//                    computer.mar.setValue(EA_V2 + instruction.iad);
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v2 = computer.mbr.getBase10Value();
+//                    // we get the second vector from EA+1
+//                    int result = v1 + v2;
+//
+//                    // check if overflow
+//                    int MAX_VALUE = 2^6;
+//                    int MIN_VALUE = -2^6 - 1;
+//                    if(result > MAX_VALUE && result < MIN_VALUE){
+//                        computer.ccr[0].setValue(1);
+//                    }else{
+//                        computer.mbr.setValue(result);
+//                        computer.mar.setValue(EA_V1 + instruction.iad);
+//                        computer.cache.addToCache(computer.mar.getBase10Value(), computer.mar.getValue());
+//                    }
+//                }
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
+        }
+
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
+    }
+
+    public int VSUB(){
+        int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+
+//        int EA_V1 = EA;
+//        int EA_V2 = EA + 1;
+        switch(instruction.fr){
+            case 0:
+                int vectorLength = computer.fr[0].getBase10Value();
+                double[] v1 = new double[vectorLength];
+                double[] v2 = new double[vectorLength];
+
+                for (int i = 0; i < vectorLength; i++) {
+                    v1[i] = computer.RAM[EA+i].calflo();
+                    v2[i] = computer.RAM[EA+1+i].calflo();
+                }
+
+                for (int i = 0; i < vectorLength; i++) {
+                    computer.RAM[EA+i].fval = v1[i] - v2[i];
+                    computer.RAM[EA+i].calem();
+                }
+//                for(instruction.iad = 0; instruction.iad < vectorLength; instruction.iad++){
+//                    // store EA in MAR
+//                    computer.mar.setValue(EA_V1 + instruction.iad);
+//                    // store what we fetched from memory into MBR
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v1 = computer.mbr.getBase10Value();
+//                    // we get the first vector from EA_V1
+//                    computer.mar.setValue(EA_V2 + instruction.iad);
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v2 = computer.mbr.getBase10Value();
+//                    // we get the second vector from EA+1
+//                    int result = v1 - v2;
+//                    // check if overflow
+//
+//                    int MAX_VALUE = 2^6;
+//                    int MIN_VALUE = -2^6 - 1;
+//                    if(result > MAX_VALUE && result < MIN_VALUE){
+//                        computer.ccr[0].setValue(1);
+//                    }else{
+//                        computer.mbr.setValue(result);
+//                        computer.mar.setValue(EA_V1 + instruction.iad);
+//                        computer.cache.addToCache(computer.mar.getBase10Value(), computer.mar.getValue());
+//                    }
+//                }
+                break;
+            case 1:
+                int vectorLength1 = computer.fr[1].getBase10Value();
+                double[] v11 = new double[vectorLength1];
+                double[] v21 = new double[vectorLength1];
+
+                for (int i = 0; i < vectorLength1; i++) {
+                    v11[i] = computer.RAM[EA+i].calflo();
+                    v21[i] = computer.RAM[EA+1+i].calflo();
+                }
+
+                for (int i = 0; i < vectorLength1; i++) {
+                    computer.RAM[EA+i].fval = v11[i] + v21[i];
+                    computer.RAM[EA+i].calem();
+                }
+//                for(instruction.iad = 0; instruction.iad < vectorLength1; instruction.iad++){
+//                    // store EA in MAR
+//                    computer.mar.setValue(EA_V1 + instruction.iad);
+//                    // store what we fetched from memory into MBR
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v1 = computer.mbr.getBase10Value();
+//                    // we get the first vector from EA_V1
+//                    computer.mar.setValue(EA_V2 + instruction.iad);
+//                    computer.mbr.setValue(computer.mar.getValue());
+//
+//                    int v2 = computer.mbr.getBase10Value();
+//                    // we get the second vector from EA+1
+//                    int result = v1 - v2;
+//
+//                    // check if overflow
+//                    int MAX_VALUE = 2^6;
+//                    int MIN_VALUE = -2^6 - 1;
+//                    if(result > MAX_VALUE && result < MIN_VALUE){
+//                        computer.ccr[0].setValue(1);
+//                    }else{
+//                        computer.mbr.setValue(result);
+//                        computer.mar.setValue(EA_V1 + instruction.iad);
+//                        computer.cache.addToCache(computer.mar.getBase10Value(), computer.mar.getValue());
+//                    }
+//                }
+                break;
+            default:
+                return Computer.ERROR_RET_CODE;
+        }
+
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
+    }
+
+    public int CNVRT(){
+        int EA = getEffectiveAdr();
+        if (this.checkBeyond(EA) == 1) {
+            computer.pc.setValue(computer.pc.getBase10Value() + 1);
+            computer.ir.setValue(computer.RAM[computer.pc.getBase10Value()].MEM);
+            return Computer.SUCCESS_RET_CODE;
+        }
+        int[] memVal = checkCache(EA);
+        computer.mar.setValue(EA);
+        computer.mbr.setValue(memVal);
+        int F = this.getValueFromRById(instruction.gpr);
+
+        if(F == 0){
+            this.setValueToRById(instruction.gpr, (int)Math.abs(computer.RAM[EA].fval));
+        }
+        if(F == 1){
+            computer.fr[0].calem((double)computer.RAM[EA].mem);
+        }
+        computer.pc.setValue(computer.pc.getBase10Value() + 1);
+        return Computer.SUCCESS_RET_CODE;
+    }
+
 
 
     //set value by NUM to floating register fr0-fr1
