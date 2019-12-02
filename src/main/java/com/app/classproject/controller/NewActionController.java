@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class NewActionController {
-    Computer computer = new Computer();
+    public Computer computer = new Computer();
     private int TEST_PROGRAM_ONE = 1;
     private int TEST_PROGRAM_TWO = 2;
     private int PART_FOUR_DEMO = 3;

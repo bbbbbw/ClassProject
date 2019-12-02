@@ -75,7 +75,7 @@ public class memory {
      *
      */
 
-
+    
     public void ini() {
         for (int i = 0; i < MEM.length; i++) {
             MEM[i] = 0;
@@ -103,7 +103,6 @@ public class memory {
         tmp = builder.toString();
         this.man = Integer.parseInt(tmp, 2);
         this.calflo();
-
     }
 
 
@@ -150,7 +149,6 @@ public class memory {
             this.MEM[i] = (int) temp.charAt(i) - 48;
         }
         this.setvec();
-
         return this.MEM;
     }
 

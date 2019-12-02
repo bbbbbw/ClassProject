@@ -26,6 +26,9 @@ Links architecture models to UI
 ### Memory.java ###
 Models a 16-bit memory unit. Includes functions to translate from a base 2 binary array to base 10 integer and parse the components of an instruction.  
 
+### Pipeline-java ###
+Models a simple 3-stage pipeline. Stage 1- Fetch instruction. Stage 2- Decode instruction and load register values. Stage 3- Execute instruction, memory access, and write back.
+
 ### Register.java ###
 Models a program register and provides a constructor to create all required types of registers.  
 
