@@ -1,0 +1,32 @@
+Demonstrates floating point add/subtract, vector add/subtract, and floating point conversion.
+
+set fr0 = 3.125
+set fr1 = -7.25
+set r3 = 1
+set address 6 = 1.4375
+set address 7 = 184.43
+set address 8 = -10.66
+set address 24 = 12.5
+set address 25 = 22.2
+set address 26 = -12.0
+set address 27 = -63.5
+set address 28 = 44
+
+
+
+// floating point add/subtract
+9		FADD 0, 0, 6
+10		FSUB 0, 0, 8
+
+// vector add/subtract
+11		VADD 1, 0, 24
+12		LDR r0, 00, 24
+13		LDR r1, 00, 25
+14		VSUB 1, 0, 25
+15		LDR r0, 00, 25, 0
+16		LDR r1, 00, 26, 0
+
+// floating point conversion
+17		CNVRT 2, 0, 7
+18		LDR r3, 00, 30, 0
+19		CNVRT 3, 0, 28
